@@ -88,7 +88,7 @@ class AutoLoader {
 	public function autoload($class)
 	{
 		echo "Loading $class";
-		foreach($this->directories as $directory){
+		foreach ($this->directories as $directory) {
 			static::autoloadRecursive($class, $directory);
 		}
 	}
@@ -101,16 +101,16 @@ class AutoLoader {
 	 */
 	private function autoloadRecursive($class, $directory)
 	{
-		foreach($this->fileNameFormats as $fileNameFormat){
+		foreach ($this->fileNameFormats as $fileNameFormat) {
 			$path = $directory.sprintf($fileNameFormat, $class);
-			if(file_exists($path)){
+			if (file_exists($path)) {
 				include_once $path;
 				return;
 			}
 		}
 		$d = dir($directory);
-		while($entry=$d->read()) {
-			if(is_dir($d->path.DIRECTORY_SEPARATOR.$entry) && ($entry != '.' || $entry != '..')){
+		while ($entry=$d->read()) {
+			if (is_dir($d->path.DIRECTORY_SEPARATOR.$entry) && ($entry != '.' || $entry != '..')) {
 				static::autoloadRecursive($class, $d->path.DIRECTORY_SEPARATOR.$entry);
 			}
 		}
@@ -122,8 +122,9 @@ class AutoLoader {
 	 *
 	 * @param string $directory Directory to search in.
 	 */
-	public function addDirectory($directory){
-		    if(is_string($directory)){
+	public function addDirectory($directory)
+	{
+		    if (is_string($directory)) {
 	        $this->directories[] = $directory;
 	    } elseif (is_array($directory)) {
 	        foreach ($directory as $dir) {
@@ -137,8 +138,9 @@ class AutoLoader {
 	 *
 	 * @param string $format File name format to add.
 	 */
-	public function addFileNameFormat($format){
-		if(is_string($format)){
+	public function addFileNameFormat($format)
+	{
+		if (is_string($format)) {
 	        $this->fileNameFormats[] = $format;
 	    } elseif (is_array($format)) {
 	        foreach ($format as $for) {

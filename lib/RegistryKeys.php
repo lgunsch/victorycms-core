@@ -2,13 +2,13 @@
 //
 //  VictoryCMS - Content managment system and framework.
 //
-//  Copyright (C) 2009  Lewis Gunsch <lgunsch@victorycms.org>
+//  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
 //
 //  This file is part of VictoryCMS.
 //  
 //  VictoryCMS is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
+//  the Free Software Foundation, either version 2 of the License, or
 //  (at your option) any later version.
 //
 //  VictoryCMS is distributed in the hope that it will be useful,
@@ -21,11 +21,13 @@
 
 /**
  * VictoryCMS - RegistryKeys
- * 
- * @license http://www.gnu.org/licenses/gpl.html
- * @author Lewis Gunsch
+ *
  * @filesource
- * @package Core
+ * @category VictoryCMS
+ * @package  Core
+ * @author   Lewis Gunsch <lgunsch@victorycms.org>
+ * @license  GPL http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.victorycms.org/
  */
 
 namespace VictoryCMS;

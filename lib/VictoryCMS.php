@@ -24,16 +24,18 @@ namespace VictoryCMS;
 require_once 'RegistryKeys.php';
 require_once 'Registry.php';
 require_once 'AutoLoader.php';
+require_once 'RegistryNode.php';
 
 /**
  * VictoryCMS core class. This class is the entry point to the VictoryCMS
  * system. It initializes the error handlers, the class autoloader and
  * contains some important functions.
  *
- * <strong>Note:</strong> This depends on <strong>Registry.php</strong> and 
- * <strong>RegistryKeys.php</strong> for storing system variables. It also
- * depends on <strong>AutoLoader.php</strong> for loading required classes.
- * These should be in the same directory as this file.
+ * <strong>Note:</strong> This depends on <strong>Registry.php</strong>, 
+ * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong> 
+ * for storing system variables. It also depends on 
+ * <strong>AutoLoader.php</strong> for loading required classes. These 
+ * should be in the same directory as this file.
  *
  * @filesource
  * @category VictoryCMS
