@@ -30,9 +30,10 @@ require_once 'AutoLoader.php';
  * system. It initializes the error handlers, the class autoloader and
  * contains some important functions.
  *
- * <strong>Note:</strong> This depends on <strong>Registry.php</strong> for
- * storing system variables. It also depends on <strong>AutoLoader.php</strong>
- * for loading required classes. These should be in the same directory as this file.
+ * <strong>Note:</strong> This depends on <strong>Registry.php</strong> and 
+ * <strong>RegistryKeys.php</strong> for storing system variables. It also
+ * depends on <strong>AutoLoader.php</strong> for loading required classes.
+ * These should be in the same directory as this file.
  *
  * @filesource
  * @category VictoryCMS
@@ -51,7 +52,8 @@ class VictoryCMS
 	const CODE_NAME = "sparkplug";
 
 	/**
-	 * Perform PHP environment initiailization.
+	 * Perform PHP environment initiailization. This will add the exception
+	 * and error handlers into PHP and also create the AutoLoader.
 	 *
 	 * @return void
 	 */
@@ -80,9 +82,12 @@ class VictoryCMS
 	}
 
 	/**
-	 * Enter description here ...
+	 * The main startup method for initializing VictoryCMS and to process
+	 * the request. This should be called with the path to the config.json
+	 * file. This is normally called from the index.php file, or default
+	 * start page.
 	 *
-	 * @param string  $settings_path Path to the settings XML file.
+	 * @param string  $settings_path Path to the settings JSON file.
 	 * @param boolean $debug_mode Enable debug mode, disabled by default.
 	 *
 	 * @return void
@@ -109,25 +114,20 @@ class VictoryCMS
 	}
 
 	/**
-	 * The main run method for using VictoryCMS.
-	 * This should be called with the path to the settings.xml
-	 * set. This is normally called from the index.php file, or default
+	 * The main run method for starting up the VictorCMS front controller
+	 * and beginning processing.
+	 * 
+	 * @return void
 	 */
 	protected static function run()
 	{
 		printf("I AM RUNNING!");
 	}
-	
-	public static function autoloader($class)
-	{
-		echo "Loading $class";
-		return true;
-	}
 
 	/**
 	 * Are we operating on the command line interface, or a web server?
 	 *
-	 * @return boolean
+	 * @return boolean true if This PHP class was called from the command line.
 	 */
 	public static function isCli()
 	{
@@ -334,7 +334,7 @@ class VictoryCMS
 	 * @param $array The array to print out.
 	 * @param $count Recursive call parameter - DO NOT use directly
 	 */
-	public static function PrintArray($array, $count=0)
+	public static function printArray($array, $count=0)
 	{
 		if (! Registry::get(RegistryKeys::debug_enabled)) {
 			throw new Exception('Cannot call PrintArray while not in debug mode!');
