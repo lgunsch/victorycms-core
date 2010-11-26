@@ -46,9 +46,6 @@ class AutoLoader {
 	/** Singleton instance to AutoLoader */
 	private static $instance;
 	
-	/** Array of registered directories */
-	private $directories;
-	
 	/** Array of file format extensions */
 	private $fileNameFormats;
 
@@ -57,9 +54,7 @@ class AutoLoader {
 	 */
 	private function __construct()
 	{
-		$directories = array(
-		);
-		$fileNameFormats = array(
+		$this->fileNameFormats = array(
         	'%s.php',
       		'%s.class.php',
       		'class.%s.php',
@@ -87,8 +82,7 @@ class AutoLoader {
 	 */
 	public function autoload($class)
 	{
-		echo "Loading $class";
-		foreach ($this->directories as $directory) {
+		foreach (Registry::get('autoload') as $directory) {
 			static::autoloadRecursive($class, $directory);
 		}
 	}
@@ -124,13 +118,7 @@ class AutoLoader {
 	 */
 	public function addDirectory($directory)
 	{
-		    if (is_string($directory)) {
-	        $this->directories[] = $directory;
-	    } elseif (is_array($directory)) {
-	        foreach ($directory as $dir) {
-			    $this->addDirectory($dir);
-		    }
-	    }
+		Registry::add('autoload', $directory, false);
 	}
 
 	/**
@@ -148,7 +136,6 @@ class AutoLoader {
 		    }
 	    }
 	}
-
 
 	/**
 	 * Disables the clone of this class.

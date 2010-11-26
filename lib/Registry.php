@@ -93,10 +93,10 @@ class Registry
 			} elseif ($readonly == true) {
 				$gl->vars[$key] = new RegistryNode($value, true);
 			} else {
-				$gl->vars[$bind] = new RegistryNode(array_merge($value,$gl->vars[$key]->getValue()), false);
+				$gl->vars[$key] = new RegistryNode(array_merge($value,$gl->vars[$key]->getValue()), false);
 			}
 		} else {
-			$gl->vars[$bind] = new RegistryNode($value, $readonly);
+			$gl->vars[$key] = new RegistryNode($value, $readonly);
 		}
 		return true;
 	}
