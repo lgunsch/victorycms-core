@@ -3,6 +3,7 @@
 //  VictoryCMS - Content managment system and framework.
 //
 //  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
+//  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
 //
 //  This file is part of VictoryCMS.
 //
@@ -26,6 +27,7 @@
  * @category VictoryCMS
  * @package  Core
  * @author   Andrew Crouse <amcrouse@victorycms.org>
+ * @author   Lewis Gunsch <lgunsch@victorycms.org>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
  */
@@ -33,7 +35,7 @@
 namespace VictoryCMS;
 
 /**
- * This class keeps value of the registry along with if it is read only or not.
+ * This class keeps a value of the registry along with if it is read only or not.
  *
  * @package Core
  *
@@ -48,15 +50,16 @@ class RegistryNode
 
 	/**
 	 * Registry Node constructor.
+	 * 
+	 * @throws \VictoryCMS\Exception\DataException if $readonly is not a bool value.
 	 */
 	public function __construct($value, $readonly = false)
 	{
 		$this->value = $value;
-		if ($readonly == true) {
-			$this->readonly = true;
-		} else {
-			$this->readonly = false;
+		if (! is_bool($readonly)) {
+			throw new \VictoryCMS\Exception\DataException("bool", "$readonly", 'readonly');
 		}
+		$this->readonly = $readonly;
 	}
 
 	/**
@@ -70,22 +73,26 @@ class RegistryNode
 	}
 
 	/**
-	 * Sets the value of the RegistryNode if the node is not read only.
+	 * Sets the value of the RegistryNode; this will throw an Overwrite exception
+	 * if the value is marked as read-only.
 	 *
 	 * @param $value Value to set the RegistryNode to.
-	 * @return true if the value has been set; false otherwise.
+	 * 
+	 * @throws \VictoryCMS\Exception\OverwriteException If the value is readonly.
 	 */
 	public function setValue($value)
 	{
-		if ($this->readonly == false) {
+		if ($this->readonly === false) {
 			$this->value = $value;
 			return true;
 		}
-		return false;
+		/* this throws an exception to keep developers from ignoring a false return */
+		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
 	}
 
 	/**
 	 * Sets the RegistryNode to read only.
+	 * 
 	 * @return void
 	 */
 	public function setReadOnly()
