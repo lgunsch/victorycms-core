@@ -51,6 +51,9 @@ class RegistryNode
 	/**
 	 * Registry Node constructor.
 	 * 
+	 * @param mixed $value Value to set the RegistryNode to.
+	 * @param bool $readonly sets the RegistryNode to read-only
+	 * 
 	 * @throws \VictoryCMS\Exception\DataException if $readonly is not a bool value.
 	 */
 	public function __construct($value, $readonly = false)
@@ -76,9 +79,9 @@ class RegistryNode
 	 * Sets the value of the RegistryNode; this will throw an Overwrite exception
 	 * if the value is marked as read-only.
 	 *
-	 * @param $value Value to set the RegistryNode to.
+	 * @param mixed $value Value to set the RegistryNode to.
 	 * 
-	 * @throws \VictoryCMS\Exception\OverwriteException If the value is readonly.
+	 * @throws \VictoryCMS\Exception\OverwriteException If the value is read-only.
 	 */
 	public function setValue($value)
 	{
@@ -91,7 +94,26 @@ class RegistryNode
 	}
 
 	/**
-	 * Sets the RegistryNode to read only.
+	 * Sets the value of the node using a reference to the value; The value
+	 * should be instantiated before calling attach. This will also throw
+	 * an Overwrite exception if the value is marked as read-only.
+	 * 
+	 * @param mixed $objAddress Value to set the RegistryNode reference to.
+	 * 
+	 * @throws \VictoryCMS\Exception\OverwriteException If the value is read-only.
+	 */
+	public function setAttachedValue(& $objAddress)
+	{
+		if ($this->readonly === false) {
+			$this->value = & $objAddress;
+			return true;
+		}
+		/* this throws an exception to keep developers from ignoring a false return */
+		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
+	}
+	
+	/**
+	 * Sets the RegistryNode to read-only.
 	 * 
 	 * @return void
 	 */
@@ -101,9 +123,9 @@ class RegistryNode
 	}
 
 	/**
-	 * Returns if the value is read only or not.
+	 * Returns if the value is read-only or not.
 	 *
-	 * @return true if the value is read only; false otherwise.
+	 * @return true if the value is read-only; false otherwise.
 	 */
 	public function isReadOnly()
 	{
