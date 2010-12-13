@@ -38,7 +38,7 @@ namespace VictoryCMS;
 class Exception extends \Exception
 {
 	/**
-	 * Constructs a new VcmsException.
+	 * Constructs a new VictoryCMS Exception.
 	 */
 	public function __construct($message, $code=0)
 	{
