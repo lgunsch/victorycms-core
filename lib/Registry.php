@@ -35,8 +35,9 @@
 namespace VictoryCMS;
 
 /**
- * This singleton class keeps key-value pairs saved in a similar
- * fasion as $GLOBALS without using the globals array.
+ * This singleton class keeps key-value pairs saved in a similar fasion as $GLOBALS
+ * without using the globals array; Use the set, add, and get methods to store
+ * values or attach, and get methods to store values by reference.
  *
  * @package Core
  *
@@ -60,7 +61,7 @@ class Registry
 	/**
 	 * Returns an instance to Registry.
 	 *
-	 * @return Registry
+	 * @return Registry the registry instance
 	 */
 	public static function getInstance()
 	{
@@ -72,106 +73,214 @@ class Registry
 	}
 
 	/**
-	 * Adds another value into a key-value binding pair.
-	 * If the value is an array it is added or replaced into the array.
-	 * Values that allready exists and are readonly can not be modified.
+	 * Adds another value into a key-value binding pair; value's added with this
+	 * method will be returned as an array, even a single value. If the value is an
+	 * array it is added or replaced into the array, values that already exist and
+	 * are readonly can not be modified. Use the isReadOnly method to check if a key
+	 * is marked read-only or not.
 	 *
-	 * @param $key The key to use to identify the value.
+	 * @param $key The binding name or key to use to identify the binding.
 	 * @param $value The value to be bound to the key.
-	 * @param $readonly Sets the value as read only protected.
-	 * @return true on success; false otherwise.
+	 * @param $readonly Sets the value as read only protected, default is false.
+	 * 
+	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * readonly is not a boolean.
+	 * @throws \VictoryCMS\Exception\OverwriteException when trying to add to a
+	 * binding that has been marked as read-only.
 	 */
-	public static function add($key = null, $value = null, $readonly = false)
+	public static function add($key, $value, $readonly = false)
 	{
-		if ($key == null || $value == null) {
-			return false;
+		/* this throws an exception to keep developers from ignoring the false return */
+		if ($key === null || $value === null) {
+			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
 		}
+		if (! is_bool($readonly)) {
+			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+		}
+		
 		$gl = static::getInstance();
-		if (isset($gl->vars[$key])) {
+		
+		if (array_key_exists($key, $gl->vars)) {
+			// Key-value already exists, so merge in value if not read-only
 			if ($gl->vars[$key]->isReadOnly()) {
-				return false;
-			} elseif ($readonly == true) {
-				$gl->vars[$key] = new RegistryNode($value, true);
-			} else {
-				$gl->vars[$key] = new RegistryNode(array_merge($value,$gl->vars[$key]->getValue()), false);
+				throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
 			}
+			$valueArray = array_merge(
+				$gl->vars[$key]->getValue(),
+				is_array($value)? $value : array($value)
+			);
 		} else {
-			$gl->vars[$key] = new RegistryNode($value, $readonly);
+			// Key-value does not exist so create a new one
+			$valueArray = is_array($value)? $value : array($value);
 		}
+		$gl->vars[$key] = new RegistryNode($valueArray, $readonly);
 		return true;
 	}
 
 	/**
-	 * Create a new key-value binding using a
-	 * reference to the value. The value should
-	 * be instantiated before calling attach.
+	 * Create a new key-value binding using a reference to the value; The value
+	 * should be instantiated before calling attach.  Use the isReadOnly method to
+	 * check if a key is marked read-only or not.
 	 *
-	 * @param $bind The binding name or key to use to identify the binding.
-	 * @param $var The address of the value to be bound to the key.
-	 * @throws OverwriteException when trying to attach a binding that has already been set.
-	 * @return void
+	 * @param $key The binding name or key to use to identify the binding.
+	 * @param $value The object to be attached to the key.
+	 * @param $readonly Sets the value as read only protected, default is false.
+	 * 
+	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * readonly is not a boolean.
+	 * @throws \VictoryCMS\Exception\OverwriteException when trying to attach to a
+	 * binding that has been marked as read-only.
 	 */
-	public static function attach($key, &$var, $readonly = false)
+	public static function attach($key, & $value, $readonly = false)
 	{
-		$existing = static::get($key);
-		if (!empty($existing)) {
-			throw new OverwriteException('Binding', $key);
+		/* this throws an exception to keep developers from ignoring the false return */
+		if ($key === null || $value === null) {
+			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
 		}
+		if (! is_bool($readonly)) {
+			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+		}
+		
 		$gl = static::getInstance();
-		$gl->vars[$key] = new RegistryNode(&$var, $readonly);
+		if (! array_key_exists($key, $gl->vars)
+				|| ! $gl->vars[$key]->isReadOnly()) {
+			$node = new RegistryNode(null);
+			$node->setAttachedValue($value);
+			$gl->vars[$key] = $node;
+			return true;
+		}
+		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
 	}
 
 	/**
-	 * Copy a new key-value binding into the registry.
+	 * Copy a new key-value binding into the registry or change an existing entry
+	 * if the key-value binding is not read-only. Use the isReadOnly method to check
+	 * if a key is marked read-only or not.
 	 * 
-	 * @param $key The key to use to identify the binding.
+	 * @param $key The binding name or key to use to identify the binding.
 	 * @param $value The value to be bound to the key.
-	 * @return true if the value was set; false otherwise.
+	 * @param $readonly Sets the value as read only protected, default is false.
+	 * 
+	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * readonly is not a boolean.
+	 * @throws \VictoryCMS\Exception\OverwriteException when trying to set a
+	 * binding that has been marked as read-only.
 	 */
 	public static function set($key, $value, $readonly = false)
 	{
-		if ($key == null || $value == null) {
-			return false;
+		/* these throw an exception to keep developers from ignoring the false return */
+		if ($key === null || $value === null) {
+			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
 		}
+		if (! is_bool($readonly)) {
+			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+		}
+		
 		$gl = static::getInstance();
-		if (!isset($gl->vars[$key]) || !($gl->vars[$key]->isReadOnly())) {
-			$gl->vars[$bind] = new RegistryNode($value, $readonly);
+		if (! array_key_exists($key, $gl->vars) || ! ($gl->vars[$key]->isReadOnly())) {
+			$gl->vars[$key] = new RegistryNode($value, $readonly);
+			return true;
 		}
-		return false;
+		
+		throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
 	}
 
 	/**
-	 * Returns the value of a key-value pair.
+	 * Returns the value of a key-value pair or if there is multiple values for
+	 * the key then an array is returned; throws an exception \Exception
+	 * if the key does not exist. Use the isKey method it check if a key is valid.
 	 *
-	 * @param $key The name of the value to return.
+	 * @param $key The binding name or key to use to identify the binding.
+	 * 
+	 * @throws \Exception If the key does not exist.
+	 * 
 	 * @return value The value that was bound to the key.
 	 */
 	public static function get($key)
 	{
 		$gl = static::getInstance();
-		//TODO: check if NotFoundException can be loaded and use that if possible
-		if (empty($gl->vars[$key])) {
-			throw new \Exception("Key does not exist!");
+		
+		/* this throws an exception to keep developers from ignoring the false return */
+		if (! array_key_exists($key, $gl->vars)) {
+			throw new \Exception("Key '$key' does not exist!");
 		}
+		
 		return $gl->vars[$key]->getValue();
 	}
 
 	/**
-	 * Unsets a key.
+	 * This returns true if the a key is read-only, and false if not. Use the isKey
+	 * method it check if a key is valid.
+	 * 
+	 * @param $key The binding name or key to use to identify the binding.
+	 * @throws \VictoryCMS\Exception\DataException if $Key is null
+	 * @throws \Exception If the key does not exist.
+	 */
+	public static function isReadOnly($key)
+	{
+		$gl = static::getInstance();
+		
+		/* these throw an exception to keep developers from ignoring the false return */
+		if ($key === null) {
+			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
+		}
+		if (! array_key_exists($key, $gl->vars)) {
+			throw new \Exception("Key '$key' does not exist!");
+		}
+		
+		return $gl->vars[$key]->isReadOnly();
+	}
+	
+	/**
+	 * This returns true if key is a valid key-value binding key, false if not.
+	 * 
+	 * @param bool $key true if $key is a valid key; false otherwise
+	 */
+	public static function isKey($key)
+	{
+		$gl = static::getInstance();
+		
+		if ($key == null) {
+			return false;
+		} elseif (! array_key_exists($key, $gl->vars)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Unsets a key-value binding if it is not read-only; this will throw an
+	 * exception if the key-value binding is marked read-only. Use the isKey method
+	 * to check if a key is valid, and the isReadOnly to check if it is marked as
+	 * read-only.
 	 *
-	 * @param $key The key used to identify the binding
-	 * @return void
+	 * @param $key The binding name or key to use to identify the binding.
+	 * 
+	 * @throws \VictoryCMS\Exception\OverwriteException when trying to clear a
+	 * binding that has been marked as read-only.
+	 * @throws \Exception If the key does not exist.
 	 */
 	public static function clear($key)
 	{
 		$gl = static::getInstance();
+		
+		/* these throw an exception to keep developers from ignoring the false return */
+		if (! array_key_exists($key, $gl->vars)) {
+			throw new \Exception("Key '$key' does not exist!");
+		}
+		if ($gl->vars[$key]->isReadOnly()) {
+			throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
+		}
+		
 		unset($gl->vars[$key]);
+		return true;
 	}
 
 	// Prevent users to clone the instance
 	public function __clone()
 	{
-		throw new VictoryCMS\Exception\SingletonCopyException;
+		throw new \VictoryCMS\Exception\SingletonCopyException;
 	}
 }
 ?>
