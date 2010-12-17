@@ -82,7 +82,12 @@ class AutoLoader {
 	 */
 	public function autoload($class)
 	{
-		foreach (Registry::get('autoload') as $directory) {
+		if (Registry::isKey('autoload')) {
+			$autoload = Registry::get('autoload');
+		} else {
+			$autoload = array();
+		}
+		foreach ($autoload as $directory) {
 			static::autoloadRecursive($class, $directory);
 		}
 	}
@@ -118,6 +123,9 @@ class AutoLoader {
 	 */
 	public function addDirectory($directory)
 	{
+		if (! is_string($directory)) {
+			throw new \VictoryCMS\Exception\DataTypeException();
+		}
 		Registry::add('autoload', $directory, false);
 	}
 
