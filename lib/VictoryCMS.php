@@ -154,14 +154,14 @@ class VictoryCMS
 		}
 
 		// get the necessary varaibles from the Registry if they exist
-		try {
+		if (Registry::isKey(RegistryKeys::debug_enabled)) {
 			$debugging = Registry::get(RegistryKeys::debug_enabled);
-		} catch (\Exception $e) {
+		} else {
 			$debugging = false;
 		}
-		try {
+		if (Registry::isKey(RegistryKeys::admin_email)) {
 			$email_path = Registry::get(RegistryKeys::admin_email);
-		} catch (\Exception $e) {
+		} else {
 			$email_path = '';
 		}
 		
@@ -187,19 +187,19 @@ class VictoryCMS
 		 * so comment out for now
 		 */
 		$errorType = array (
-		E_ERROR            => 'ERROR',
-		E_WARNING        => 'WARNING',
-		E_PARSE          => 'PARSING ERROR',
-		E_NOTICE         => 'NOTICE',
-		E_CORE_ERROR     => 'CORE ERROR',
-		E_CORE_WARNING   => 'CORE WARNING',
-		E_COMPILE_ERROR  => 'COMPILE ERROR',
-		E_COMPILE_WARNING => 'COMPILE WARNING',
-		E_USER_ERROR     => 'USER ERROR',
-		E_USER_WARNING   => 'USER WARNING',
-		E_USER_NOTICE    => 'USER NOTICE',
-		E_STRICT         => 'STRICT NOTICE',
-		E_RECOVERABLE_ERROR  => 'RECOVERABLE ERROR'
+			E_ERROR            => 'ERROR',
+			E_WARNING        => 'WARNING',
+			E_PARSE          => 'PARSING ERROR',
+			E_NOTICE         => 'NOTICE',
+			E_CORE_ERROR     => 'CORE ERROR',
+			E_CORE_WARNING   => 'CORE WARNING',
+			E_COMPILE_ERROR  => 'COMPILE ERROR',
+			E_COMPILE_WARNING => 'COMPILE WARNING',
+			E_USER_ERROR     => 'USER ERROR',
+			E_USER_WARNING   => 'USER WARNING',
+			E_USER_NOTICE    => 'USER NOTICE',
+			E_STRICT         => 'STRICT NOTICE',
+			E_RECOVERABLE_ERROR  => 'RECOVERABLE ERROR'
 		);
 
 		// create error message
@@ -207,7 +207,7 @@ class VictoryCMS
 			$err = (static::isCli())? ''.$errorType[$errno].' ' :
 				'<strong>'.$errorType[$errno].'</strong>';
 		} else {
-			$err = (static::isCli())? 'CAUGHT_EXCEPTION' :
+			$err = (static::isCli())? "\tCAUGHT_EXCEPTION" :
 				'<strong>CAUGHT EXCEPTION</strong>';
 		}
 
@@ -217,7 +217,6 @@ class VictoryCMS
 
 		// start backtrace
 		foreach ($backtrace as $v) {
-
 			if (isset($v['class'])) {
 				$trace = (static::isCli())? 'in class '.$v['class'].'::'.$v['function'].'(' :
 					'in class '.$v['class'].'::'.$v['function'].'(';
@@ -230,9 +229,8 @@ class VictoryCMS
 					}
 				}
 				$trace .= (static::isCli())? ')' : ')</strong>';
-			}
-
-			elseif (isset($v['function']) && empty($trace)) {
+				
+			} elseif (isset($v['function']) && empty($trace)) {
 				$trace = (static::isCli())? 'in function '.$v['function'].'(' :
 					'in class '.$v['function'].'(';
 				if (!empty($v['args'])) {
@@ -248,15 +246,14 @@ class VictoryCMS
 			}
 		}
 
-		// display error msg, if debug is enabled
-		if ($debugging == true) {
-			if (static::isCli()) {
-				echo "\nDebug Msg:\n".$errMsg."\n".
-					'Trace: '.$trace."\n";
-			} else {
+		// display error message in HTML if debug is enabled and not in CLI,
+		// always display if on CLI
+		if (static::isCli()) {
+			echo "\nDebug Msg:\n".$errMsg."\n".
+				"Trace: \n\t".$trace."\n\n";
+		} elseif ($debugging == true) {
 				echo '<h2>Debug Msg</h2>'.nl2br($errMsg).'<br />'.
 					'<strong>Trace:</strong> '.nl2br($trace).'<br />';
-			}
 		}
 
 		// what to do
@@ -269,14 +266,14 @@ class VictoryCMS
 
 			default:
 				if ($debugging == false) {
-					// send email to admin
-					if (!empty($email_path)) {
+					// send email to admin if we can
+					if (! empty($email_path)) {
 						$headers = 'From: VictoryCMS Error Handler\r\n';
 						$subject = 'critical error on '.$_SERVER['HTTP_HOST'];
 						@mail($email_path, $subject, $errMsg, $headers);
 					}
 					// end and display error msg
-					exit('An error was encountered on this page.');
+					exit("An error was encountered on this page.\n");
 				} else {
 					if (! static::isCli()) {
 						exit('<p>Aborting.</p>');

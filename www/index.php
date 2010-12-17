@@ -10,4 +10,4 @@ $webRoot = ''.dirname(__DIR__).DIRECTORY_SEPARATOR;
 require_once $webRoot.'lib'.DIRECTORY_SEPARATOR.'VictoryCMS.php';
 
 // Change the below path to config.json as needed
-VictoryCMS\VictoryCMS::bootstrap('../config.json');
+VictoryCMS\VictoryCMS::bootstrap($webRoot.'config.json');
