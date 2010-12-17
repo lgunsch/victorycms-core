@@ -44,29 +44,78 @@ namespace VictoryCMS;
 class FileUtils
 {
 	/**
-	 * Recursively loads any PHP files in the directory $path or in any number of
+	 * Recursively finds any PHP files in the directory $path or in any number of
 	 * sub-folder's underneath the $path including hidden files.
 	 * 
 	 * @example
 	 * $files = FileUtils::findPHPFiles('/etc');
-	 *	foreach ($files as $name => $object) {
-	 *		echo "$name\n";
+	 *	foreach ($files as $filePath) {
+	 *		echo "$filePath\n";
 	 *	}
 	 * 
-	 * @param string $path Directory path from which to load PHP files
+	 * @param string $path Directory path from which to find PHP files
+	 * @throws \Exception if path is not a string
 	 * 
 	 * @return array containing a single index for each PHP file.
 	 */
 	public static function findPHPFiles($path)
 	{
+		return static::findFilesByExtension($path, 'php');
+	}
+	
+	/**
+	 * Recursively finds any files with the specified extension in the directory $path
+	 * or in any number of sub-folder's underneath the $path including hidden files.
+	 * 
+	 * @example
+	 * $files = FileUtils::findPHPFiles('/etc', 'ini');
+	 *	foreach ($files as $filePath) {
+	 *		echo "Found INI file: $filePath\n";
+	 *	}
+	 * 
+	 * @param string $path Directory path from which to find files with extension
+	 * $extension
+	 * @param string $extension The file extension to look for when searching for
+	 * files, but should not have a '.' at the start.
+	 * @param bool $caseSensitive If the extension should be case-sensitive or not;
+	 * default is false or not case-sensitive.
+	 * @throws \Exception if path or extension are not strings, or if caseSensitive
+	 * is not a bool.
+	 * 
+	 * @return array containing a single index for each PHP file.
+	 */
+	public static function findFilesByExtension($path, $extension, $caseSensitive = false)
+	{
+		if (! is_string($path) || ! is_string($extension)) {
+			throw new \Exception('Path and extension must be a string.');
+		}
+		if (! is_bool($caseSensitive)) {
+			throw new \Exception('caseSensitive must be a bool.');
+		}
+		
 		$path = realpath($path);
 		if (! is_dir($path)) {
-			\Exception("$path must be a directory path!");
+			throw new \Exception("$path must be a readable directory path!");
 		}
+		if (empty($extension)) {
+			throw new \Exception('$extension cannot be an empty string.');
+		}
+		
+		// Create an iterator to match the files requested
 		$dirIt = new \RecursiveDirectoryIterator($path);
 		$recursiveIt = new \RecursiveIteratorIterator($dirIt);
-		$files = new \RegexIterator($recursiveIt, '/^.+\.php$/i',
-			\RecursiveRegexIterator::GET_MATCH);
+		$iterator = new \RegexIterator(
+			$recursiveIt,
+			'/^.+\.'.$extension.'$/'.(($caseSensitive)? '' : 'i'),
+			\RecursiveRegexIterator::GET_MATCH
+		);
+		
+		// Use the iterator to build the list of files matched
+		$files = array();
+		foreach ($iterator as $match) {
+			array_push($files, $match[0]);
+		}
+		
 		return $files;
 	}
 }
