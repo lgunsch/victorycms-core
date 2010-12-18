@@ -25,6 +25,7 @@ require_once 'RegistryKeys.php';
 require_once 'Registry.php';
 require_once 'AutoLoader.php';
 require_once 'RegistryNode.php';
+require_once 'LoadManager.php';
 
 /**
  * VictoryCMS core class. This class is the entry point to the VictoryCMS
@@ -34,8 +35,8 @@ require_once 'RegistryNode.php';
  * <strong>Note:</strong> This depends on <strong>Registry.php</strong>, 
  * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong> 
  * for storing system variables. It also depends on 
- * <strong>AutoLoader.php</strong> for loading required classes. These 
- * should be in the same directory as this file.
+ * <strong>AutoLoader.php</strong> and <strong>LoadManager.php</strong> for
+ * loading required classes. These should be in the same directory as this file.
  *
  * @filesource
  * @category VictoryCMS
@@ -76,13 +77,25 @@ class VictoryCMS
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
 		
-		$autoloader = AutoLoader::getInstance();//new AutoLoader();
+		$autoloader = AutoLoader::getInstance();
 		$autoloader = spl_autoload_register(array($autoloader, 'autoload'));
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
 	}
 
+	protected static function load()
+	{
+		echo "Starting the load process...\n";
+		try {
+			LoadManager::load(Registry::get(RegistryKeys::settings_path));
+		} catch (\Exception $e) {
+			echo LoadManager::getUserErrorMessage();
+			exit();
+		}
+		echo "done.\n";
+	}
+	
 	/**
 	 * The main startup method for initializing VictoryCMS and to process
 	 * the request. This should be called with the path to the config.json
@@ -107,11 +120,11 @@ class VictoryCMS
 			exit('Debug mode must only be enabled with a boolean value!');
 		}
 
-		Registry::set(RegistryKeys::settings_path, $settings_path);
-		Registry::set(RegistryKeys::debug_enabled, $debug_mode);
+		Registry::set(RegistryKeys::settings_path, $settings_path, true);
+		Registry::set(RegistryKeys::debug_enabled, $debug_mode, true);
 		
 		static::initialize();
-		
+		static::load();
 		static::run();
 	}
 

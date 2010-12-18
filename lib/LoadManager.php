@@ -3,6 +3,7 @@
 //  VictoryCMS - Content managment system and framework.
 //
 //  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
+//  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
 //
 //  This file is part of VictoryCMS.
 //
@@ -45,7 +46,10 @@ class LoadManager
 	
 	/** Singleton instance to LoadManager */
 	private static $instance;
-		
+	
+	/** User friendly error message */
+	private static $errorMessage;
+	
 	/**
 	 * private constructor; prevents direct creation of object.
 	 */
@@ -63,8 +67,19 @@ class LoadManager
 		if (!isset(static::$instance)) {
 			$c = __CLASS__;
 			static::$instance = new $c;
+			static::$errorMessage = '';
 		}
 		return static::$instance;
+	}
+	
+	/**
+	 * Returns the user friendly error message for the last error.
+	 * 
+	 * @return string Last error message in user friendly format
+	 */
+	public static function getUserErrorMessage()
+	{
+		return static::$errorMessage;
 	}
 	
 	/**
@@ -72,27 +87,53 @@ class LoadManager
 	 * 
 	 * @param $path To the file to load.
 	 */
-	public static function Load($path)
+	public static function load($path)
 	{
+		if (! function_exists('json_decode')) {
+			static::$errorMessage = "JSON PHP extension is required.\n";
+			throw new \Exception('LoadManager requires json_decode function!');
+		}
+		
 		$contents = file_get_contents($path);
-		if (!function_exists('json_decode') || $contents == false) {
-			return false;
+		if ($contents === false) {
+			static::$errorMessage = "Cannot read file configuration file: $path.\n";
+			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
-		$json = json_decode(utf8_encode($contents));
-		if($json == null){
-			return false;
+		
+		$json = json_decode($contents, true);
+		
+		if($json === null){
+			static::$errorMessage = static::getJsonErrorMessage($path);
+			throw new \Exception('Configuration file cannot be decoded.');
 		}
+		
 		foreach ($json as $key => $value) {
 			if ($key == 'load') {
-				$locations = Registry::get('load');
-				foreach ($key as $item) {
-					if (!in_array($item, $locations)) {
+				if (Registry::isKey('load')) {
+					$locations = Registry::get('load');
+				} else {
+					$locations = array();
+				}
+				if (is_array($value)) {
+					foreach ($value as $item) {
+						if (is_array($item)) {
+							throw new \Exception('LoadManager does not support '.
+								'multi-dimensional arrays yet.');
+						} else {
+							if (! in_array($item, $locations)) {
+								Registry::add('load', $item, false);
+								static::load($item);
+							}
+						}
+					}
+				} else {
+					if (! in_array($item, $locations)) {
 						Registry::add('load', $item, false);
-						static::Load($item);
+						static::load($item);
 					}
 				}
-			}
-			elseif (isset($json->$key->value)) {
+				
+			} elseif (isset($json->$key->value)) {
 				if (isset($json->$key->readonly)) {
 					Registry::add($key, ($json->$key->value), $json->$key->readonly);
 				} else {
@@ -100,6 +141,39 @@ class LoadManager
 				}
 			}
 		}
+	}
+	
+	/**
+	 * This will return a nice readable error message if there is an error in a
+	 * configuration file; It assumes json_decode produced the error since this
+	 * loads configuration files using JSON format.
+	 * 
+	 * @param string $filePath The configuration file containing the error.
+	 * 
+	 * @return string The last JSON error in user friendly format.
+	 */
+	protected static function getJsonErrorMessage($filePath)
+	{
+		$json_errors = array(
+    		JSON_ERROR_NONE => 'No error has occurred',
+    		JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
+    		JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
+    		JSON_ERROR_SYNTAX => 'Syntax error'
+		);
+		
+		$message = 'Could not decode configuration file ';
+		$message .= (VictoryCMS::isCli())? $filePath : "<em>$filePath</em>";
+		$message .= (VictoryCMS::isCli())? ": ": ":&nbsp;<strong>";
+		$message .= $json_errors[json_last_error()];
+		$message .= (VictoryCMS::isCli())? ".\n" : "</strong>";
+		
+		return $message;
+	}
+	
+	// Prevent users to clone the instance
+	public function __clone()
+	{
+		throw new \VictoryCMS\Exception\SingletonCopyException;
 	}
 }
 ?>
