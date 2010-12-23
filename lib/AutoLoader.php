@@ -150,7 +150,7 @@ class AutoLoader {
 	 */
 	public function __clone()
 	{
-		throw new VictoryCMS\Exception\SingletonCopyException;
+		throw new \VictoryCMS\Exception\SingletonCopyException;
 	}
 }
 ?>
