@@ -87,6 +87,8 @@ class VictoryCMS
 	protected static function load()
 	{
 		echo "Starting the load process...\n";
+		$autoloader = AutoLoader::getInstance();
+		$autoloader->addDirectory(dirname(__FILE__));
 		try {
 			LoadManager::load(Registry::get(RegistryKeys::settings_path));
 		} catch (\Exception $e) {
