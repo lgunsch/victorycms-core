@@ -82,12 +82,8 @@ class AutoLoader {
 	 */
 	public function autoload($class)
 	{
-		if (Registry::isKey('autoload')) {
-			$autoload = Registry::get('autoload');
-		} else {
-			$autoload = array();
-		}
-		foreach ($autoload as $directory) {
+		// Search all of them for the class to load.
+		foreach (static::listDirs() as $directory) {
 			static::autoloadRecursive($class, $directory);
 		}
 	}
@@ -117,16 +113,40 @@ class AutoLoader {
 	}
 
 	/**
-	 * Adds a directory to search in for the needed class.
+	 * Adds a directory to recursively search in for the needed class; the directory
+	 * should be a valid readable directory, although this cannot be checked until
+	 * it is used by the autoload method. You should not add a sub-directory of a 
+	 * directory already added into the AutoLoader.
 	 *
 	 * @param string $directory Directory to search in.
 	 */
-	public function addDirectory($directory)
+	public static function addDir($directory)
 	{
-		if (! is_string($directory)) {
+		if (! is_string($directory) || empty($directory)) {
 			throw new \VictoryCMS\Exception\DataTypeException();
 		}
-		Registry::add('autoload', $directory, false);
+		Registry::add(RegistryKeys::autoload, $directory, false);
+	}
+	
+	/**
+	 * Returns the directory paths from which the autoloader will search for classes
+	 * to load; this will only return a list of top level directories,
+	 * sub-directories of these top level directories will be searched by the
+	 * autoloader but not returned here.
+	 * 
+	 * @return array of directory paths.
+	 * 
+	 */
+	public static function listDirs()
+	{
+		// Check for any user configured autoload directories
+		if (Registry::isKey(RegistryKeys::autoload)) {
+			$autoload = Registry::get(RegistryKeys::autoload);
+		} else {
+			$autoload = array();
+		}
+		
+		return $autoload;
 	}
 
 	/**

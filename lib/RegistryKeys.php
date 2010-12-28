@@ -49,5 +49,8 @@ class RegistryKeys
  	
  	/** Path to the settings file */
  	const settings_path = "settings_path";
+ 	
+ 	/** Registry array of Autoload directory paths */
+ 	const autoload = 'autoload';
 }
 ?>
