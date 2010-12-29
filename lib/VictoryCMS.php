@@ -28,7 +28,7 @@ require_once 'RegistryNode.php';
 require_once 'LoadManager.php';
 
 /**
- * VictoryCMS core class. This class is the entry point to the VictoryCMS
+ * VictoryCMS core class; this class is the entry point to the VictoryCMS
  * system. It initializes the error handlers, the class autoloader and
  * contains some important functions.
  *
@@ -36,7 +36,8 @@ require_once 'LoadManager.php';
  * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong> 
  * for storing system variables. It also depends on 
  * <strong>AutoLoader.php</strong> and <strong>LoadManager.php</strong> for
- * loading required classes. These should be in the same directory as this file.
+ * loading required classes. These should be in the same directory as this file,
+ * and all located in the VictoryCMS 'lib' directory.
  *
  * @filesource
  * @category VictoryCMS
@@ -87,8 +88,11 @@ class VictoryCMS
 	protected static function load()
 	{
 		echo "Starting the load process...\n";
-		$autoloader = AutoLoader::getInstance();
-		$autoloader->addDirectory(dirname(__FILE__));
+		
+		// Set the lib path and register it with the autoloader
+		Registry::set(RegistryKeys::lib_path, __DIR__);
+		AutoLoader::addDir(Registry::get(RegistryKeys::lib_path));
+		
 		try {
 			LoadManager::load(Registry::get(RegistryKeys::settings_path));
 		} catch (\Exception $e) {
