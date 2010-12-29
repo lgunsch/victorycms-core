@@ -37,22 +37,25 @@ namespace VictoryCMS;
  * depends on the registry locations for finding needed classes.
  *
  * @package Core
- *
- * @todo Testing since I can't till the reg is done.
- * @todo Add the directories from the reg.
  */
 class AutoLoader {
 
 	/** Singleton instance to AutoLoader */
-	private static $instance;
+	protected static $instance;
+	
+	/** Namespace separator pattern: dot, whitespace, or a dash. */
+	private static $NSSeparatorPattern = '(\.|\s|-)';
+	
+	/** Class search regular expression pattern: [class.]%s[.class OR .inc].php  */
+	private static $pattern = '/^(class\.)?%s(\.class|\.inc)?\.php$/i';
 	
 	/** Array of file format extensions */
 	private $fileNameFormats;
 
 	/**
-	 * private constructor; prevents direct creation of object. Also adds a few default values for seach for.
+	 * protected constructor; prevents direct creation of object. Also adds a few default values for seach for.
 	 */
-	private function __construct()
+	protected function __construct()
 	{
 		$this->fileNameFormats = array(
         	'%s.php',
@@ -113,6 +116,24 @@ class AutoLoader {
 	}
 
 	/**
+	 * This will return the regular expression pattern for the given class; the
+	 * class is expected to be in the form of 'Namespace\Sub-namespace\Class'
+	 * similar to what is passed into a spl_autoload function.
+	 * 
+	 * @param string $class Class name to use in the pattern.
+	 * 
+	 * @return string the complete pattern to match against.
+	 */
+	protected static function getPattern($class)
+	{
+		$class = trim($class);
+		$fixed = ($class{0} == '\\')? substr($class, 1) : $class;
+		$separated = str_replace('\\', self::$NSSeparatorPattern, $fixed);
+		$pattern = sprintf(self::$pattern, $separated);
+		return $pattern;
+	}	
+	
+	/**
 	 * Adds a directory to recursively search in for the needed class; the directory
 	 * should be a valid readable directory, although this cannot be checked until
 	 * it is used by the autoload method. You should not add a sub-directory of a 
@@ -147,22 +168,6 @@ class AutoLoader {
 		}
 		
 		return $autoload;
-	}
-
-	/**
-	 * Adds a file name format to search for.
-	 *
-	 * @param string $format File name format to add.
-	 */
-	public function addFileNameFormat($format)
-	{
-		if (is_string($format)) {
-	        $this->fileNameFormats[] = $format;
-	    } elseif (is_array($format)) {
-	        foreach ($format as $for) {
-			    $this->addFileNameFormat($for);
-		    }
-	    }
 	}
 
 	/**
