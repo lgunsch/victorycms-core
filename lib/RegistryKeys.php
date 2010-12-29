@@ -50,6 +50,9 @@ class RegistryKeys
  	/** Path to the settings file */
  	const settings_path = "settings_path";
  	
+ 	/** Path to the VictoryCMS lib directory */
+ 	const lib_path = "lib_path";
+ 	
  	/** Registry array of Autoload directory paths */
  	const autoload = 'autoload';
 }
