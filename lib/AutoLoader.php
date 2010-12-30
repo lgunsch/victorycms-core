@@ -44,10 +44,10 @@ class AutoLoader {
 	protected static $instance;
 	
 	/** Namespace separator pattern: dot, whitespace, or a dash. */
-	private static $NSSeparatorPattern = '(\.|\s|-)';
+	private static $NSSeparatorPattern = '(\.|\s|-)+';
 	
 	/** Class search regular expression pattern: [class.]%s[.class OR .inc].php  */
-	private static $pattern = '/^(class\.)?%s(\.class|\.inc)?\.php$/i';
+	private static $pattern = '/^(class\.)?%s(\.class|\.inc){0,2}\.php$/i';
 	
 	/** Array of file format extensions */
 	private $fileNameFormats;
