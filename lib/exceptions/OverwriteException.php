@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents a overwrite Exception. This is usually thrown 
@@ -37,7 +37,7 @@ namespace VictoryCMS\Exception;
  *
  * @package Exceptions
  */
-class OverwriteException extends  \VictoryCMS\Exception
+class OverwriteException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new OverwriteException.

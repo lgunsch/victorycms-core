@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an invalid data exception. Thrown when
@@ -38,7 +38,7 @@ namespace VictoryCMS\Exception;
  *
  * @package Exceptions
  */
-class DataException extends  \VictoryCMS\Exception
+class DataException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new DataException.

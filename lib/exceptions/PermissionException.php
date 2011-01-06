@@ -28,14 +28,14 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an invalid permission level exception.
  *
  * @package Exceptions
  */
-class PermissionException extends  \VictoryCMS\Exception
+class PermissionException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new PermissionException.

@@ -19,7 +19,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace VictoryCMS;
+namespace Vcms;
 
 require_once 'RegistryKeys.php';
 require_once 'Registry.php';

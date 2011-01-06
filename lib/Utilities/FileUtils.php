@@ -30,11 +30,11 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * A collection of file and directory manipulating methods.
- * 
+ *
  * @author Lewis Gunsch
  * @filesource
  * @package Utilities

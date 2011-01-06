@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an invalid permission key exception. This is
@@ -36,7 +36,7 @@ namespace VictoryCMS\Exception;
  *
  * @package Exceptions
  */
-class PermissionKeyException extends  \VictoryCMS\Exception
+class PermissionKeyException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new PermissionKeyException.

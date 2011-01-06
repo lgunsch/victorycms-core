@@ -32,7 +32,7 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This class keeps a value of the registry along with if it is read only or not.
@@ -54,13 +54,13 @@ class RegistryNode
 	 * @param mixed $value Value to set the RegistryNode to.
 	 * @param bool $readonly sets the RegistryNode to read-only
 	 * 
-	 * @throws \VictoryCMS\Exception\DataException if $readonly is not a bool value.
+	 * @throws \Vcms\Exception\DataException if $readonly is not a bool value.
 	 */
 	public function __construct($value, $readonly = false)
 	{
 		$this->value = $value;
 		if (! is_bool($readonly)) {
-			throw new \VictoryCMS\Exception\DataException("bool", "$readonly", 'readonly');
+			throw new \Vcms\Exception\DataException("bool", "$readonly", 'readonly');
 		}
 		$this->readonly = $readonly;
 	}
@@ -81,7 +81,7 @@ class RegistryNode
 	 *
 	 * @param mixed $value Value to set the RegistryNode to.
 	 * 
-	 * @throws \VictoryCMS\Exception\OverwriteException If the value is read-only.
+	 * @throws \Vcms\Exception\OverwriteException If the value is read-only.
 	 */
 	public function setValue($value)
 	{
@@ -90,7 +90,7 @@ class RegistryNode
 			return true;
 		}
 		/* this throws an exception to keep developers from ignoring a false return */
-		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\OverwriteException('Binding', $value);
 	}
 
 	/**
@@ -100,7 +100,7 @@ class RegistryNode
 	 * 
 	 * @param mixed $objAddress Value to set the RegistryNode reference to.
 	 * 
-	 * @throws \VictoryCMS\Exception\OverwriteException If the value is read-only.
+	 * @throws \Vcms\Exception\OverwriteException If the value is read-only.
 	 */
 	public function setAttachedValue(& $objAddress)
 	{
@@ -109,7 +109,7 @@ class RegistryNode
 			return true;
 		}
 		/* this throws an exception to keep developers from ignoring a false return */
-		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\OverwriteException('Binding', $value);
 	}
 	
 	/**

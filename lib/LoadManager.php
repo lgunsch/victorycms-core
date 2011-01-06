@@ -31,7 +31,7 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This class loads the Registry with information 
@@ -179,7 +179,7 @@ class LoadManager
 	// Prevent users to clone the instance
 	public function __clone()
 	{
-		throw new \VictoryCMS\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopyException;
 	}
 }
 ?>

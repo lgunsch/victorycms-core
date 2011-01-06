@@ -32,7 +32,7 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This singleton class keeps key-value pairs saved in a similar fasion as $GLOBALS
@@ -83,19 +83,19 @@ class Registry
 	 * @param $value The value to be bound to the key.
 	 * @param $readonly Sets the value as read only protected, default is false.
 	 * 
-	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * @throws \Vcms\Exception\DataException If key or value is null, or if
 	 * readonly is not a boolean.
-	 * @throws \VictoryCMS\Exception\OverwriteException when trying to add to a
+	 * @throws \Vcms\Exception\OverwriteException when trying to add to a
 	 * binding that has been marked as read-only.
 	 */
 	public static function add($key, $value, $readonly = false)
 	{
 		/* this throws an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\DataException("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
 		}
 		
 		$gl = static::getInstance();
@@ -103,7 +103,7 @@ class Registry
 		if (array_key_exists($key, $gl->vars)) {
 			// Key-value already exists, so merge in value if not read-only
 			if ($gl->vars[$key]->isReadOnly()) {
-				throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
+				throw new \Vcms\Exception\OverwriteException('Binding', $key);
 			}
 			$valueArray = array_merge(
 				$gl->vars[$key]->getValue(),
@@ -126,19 +126,19 @@ class Registry
 	 * @param $value The object to be attached to the key.
 	 * @param $readonly Sets the value as read only protected, default is false.
 	 * 
-	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * @throws \Vcms\Exception\DataException If key or value is null, or if
 	 * readonly is not a boolean.
-	 * @throws \VictoryCMS\Exception\OverwriteException when trying to attach to a
+	 * @throws \Vcms\Exception\OverwriteException when trying to attach to a
 	 * binding that has been marked as read-only.
 	 */
 	public static function attach($key, & $value, $readonly = false)
 	{
 		/* this throws an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\DataException("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
 		}
 		
 		$gl = static::getInstance();
@@ -149,7 +149,7 @@ class Registry
 			$gl->vars[$key] = $node;
 			return true;
 		}
-		throw new \VictoryCMS\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\OverwriteException('Binding', $value);
 	}
 
 	/**
@@ -161,19 +161,19 @@ class Registry
 	 * @param $value The value to be bound to the key.
 	 * @param $readonly Sets the value as read only protected, default is false.
 	 * 
-	 * @throws \VictoryCMS\Exception\DataException If key or value is null, or if
+	 * @throws \Vcms\Exception\DataException If key or value is null, or if
 	 * readonly is not a boolean.
-	 * @throws \VictoryCMS\Exception\OverwriteException when trying to set a
+	 * @throws \Vcms\Exception\OverwriteException when trying to set a
 	 * binding that has been marked as read-only.
 	 */
 	public static function set($key, $value, $readonly = false)
 	{
 		/* these throw an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\DataException("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \VictoryCMS\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
 		}
 		
 		$gl = static::getInstance();
@@ -182,7 +182,7 @@ class Registry
 			return true;
 		}
 		
-		throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
+		throw new \Vcms\Exception\OverwriteException('Binding', $key);
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Registry
 	 * method it check if a key is valid.
 	 * 
 	 * @param $key The binding name or key to use to identify the binding.
-	 * @throws \VictoryCMS\Exception\DataException if $Key is null
+	 * @throws \Vcms\Exception\DataException if $Key is null
 	 * @throws \Exception If the key does not exist.
 	 */
 	public static function isReadOnly($key)
@@ -222,7 +222,7 @@ class Registry
 		
 		/* these throw an exception to keep developers from ignoring the false return */
 		if ($key === null) {
-			throw new \VictoryCMS\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\DataException("Not null", "null", "key");
 		}
 		if (! array_key_exists($key, $gl->vars)) {
 			throw new \Exception("Key '$key' does not exist!");
@@ -257,7 +257,7 @@ class Registry
 	 *
 	 * @param $key The binding name or key to use to identify the binding.
 	 * 
-	 * @throws \VictoryCMS\Exception\OverwriteException when trying to clear a
+	 * @throws \Vcms\Exception\OverwriteException when trying to clear a
 	 * binding that has been marked as read-only.
 	 * @throws \Exception If the key does not exist.
 	 */
@@ -270,7 +270,7 @@ class Registry
 			throw new \Exception("Key '$key' does not exist!");
 		}
 		if ($gl->vars[$key]->isReadOnly()) {
-			throw new \VictoryCMS\Exception\OverwriteException('Binding', $key);
+			throw new \Vcms\Exception\OverwriteException('Binding', $key);
 		}
 		
 		unset($gl->vars[$key]);
@@ -280,7 +280,7 @@ class Registry
 	// Prevent users to clone the instance
 	public function __clone()
 	{
-		throw new \VictoryCMS\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopyException;
 	}
 }
 ?>

@@ -30,7 +30,7 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This class represents a set of key constants used in the Registry by 

@@ -31,7 +31,7 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This class represents a autoloader object that loads required classes. This class
@@ -184,7 +184,7 @@ class AutoLoader {
 	public static function addDir($directory)
 	{
 		if (! is_string($directory) || empty($directory)) {
-			throw new \VictoryCMS\Exception\DataTypeException();
+			throw new \Vcms\Exception\DataTypeException();
 		}
 		Registry::add(RegistryKeys::autoload, $directory, false);
 		static::loadDir($directory);
@@ -216,7 +216,7 @@ class AutoLoader {
 	 */
 	public function __clone()
 	{
-		throw new \VictoryCMS\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopyException;
 	}
 }
 ?>

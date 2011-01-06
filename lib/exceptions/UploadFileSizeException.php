@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an invalid uploaded file size exception. This is
@@ -37,7 +37,7 @@ namespace VictoryCMS\Exception;
  *
  * @package Exceptions
  */
-class UploadFileSizeException extends  \VictoryCMS\Exception
+class UploadFileSizeException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new UploadFileSizeException.

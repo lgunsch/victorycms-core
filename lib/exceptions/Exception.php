@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS;
+namespace Vcms;
 
 /**
  * This is a Exception class that is thrown by VictoryCMS

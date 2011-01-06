@@ -28,14 +28,14 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an invalid singleton copy exception.
  *
  * @package Exceptions
  */
-class SingletonCopyException extends \VictoryCMS\Exception
+class SingletonCopyException extends \Vcms\Exception
 {
 	/**
 	 * Constructs a new SingletonCopyException.

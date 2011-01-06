@@ -28,7 +28,7 @@
  * @package Exceptions
  */
 
-namespace VictoryCMS\Exception;
+namespace Vcms\Exception;
 
 /**
  * This represents an NotFoundException exception. This is
@@ -37,7 +37,7 @@ namespace VictoryCMS\Exception;
  *
  * @package Exceptions
  */
-class NotFoundException extends  \VictoryCMS\Exception
+class NotFoundException extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new NotFoundException.
