@@ -3,6 +3,7 @@
 //  VictoryCMS - Content managment system and framework.
 //
 //  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
+//  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
 //
 //  This file is part of VictoryCMS.
 //
@@ -33,7 +34,7 @@
 namespace VictoryCMS;
 
 /**
- * This class represents a autoloader object that loads needed classes. This class
+ * This class represents a autoloader object that loads required classes. This class
  * depends on the registry locations for finding needed classes.
  *
  * @package Core
@@ -46,23 +47,21 @@ class AutoLoader {
 	/** Namespace separator pattern: dot, whitespace, or a dash. */
 	private static $NSSeparatorPattern = '(\.|\s|-)+';
 	
-	/** Class search regular expression pattern: [class.]%s[.class OR .inc].php  */
-	private static $pattern = '/^(class\.)?%s(\.class|\.inc){0,2}\.php$/i';
+	/** PHP File pattern, matches all full path PHP files. */
+	private static $phpFilePattern = '/^.+\.php$/i';
 	
-	/** Array of file format extensions */
-	private $fileNameFormats;
-
+	/** Class file search pattern: [class.]%s[.class OR .inc]  */
+	private static $pattern = '/^(class\.)?%s(\.class|\.inc){0,2}$/i';
+	
+	/** Array of arrays of PHP file paths */
+	protected static $directoryFiles = array();
+	
 	/**
 	 * protected constructor; prevents direct creation of object. Also adds a few default values for seach for.
 	 */
 	protected function __construct()
 	{
-		$this->fileNameFormats = array(
-        	'%s.php',
-      		'%s.class.php',
-      		'class.%s.php',
-      		'%s.inc.php'
-        );
+
 	}
 
 	/**
@@ -79,40 +78,46 @@ class AutoLoader {
 	}
 
 	/**
-	 * The function to be called to search for a given needed class.
+	 * This is called to load a required class.
 	 *
-	 * @param string $class the class name to search for
+	 * @param string $class The class name to search for.
 	 */
-	public function autoload($class)
+	public static function autoload($class)
 	{
+		//TODO: check if class is already loaded!
+		
 		// Search all of them for the class to load.
 		foreach (static::listDirs() as $directory) {
-			static::autoloadRecursive($class, $directory);
+			static::autoloadDir($class, $directory);
 		}
 	}
 
 	/**
-	 * The function that recursivley searchs for the needed class.
+	 * This searchs the directoryFiles array for the required class
+	 * and loads it. 
 	 *
-	 * @param string $class the class name to search for
-	 * @param string $directory location to search within
+	 * @param string $class The class name to search for.
+	 * @param string $directory Directory index of array to search in
+	 * directoryFiles.
+	 * 
+	 * @return boolean true if class is loaded, false if not.
 	 */
-	private function autoloadRecursive($class, $directory)
+	private static function autoloadDir($class, $directory)
 	{
-		foreach ($this->fileNameFormats as $fileNameFormat) {
-			$path = $directory.sprintf($fileNameFormat, $class);
-			if (file_exists($path)) {
-				include_once $path;
-				return;
+		if (! array_key_exists($directory, static::$directoryFiles)) {
+			return false;
+		}
+		
+		$files = static::$directoryFiles[$directory];
+		$pattern = static::getPattern($class);
+		
+		foreach ($files as $file) {
+			if (preg_match($pattern, pathinfo($file, PATHINFO_FILENAME)) == 1) {
+				require_once $file;
+				return true;
 			}
 		}
-		$d = dir($directory);
-		while ($entry=$d->read()) {
-			if (is_dir($d->path.DIRECTORY_SEPARATOR.$entry) && ($entry != '.' || $entry != '..')) {
-				static::autoloadRecursive($class, $d->path.DIRECTORY_SEPARATOR.$entry);
-			}
-		}
-		$d->close();
+		return false;
 	}
 
 	/**
@@ -126,18 +131,53 @@ class AutoLoader {
 	 */
 	protected static function getPattern($class)
 	{
+		// Create the namespace and class pattern
 		$class = trim($class);
 		$fixed = ($class{0} == '\\')? substr($class, 1) : $class;
 		$separated = str_replace('\\', self::$NSSeparatorPattern, $fixed);
+
+		// Assemble the pattern
 		$pattern = sprintf(self::$pattern, $separated);
+
 		return $pattern;
 	}	
 	
 	/**
-	 * Adds a directory to recursively search in for the needed class; the directory
-	 * should be a valid readable directory, although this cannot be checked until
-	 * it is used by the autoload method. You should not add a sub-directory of a 
-	 * directory already added into the AutoLoader.
+	 * Loads PHP file paths from a directory or any sub-directories into an array in
+	 * the directoryFiles array with the directory path used as the index. 
+	 * 
+	 * @param string $directory Directory to search for PHP files.
+	 */
+	protected static function loadDir($directory)
+	{
+		static::$directoryFiles[$directory] = array();
+		
+		//TODO: is_dir() nees debugged realpath (FileUtils::truepath) to be accurate!
+		if (! is_dir($directory)) {
+			throw new \Exception($directory.' is not a valid directory!');
+		}
+
+		// Create a PHP file recursive iterator
+		$dirIterator = new \RecursiveDirectoryIterator($directory);
+		$recursiveIterator = new \RecursiveIteratorIterator($dirIterator);
+		$iterator = new \RegexIterator(
+			$recursiveIterator,
+			static::$phpFilePattern,
+			\RecursiveRegexIterator::GET_MATCH
+		);
+
+		// Use the iterator to build the list of PHP files
+		$files = array();
+		foreach ($iterator as $match) {
+			array_push(static::$directoryFiles[$directory], $match[0]);
+		}
+	}
+	
+	/**
+	 * Adds a directory to search in for the required class; all sub-directories below
+	 * this the directory will also be searched. The directory should be a valid
+	 * readable directory. You should NOT add a sub-directory of a directory already
+	 * added into the AutoLoader.
 	 *
 	 * @param string $directory Directory to search in.
 	 */
@@ -147,6 +187,7 @@ class AutoLoader {
 			throw new \VictoryCMS\Exception\DataTypeException();
 		}
 		Registry::add(RegistryKeys::autoload, $directory, false);
+		static::loadDir($directory);
 	}
 	
 	/**

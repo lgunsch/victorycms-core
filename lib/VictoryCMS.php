@@ -78,8 +78,7 @@ class VictoryCMS
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
 		
-		$autoloader = AutoLoader::getInstance();
-		$autoloader = spl_autoload_register(array($autoloader, 'autoload'));
+		$autoloader = spl_autoload_register(__NAMESPACE__.'\AutoLoader::autoload');
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
