@@ -44,6 +44,26 @@ namespace Vcms;
 class FileUtils
 {
 	/**
+	 * This function is to replace PHP's extremely buggy realpath(); it is used to
+	 * realize file system paths. It will resolve absolute and relative paths,
+	 * paths with . and .., and paths with extra directory separators.
+	 * 
+	 * @param string The original path, can be relative or absolute.
+	 * 
+	 * @return string The resolved path, it might not exist.
+	 */
+	public static function truepath($path)
+	{
+		/* 
+		 * This is an adapter for AutoLoader::truepath because this function is
+		 * required by AutoLoader before FileUtils can ever be loaded. So it is
+		 * located there, and this is an adapter to it so it looks to be in the
+		 * correct location.
+		 */
+		return AutoLoader::truepath($path);
+	}
+	
+	/**
 	 * Recursively finds any PHP files in the directory $path or in any number of
 	 * sub-folder's underneath the $path including hidden files.
 	 * 
@@ -105,9 +125,9 @@ class FileUtils
 		$dirIt = new \RecursiveDirectoryIterator($path);
 		$recursiveIt = new \RecursiveIteratorIterator($dirIt);
 		$iterator = new \RegexIterator(
-			$recursiveIt,
+		$recursiveIt,
 			'/^.+\.'.$extension.'$/'.(($caseSensitive)? '' : 'i'),
-			\RecursiveRegexIterator::GET_MATCH
+		\RecursiveRegexIterator::GET_MATCH
 		);
 		
 		// Use the iterator to build the list of files matched

@@ -174,6 +174,43 @@ class AutoLoader {
 	}
 	
 	/**
+	 * This function is to replace PHP's extremely buggy realpath(); it is used to
+	 * realize file system paths. It will resolve absolute and relative paths,
+	 * paths with . and .., and paths with extra directory separators.
+	 *
+	 * @param string The original path, can be relative or absolute.
+	 * 
+	 * @return string The resolved path, it might not exist.
+	 */
+	public static function truepath($path)
+	{
+		// attempts to detect if path is relative in which case, add cwd
+		if(strpos($path,':') === false && (strlen($path) == 0 || $path{0} != '/')) {
+			$path = getcwd().DIRECTORY_SEPARATOR.$path;
+		}
+		// resolve path parts (single dot, double dot and double delimiters)
+		$path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+		$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+		$absolutes = array();
+		foreach ($parts as $part) {
+			if ('.'  == $part) {
+				continue;
+			}
+			if ('..' == $part) {
+				array_pop($absolutes);
+			} else {
+				$absolutes[] = $part;
+			}
+		}
+		$path = DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+		// if file exists and it is a link, use readlink to resolves links
+		if(file_exists($path) && is_link($path) == true) {
+			$path = readlink($path);
+		}
+		return $path;
+	}
+	
+	/**
 	 * Adds a directory to search in for the required class; all sub-directories below
 	 * this the directory will also be searched. The directory should be a valid
 	 * readable directory. You should NOT add a sub-directory of a directory already
