@@ -94,15 +94,15 @@ class LoadManager
 			throw new \Exception('LoadManager requires json_decode function!');
 		}
 		
-		$path = realpath($path);
+		$path = FileUtils::truepath($path);
 		if ($path === false) {
-			static::$errorMessage = "Cannot find path for configuration file: $path.\n";
+			static::$errorMessage = "Cannot find path for configuration file: $path\n";
 			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
 		
 		$contents = file_get_contents($path);
 		if ($contents === false) {
-			static::$errorMessage = "Cannot read file configuration file: $path.\n";
+			static::$errorMessage = "Cannot read file configuration file: $path\n";
 			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
 		
