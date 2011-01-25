@@ -45,7 +45,7 @@ class AutoLoader {
 	protected static $instance;
 	
 	/** Namespace separator pattern: dot, whitespace, or a dash. */
-	private static $NSSeparatorPattern = '(\.|\s|-)+';
+	private static $NSSeparatorPattern = '(\.|-)+';
 	
 	/** PHP File pattern, matches all full path PHP files. */
 	private static $phpFilePattern = '/^.+\.php$/i';
