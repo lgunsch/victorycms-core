@@ -86,10 +86,24 @@ class AutoLoader {
 	{
 		//TODO: check if class is already loaded!
 		
-		// Search all of them for the class to load.
+		// Search all autoload directories for the class to load.
 		foreach (static::listDirs() as $directory) {
-			static::autoloadDir($class, $directory);
+			if (static::autoloadDir($class, $directory) === true) {
+				return true;
+			} 
 		}
+		
+		// If we did not find the class the first time rescan the directories and
+		// try again. This is code duplication, but at least it will rescan and
+		// search again only when necessary.
+		static::rescanDirs();
+		foreach (static::listDirs() as $directory) {
+			if (static::autoloadDir($class, $directory) === true) {
+				return true;
+			} 
+		}
+		
+		return false;
 	}
 
 	/**
@@ -150,9 +164,9 @@ class AutoLoader {
 	 */
 	protected static function loadDir($directory)
 	{
+		$directory = static::truepath($directory);
 		static::$directoryFiles[$directory] = array();
 		
-		//TODO: is_dir() nees debugged realpath (FileUtils::truepath) to be accurate!
 		if (! is_dir($directory)) {
 			throw new \Exception($directory.' is not a valid directory!');
 		}
@@ -176,11 +190,12 @@ class AutoLoader {
 	/**
 	 * This function is to replace PHP's extremely buggy realpath(); it is used to
 	 * realize file system paths. It will resolve absolute and relative paths,
-	 * paths with . and .., and paths with extra directory separators.
+	 * paths with . and .., and paths with extra directory separators. There will be
+	 * no trailing / or \ in the path.
 	 *
 	 * @param string The original path, can be relative or absolute.
 	 * 
-	 * @return string The resolved path, it might not exist.
+	 * @return string The resolved path, it may not exist.
 	 */
 	public static function truepath($path)
 	{
@@ -211,6 +226,17 @@ class AutoLoader {
 	}
 	
 	/**
+	 * This will rescan all the directories for PHP files and rebuild the file path
+	 * cache; be frugal in calling this function as it can be expensive.
+	 */
+	public static function rescanDirs()
+	{
+		foreach (static::listDirs() as $directory) {
+			static::loadDir($directory);
+		}
+	}
+	
+	/**
 	 * Adds a directory to search in for the required class; all sub-directories below
 	 * this the directory will also be searched. The directory should be a valid
 	 * readable directory. You should NOT add a sub-directory of a directory already
@@ -223,13 +249,14 @@ class AutoLoader {
 		if (! is_string($directory) || empty($directory)) {
 			throw new \Vcms\Exception\DataTypeException();
 		}
-		Registry::add(RegistryKeys::autoload, $directory, false);
+		$path = static::truepath($directory);
+		Registry::add(RegistryKeys::autoload, $path, false);
 		static::loadDir($directory);
 	}
 	
 	/**
 	 * Returns the directory paths from which the autoloader will search for classes
-	 * to load; this will only return a list of top level directories,
+	 * to load in an array; this will only return a list of top level directories,
 	 * sub-directories of these top level directories will be searched by the
 	 * autoloader but not returned here.
 	 * 
