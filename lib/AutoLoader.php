@@ -84,8 +84,6 @@ class AutoLoader {
 	 */
 	public static function autoload($class)
 	{
-		//TODO: check if class is already loaded!
-		
 		// Search all autoload directories for the class to load.
 		foreach (static::listDirs() as $directory) {
 			if (static::autoloadDir($class, $directory) === true) {
