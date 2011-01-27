@@ -21,11 +21,11 @@
 
 namespace Vcms;
 
-require_once 'RegistryKeys.php';
-require_once 'Registry.php';
+require_once 'Vcms-RegistryKeys.php';
+require_once 'Vcms-Registry.php';
 require_once 'Vcms-Autoloader.php';
-require_once 'RegistryNode.php';
-require_once 'LoadManager.php';
+require_once 'Vcms-RegistryNode.php';
+require_once 'Vcms-LoadManager.php';
 
 /**
  * VictoryCMS core class; this class is the entry point to the VictoryCMS
