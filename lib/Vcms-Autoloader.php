@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - AutoLoader
+ * VictoryCMS - Autoloader
  *
  * @filesource
  * @category VictoryCMS
@@ -40,9 +40,9 @@ namespace Vcms;
  *
  * @package Core
  */
-class AutoLoader {
+class Autoloader {
 
-	/** Singleton instance to AutoLoader */
+	/** Singleton instance to Autoloader */
 	protected static $instance;
 	
 	/** Namespace separator pattern: dot, or a dash. */
@@ -67,7 +67,7 @@ class AutoLoader {
 
 	/**
 	 * The singleton functon for getting the object.
-	 * @return AutoLoader Object used to autoload classes.
+	 * @return Autoloader Object used to autoload classes.
 	 */
 	public static function getInstance()
 	{
@@ -239,7 +239,7 @@ class AutoLoader {
 	 * Adds a directory to search in for the required class; all sub-directories below
 	 * this the directory will also be searched. The directory should be a valid
 	 * readable directory. You should NOT add a sub-directory of a directory already
-	 * added into the AutoLoader.
+	 * added into the Autoloader.
 	 *
 	 * @param string $directory Directory to search in, not a sub-directory of one
 	 * already added.

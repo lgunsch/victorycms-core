@@ -23,7 +23,7 @@ namespace Vcms;
 
 require_once 'RegistryKeys.php';
 require_once 'Registry.php';
-require_once 'AutoLoader.php';
+require_once 'Vcms-Autoloader.php';
 require_once 'RegistryNode.php';
 require_once 'LoadManager.php';
 
@@ -35,7 +35,7 @@ require_once 'LoadManager.php';
  * <strong>Note:</strong> This depends on <strong>Registry.php</strong>, 
  * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong> 
  * for storing system variables. It also depends on 
- * <strong>AutoLoader.php</strong> and <strong>LoadManager.php</strong> for
+ * <strong>Autoloader.php</strong> and <strong>LoadManager.php</strong> for
  * loading required classes. These should be in the same directory as this file,
  * and all located in the VictoryCMS 'lib' directory.
  *
@@ -57,7 +57,7 @@ class VictoryCMS
 
 	/**
 	 * Perform PHP environment initiailization. This will add the exception
-	 * and error handlers into PHP and also create the AutoLoader.
+	 * and error handlers into PHP and also create the Autoloader.
 	 *
 	 * @return void
 	 */
@@ -78,7 +78,7 @@ class VictoryCMS
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
 		
-		$autoloader = spl_autoload_register(__NAMESPACE__.'\AutoLoader::autoload');
+		$autoloader = spl_autoload_register(__NAMESPACE__.'\Autoloader::autoload');
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
@@ -90,7 +90,7 @@ class VictoryCMS
 		
 		// Set the lib path and register it with the autoloader
 		Registry::set(RegistryKeys::lib_path, __DIR__);
-		AutoLoader::addDir(Registry::get(RegistryKeys::lib_path));
+		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
 		
 		try {
 			LoadManager::load(Registry::get(RegistryKeys::settings_path));
