@@ -27,6 +27,7 @@
  * @category VictoryCMS
  * @package  Core
  * @author   Andrew Crouse <amcrouse@victorycms.org>
+ * @author   Lewis Gunsch <lgunsch@victorycms.org>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
  */
@@ -34,8 +35,8 @@
 namespace Vcms;
 
 /**
- * This class represents a autoloader object that loads required classes. This class
- * depends on the registry locations for finding needed classes.
+ * This class represents an autoloader object that loads required classes. This
+ * class depends on the registry locations for finding needed classes.
  *
  * @package Core
  */
@@ -44,7 +45,7 @@ class AutoLoader {
 	/** Singleton instance to AutoLoader */
 	protected static $instance;
 	
-	/** Namespace separator pattern: dot, whitespace, or a dash. */
+	/** Namespace separator pattern: dot, or a dash. */
 	private static $NSSeparatorPattern = '(\.|-)+';
 	
 	/** PHP File pattern, matches all full path PHP files. */
@@ -66,11 +67,11 @@ class AutoLoader {
 
 	/**
 	 * The singleton functon for getting the object.
-	 * @return AutoLoader Object used to auto load classes.
+	 * @return AutoLoader Object used to autoload classes.
 	 */
 	public static function getInstance()
 	{
-		if (!isset(static::$instance)) {
+		if (! isset(static::$instance)) {
 			$c = __CLASS__;
 			static::$instance = new $c;
 		}
@@ -240,7 +241,8 @@ class AutoLoader {
 	 * readable directory. You should NOT add a sub-directory of a directory already
 	 * added into the AutoLoader.
 	 *
-	 * @param string $directory Directory to search in.
+	 * @param string $directory Directory to search in, not a sub-directory of one
+	 * already added.
 	 */
 	public static function addDir($directory)
 	{
