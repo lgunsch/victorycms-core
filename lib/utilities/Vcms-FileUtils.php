@@ -68,7 +68,7 @@ class FileUtils
 	 * line comments only and begin with the characters '##'
 	 * 
 	 * @param string The subject to remove comments from.
-	 * 
+	 * @throws \Exception if subject is not a string
 	 * @return string The subject with comments removed.
 	 */
 	public static function removeComments($subject){
