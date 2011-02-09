@@ -106,7 +106,9 @@ class LoadManager
 			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
 		
+		$contents = FileUtils::removeComments($contents);
 		$json = json_decode($contents, true);
+
 		
 		if($json === null){
 			static::$errorMessage = static::getJsonErrorMessage($path);
