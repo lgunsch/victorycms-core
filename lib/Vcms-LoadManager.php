@@ -135,9 +135,9 @@ class LoadManager
 						}
 					}
 				} else {
-					if (! in_array($item, $locations)) {
-						Registry::add('load', $item, false);
-						static::load($item);
+					if (! in_array($value, $locations)) {
+						Registry::add('load', $value, false);
+						static::load($value);
 					}
 				}
 				
