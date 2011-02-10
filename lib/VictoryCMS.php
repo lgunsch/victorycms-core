@@ -26,6 +26,7 @@ require_once 'Vcms-Registry.php';
 require_once 'Vcms-Autoloader.php';
 require_once 'Vcms-RegistryNode.php';
 require_once 'Vcms-LoadManager.php';
+require_once 'Vcms-LibraryLoader.php';
 
 /**
  * VictoryCMS core class; this class is the entry point to the VictoryCMS
@@ -107,6 +108,19 @@ class VictoryCMS
 		echo "done.\n";
 	}
 	
+	protected static function loadLibraries()
+	{
+		echo "Loading external libraries...\n";
+		try {
+			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::app_external),Registry::get(RegistryKeys::lib_external));
+		} catch (\Exception $e) {
+			echo LibraryLoader::getUserErrorMessage();
+			exit();
+		}
+		echo "done.\n";
+	}
+	
+	
 	/**
 	 * The main startup method for initializing VictoryCMS and to process
 	 * the request. This should be called with the path to the config.json
@@ -136,6 +150,7 @@ class VictoryCMS
 		
 		static::initialize();
 		static::load();
+		static::loadLibraries();
 		static::run();
 	}
 
