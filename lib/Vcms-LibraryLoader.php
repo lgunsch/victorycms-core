@@ -85,7 +85,7 @@ class LibraryLoader
 	/**
 	 * Loads external libraries 
 	 */
-	public static function loadLibraries($app_external_path,$lib_external_path)
+	public static function loadLibraries($lib_external_path,$app_external_path)
 	{
 		//TODO: implement	
 	}
