@@ -141,11 +141,15 @@ class LoadManager
 					}
 				}
 				
-			} elseif (isset($json->$key->value)) {
-				if (isset($json->$key->readonly)) {
-					Registry::add($key, ($json->$key->value), $json->$key->readonly);
+			} elseif (is_array($value) && isset($value["value"])){
+				if (isset($value["readonly"])) {
+					Registry::add($key, ($value["value"]), $value["readonly"]);
 				} else {
-					Registry::add($key, ($json->$key->value), false);
+					Registry::add($key, ($value["value"]), false);
+				}
+			} else{
+				if(isset($value)){
+					Registry::add($key, $value, false);
 				}
 			}
 		}
