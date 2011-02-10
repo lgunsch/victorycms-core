@@ -34,8 +34,8 @@
 namespace Vcms;
 
 /**
- * This class loads the Registry with information 
- * passed in from a settings file.
+ * This class loads the external libraries of which are located
+ * in directories specified by the configuration file.
  *
  * @package Core
  * @todo Finish implementing
@@ -45,7 +45,10 @@ class LibraryLoader
 {
 	
 	/** Singleton instance to LibraryLoader */
-	protected static $instance;
+	private static $instance;
+	
+	/** User friendly error message */
+	private static $errorMessage;
 	
 	/**
 	 * private constructor
@@ -67,6 +70,24 @@ class LibraryLoader
 			static::$errorMessage = '';
 		}
 		return static::$instance;
+	}
+	
+	/**
+	 * Returns the user friendly error message for the last error.
+	 * 
+	 * @return string Last error message in user friendly format
+	 */
+	public static function getUserErrorMessage()
+	{
+		return static::$errorMessage;
+	}
+	
+	/**
+	 * Loads external libraries 
+	 */
+	public static function loadLibraries($app_external_path,$lib_external_path)
+	{
+		//TODO: implement	
 	}
 	
 	
