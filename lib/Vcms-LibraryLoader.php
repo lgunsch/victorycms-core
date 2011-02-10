@@ -1,0 +1,81 @@
+<?php
+//
+//  VictoryCMS - Content managment system and framework.
+//
+//  Copyright (C) 2010,2011  Lewis Gunsch <lgunsch@victorycms.org>
+//  Copyright (C) 2010,2011  Mitchell Bosecke <mitchellbosecke@gmail.com>
+//
+//  This file is part of VictoryCMS.
+//
+//  VictoryCMS is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  VictoryCMS is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * VictoryCMS - LibraryLoader
+ *
+ * @filesource
+ * @category VictoryCMS
+ * @package  Core
+ * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
+ * @license  GPL http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.victorycms.org/
+ */
+
+namespace Vcms;
+
+/**
+ * This class loads the Registry with information 
+ * passed in from a settings file.
+ *
+ * @package Core
+ * @todo Finish implementing
+ * @todo Test
+ */
+class LibraryLoader
+{
+	
+	/** Singleton instance to LibraryLoader */
+	protected static $instance;
+	
+	/**
+	 * private constructor
+	 */
+	private function __construct()
+	{
+		
+	}
+
+	/**
+	 * The singleton functon for getting the object.
+	 * @return LibraryLoader object used to load external libraries.
+	 */
+	public static function getInstance()
+	{
+		if (!isset(static::$instance)) {
+			$c = __CLASS__;
+			static::$instance = new $c;
+			static::$errorMessage = '';
+		}
+		return static::$instance;
+	}
+	
+	
+	/**
+	 * Preventing cloning of this class
+	 */
+	public function __clone()
+	{
+		throw new \Vcms\Exception\SingletonCopyException;
+	}
+}
+?>
