@@ -34,8 +34,8 @@
 namespace Vcms;
 
 /**
- * This class loads the Registry with information 
- * passed in from a settings file.
+ * This class loads the external libraries of which are located
+ * in directories specified by the configuration file.
  *
  * @package Core
  * @todo Finish implementing
@@ -48,7 +48,6 @@ class LibraryLoader
 {
 	
 	/** Singleton instance to LibraryLoader */
-
 	private static $instance;
 	
 	/** User friendly error message */
