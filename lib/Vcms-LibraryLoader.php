@@ -34,30 +34,33 @@
 namespace Vcms;
 
 /**
- * This class loads the external libraries of which are located
- * in directories specified by the configuration file.
+ * This class loads the Registry with information 
+ * passed in from a settings file.
  *
  * @package Core
  * @todo Finish implementing
  * @todo Test
  */
+
 use Vcms\Exception\ExternalLibraryException;
 
 class LibraryLoader
 {
 	
 	/** Singleton instance to LibraryLoader */
+
 	private static $instance;
 	
 	/** User friendly error message */
 	private static $errorMessage;
-	
-	
+
 	/**
 	 * private constructor
 	 */
 	private function __construct()
 	{
+
+		
 	}
 
 	/**
