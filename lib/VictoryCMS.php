@@ -105,8 +105,12 @@ class VictoryCMS
 	protected static function loadLibraries()
 	{
 		echo "Loading external libraries...\n";
+		
+		// Set the two paths for external libraries
+		Registry::set(RegistryKeys::lib_external, __DIR__."/external/");
+		Registry::set(RegistryKeys::app_external, __DIR__."/../app/external/");
 		try {
-			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::app_external),Registry::get(RegistryKeys::lib_external));
+			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::lib_external),Registry::get(RegistryKeys::app_external));
 		} catch (\Exception $e) {
 			echo LibraryLoader::getUserErrorMessage();
 			exit();
