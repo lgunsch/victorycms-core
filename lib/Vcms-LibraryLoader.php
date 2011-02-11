@@ -50,12 +50,14 @@ class LibraryLoader
 	/** User friendly error message */
 	private static $errorMessage;
 	
+	/** PHP File pattern, matches all full path PHP files. */
+	private static $phpFilePattern = '/^.+\.php$/i';
+	
 	/**
 	 * private constructor
 	 */
 	private function __construct()
 	{
-		
 	}
 
 	/**
@@ -83,11 +85,41 @@ class LibraryLoader
 	}
 	
 	/**
-	 * Loads external libraries 
+	 * Loads both app-specific and global external libraries
 	 */
 	public static function loadLibraries($lib_external_path,$app_external_path)
 	{
-		//TODO: implement	
+		self::loadDirectory($lib_external_path);
+		self::loadDirectory($app_external_path);
+	}
+	
+	
+	/**
+	 * 
+	 * Loads all the classes in a given directory path
+	 * @param path of the directory $path
+	 */
+	private static function loadDirectory($directory){
+		$directory = FileUtils::truepath($directory);
+		echo $directory;
+		$files = array();
+		
+		if (! is_dir($directory)) {
+			// Create a PHP file recursive iterator
+			$dirIterator = new \RecursiveDirectoryIterator($directory);
+			$recursiveIterator = new \RecursiveIteratorIterator($dirIterator);
+			$iterator = new \RegexIterator(
+				$recursiveIterator,
+				static::$phpFilePattern,
+				\RecursiveRegexIterator::GET_MATCH
+			);
+
+			// Use the iterator to build the list of PHP files
+			foreach ($iterator as $match) {
+			array_push($files, $match[0]);
+			}
+		}
+		var_dump($files);
 	}
 	
 	
