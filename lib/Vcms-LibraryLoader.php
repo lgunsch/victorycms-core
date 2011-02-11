@@ -101,7 +101,6 @@ class LibraryLoader
 	 */
 	private static function loadDirectory($directory){
 		$directory = FileUtils::truepath($directory);
-		echo $directory;
 		$files = array();
 		
 		if (! is_dir($directory)) {
@@ -119,7 +118,7 @@ class LibraryLoader
 			array_push($files, $match[0]);
 			}
 		}
-		var_dump($files);
+		//var_dump($files);
 	}
 	
 	
