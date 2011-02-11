@@ -1,1 +1,23 @@
-README
+VictoryCMS - Content managment system and framework.
+
+Copyright (C) 2010-2011	Lewis Gunsch <lgunsch@victorycms.org>
+
+The directory containing this file is where you can store external libraries specific to your web application.
+For global libraries refer to /lib/external/. In order for VictoryCMS to load your external library, you must
+edit the main config.json file. In the config file, add your library to the array of libraries under the 
+variable 'app-external'. Here is an example:
+
+"app-external":	[  
+					{
+						"name": "MyLibrary",
+						"class": "\Namespace\Sub-namespace\class"
+					},
+					{
+						"name": "MyLibrary2",
+						"class": "MyClassWithNoNamespace"
+					}
+				]
+				
+The class of your library that you specify in this config file is the one to be instantiated by VictoryCMS. In order
+for it to be properly instantiated, it should extend /lib/Vcms-AbstractLibraryInit.php. 
+
