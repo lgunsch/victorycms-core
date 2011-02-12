@@ -112,7 +112,7 @@ class LibraryLoader
 			}
 			
 			if (! get_parent_class($class_name)==('AbstractLibraryInit')){
-				 echo "<br>$class_name doesn't extend AbstractLibraryInit!";
+				static::$errorMessage = "Class doesn't extend AbstractLibraryInit.";
 				//TODO:: throw exception
 			}
 			
