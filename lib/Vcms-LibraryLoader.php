@@ -87,38 +87,47 @@ class LibraryLoader
 	/**
 	 * Loads both app-specific and global external libraries
 	 */
-	public static function loadLibraries($lib_external_path,$app_external_path)
+	public static function loadLibraries($lib_external,$app_external)
 	{
-		echo "here!";
-		var_dump($lib_external_path);
+		static::loadArrayOfLibraries($lib_external);
+		static::loadArrayOfLibraries($app_external);
 	}
 	
 	
 	/**
 	 * 
-	 * Loads all the classes in a given directory path
-	 * @param path of the directory $path
+	 * Loads all the libraries in a given array
+	 * @param array of libraries $libraries
 	 */
-	private static function loadDirectory($directory){
-		$directory = FileUtils::truepath($directory);
-		$files = array();
-		
-		if (! is_dir($directory)) {
-			// Create a PHP file recursive iterator
-			$dirIterator = new \RecursiveDirectoryIterator($directory);
-			$recursiveIterator = new \RecursiveIteratorIterator($dirIterator);
-			$iterator = new \RegexIterator(
-				$recursiveIterator,
-				static::$phpFilePattern,
-				\RecursiveRegexIterator::GET_MATCH
-			);
-
-			// Use the iterator to build the list of PHP files
-			foreach ($iterator as $match) {
-			array_push($files, $match[0]);
+	private static function loadArrayOfLibraries($libraries){
+		foreach ($libraries as $library){
+			if (! isset($library["name"])){
+				static::$errorMessage = "Library name not set properly in config.json";
+				//TODO: throw exception
 			}
+			if (! isset($library["class"])){
+				static::$errorMessage = "Library class not set properly in config.json";
+				//TODO: throw exception
+			}
+			
+			$class_name = $library["class"];
+			try {
+				$obj = new $class_name;
+			} catch (Exception $e){
+				echo "Couldnt instantiate class";
+			}
+			if (! class_exists($class_name)){
+				echo "<br>$class_name doesn't exist";
+				//TODO: throw exception;
+			}
+			
+			if (! get_parent_class($class_name)==('AbstractLibraryInit')){
+				echo "<br>$class_name doesn't extend AbstractLibraryInit!";
+				//TODO:: throw exception
+			}
+			
 		}
-		//var_dump($files);
+		
 	}
 	
 	
