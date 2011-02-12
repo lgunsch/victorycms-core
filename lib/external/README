@@ -10,11 +10,11 @@ under the variable 'lib_external'. Here is an example:
 "lib_external":	[  
 					{
 						"name": "MyLibrary",
-						"class": "\\Namespace\\Sub-namespace\\class"
+						"class": "Vcms\\AbstractLibraryInit\\class"
 					},
 					{
 						"name": "MyLibrary2",
-						"class": "MyClassWithNoNamespace"
+						"class": "Vcms\\AbstractLibraryInit\\CustomNamespace\\class"
 					}
 				]
 				
