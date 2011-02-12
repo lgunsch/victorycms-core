@@ -6,7 +6,6 @@
 
 
 	
-
 	##------------------------------------------##
 	## Path(s) to other settings files			##
 	##------------------------------------------##
@@ -22,12 +21,8 @@
 	##------------------------------------------##
 	"lib_external":[
 			{
-				"name": "MyLibrary",
-				"class": "\\Namespace\\Sub-namespace\\class"
-			},
-			{
 				"name": "MyLibrary2",
-				"class": "MyClassWithNoNamespace"
+				"class": "Vcms\\AbstractLibraryInit\\MyClassWithNoNamespace"
             }
 	],
 	
