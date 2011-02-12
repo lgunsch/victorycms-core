@@ -1,10 +1,26 @@
 {
+	## Copyright (C) 2010-2011	Lewis Gunsch <lgunsch@victorycms.org>
+	##
+	## This file is the main configuration file for VictoryCMS.
+	##
 
-	## Path(s) to other settings files
+
+	
+
+	##------------------------------------------##
+	## Path(s) to other settings files			##
+	##------------------------------------------##
 	"load":[],
 	
-	## Global external libraries
-	"lib-external":[
+	##------------------------------------------##
+	## Administrator's email address			##
+	##------------------------------------------##
+	"admin_email":"",
+		
+	##------------------------------------------##	
+	## Global external libraries				##
+	##------------------------------------------##
+	"lib_external":[
 			{
 				"name": "MyLibrary",
 				"class": "\\Namespace\\Sub-namespace\\class"
@@ -15,7 +31,9 @@
             }
 	],
 	
-	## App-specific external libraries
-	"app-external":[]
+	##------------------------------------------##
+	## App-specific external libraries			##
+	##------------------------------------------##
+	"app_external":[]
 	
 }
