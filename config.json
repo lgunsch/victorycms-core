@@ -4,7 +4,16 @@
 	"load":[],
 	
 	## Global external libraries
-	"lib-external":[],
+	"lib-external":[
+			{
+				"name": "MyLibrary",
+				"class": "\Namespace\Sub-namespace\class"
+			},
+			{
+				"name": "MyLibrary2",
+				"class": "MyClassWithNoNamespace"
+            }
+	],
 	
 	## App-specific external libraries
 	"app-external":[]
