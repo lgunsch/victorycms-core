@@ -33,6 +33,7 @@
 
 namespace Vcms;
 
+
 /**
  * This class loads the external libraries of which are located
  * in directories specified by the configuration file.
