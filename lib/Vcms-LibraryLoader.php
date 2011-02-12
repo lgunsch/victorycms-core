@@ -51,8 +51,6 @@ class LibraryLoader
 	/** User friendly error message */
 	private static $errorMessage;
 	
-	/** PHP File pattern, matches all full path PHP files. */
-	private static $phpFilePattern = '/^.+\.php$/i';
 	
 	/**
 	 * private constructor
@@ -96,16 +94,11 @@ class LibraryLoader
 	
 	
 	/**
-	 * 
 	 * Loads all the libraries in a given array
 	 * @param array of libraries $libraries
 	 */
 	private static function loadArrayOfLibraries($libraries){
 		foreach ($libraries as $library){
-			if (! isset($library["name"])){
-				static::$errorMessage = "Library name not set properly in config.json";
-				//TODO: throw exception
-			}
 			if (! isset($library["class"])){
 				static::$errorMessage = "Library class not set properly in config.json";
 				//TODO: throw exception
@@ -113,7 +106,7 @@ class LibraryLoader
 			
 			$class_name = $library["class"];
 			if (class_exists($class_name)){
-				$obj = new $class_name;
+				$instance = new $class_name;
 			}else{
 				static::$errorMessage = "Library class does not exist - filename might not be recognized by AutoLoader";
 				//TODO: throw exception;
@@ -124,8 +117,15 @@ class LibraryLoader
 				//TODO:: throw exception
 			}
 			
+			$path_to_config = static::findLibraryConfig($instance);
 		}
 		
+	}
+	
+	private static function findLibraryConfig($instance){
+		//$dir = $instance::__FILE__;
+		//$config_file = $dir;
+		//echo "CONFIG PATH: $config_file";
 	}
 	
 	
