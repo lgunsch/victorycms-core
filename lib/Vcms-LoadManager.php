@@ -110,7 +110,6 @@ class LoadManager
 		
 		$contents = FileUtils::removeComments($contents);
 		$json = json_decode($contents, true);
-
 		
 		if($json === null){
 			static::$errorMessage = static::getJsonErrorMessage($path);
@@ -143,11 +142,13 @@ class LoadManager
 					}
 				}
 				
-			} elseif (is_array($value) && isset($value["value"])){
-				if (isset($value["readonly"])) {
+			} elseif (is_array($value) && isset($value)){
+				if (isset($value["value"]) && isset($value["readonly"])) {
 					Registry::add($key, ($value["value"]), $value["readonly"]);
-				} else {
+				} elseif (isset($value["value"])) {
 					Registry::add($key, ($value["value"]), false);
+				} else {
+					Registry::add($key, $value,false);
 				}
 			} elseif($value){
 				if(isset($value)){
