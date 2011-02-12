@@ -10,7 +10,7 @@ variable 'app-external'. Here is an example:
 "app-external":	[  
 					{
 						"name": "MyLibrary",
-						"class": "\Namespace\Sub-namespace\class"
+						"class": "\\Namespace\\Sub-namespace\\class"
 					},
 					{
 						"name": "MyLibrary2",
