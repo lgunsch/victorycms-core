@@ -124,7 +124,7 @@ class LoadManager
 				} else {
 					$locations = array();
 				}
-				if (is_array($value)) {
+				if (is_array($value) && isset($value["value"])) {
 					foreach ($value as $item) {
 						if (is_array($item)) {
 							throw new \Exception('LoadManager does not support '.
@@ -136,7 +136,7 @@ class LoadManager
 							}
 						}
 					}
-				} else {
+				} elseif (isset($value["value"])) {
 					if (! in_array($value, $locations)) {
 						Registry::add('load', $value, false);
 						static::load($value);
@@ -149,7 +149,7 @@ class LoadManager
 				} else {
 					Registry::add($key, ($value["value"]), false);
 				}
-			} else{
+			} elseif($value){
 				if(isset($value)){
 					Registry::add($key, $value, false);
 				}
