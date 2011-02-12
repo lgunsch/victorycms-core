@@ -33,7 +33,6 @@
 
 namespace Vcms;
 
-
 /**
  * This class loads the external libraries of which are located
  * in directories specified by the configuration file.
@@ -158,10 +157,18 @@ class LibraryLoader
 		}
 	}
 	
-	private static function findLibraryConfig($instance){
-		//$dir = $instance::__FILE__;
-		//$config_file = $dir;
-		//echo "CONFIG PATH: $config_file";
+	/**
+	 * Finds and returns the config file for a library
+	 */
+	private static function findLibraryConfig($class_name){
+		$libraryReflector = new \ReflectionClass($class_name);
+		/* Get path to possible config file */
+		$path = dirname($libraryReflector->getFileName())."/config.json";
+		/* Return path if file actually exists */
+		if(is_file($path)){
+			return $path;
+		} else return null;
+
 	}
 	
 	
