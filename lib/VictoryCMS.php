@@ -113,6 +113,7 @@ class VictoryCMS
 		echo "Loading external libraries...\n";
 		
 		try {
+			var_dump(Registry::get(RegistryKeys::lib_external));
 			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::lib_external),Registry::get(RegistryKeys::app_external));
 		} catch (\Exception $e) {
 			echo LibraryLoader::getUserErrorMessage();
