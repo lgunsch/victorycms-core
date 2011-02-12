@@ -89,8 +89,8 @@ class LibraryLoader
 	 */
 	public static function loadLibraries($lib_external_path,$app_external_path)
 	{
-		self::loadDirectory($lib_external_path);
-		self::loadDirectory($app_external_path);
+		echo "here!";
+		var_dump($lib_external_path);
 	}
 	
 	
