@@ -158,6 +158,12 @@ class LibraryLoader
 		}
 	}
 	
+	private static function findLibraryConfig($instance){
+		//$dir = $instance::__FILE__;
+		//$config_file = $dir;
+		//echo "CONFIG PATH: $config_file";
+	}
+	
 	
 	/**
 	 * Preventing cloning of this class

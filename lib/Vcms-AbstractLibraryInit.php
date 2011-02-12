@@ -44,6 +44,10 @@ abstract class AbstractLibraryInit
 	/* Main initializer function */
 	abstract protected function bootstrap();
 	
+	/* Returns the directory in order for LibraryLoader to find a possible config file */
+	public function getDir(){
+		return $this->__DIR__;
+	}
 
 }
 ?>
