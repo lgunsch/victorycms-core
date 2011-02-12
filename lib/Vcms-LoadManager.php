@@ -4,6 +4,7 @@
 //
 //  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
 //  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
+//  Copyright (C) 2010  Mitchell Bosecke <mitchellbosecke@gmail.com>
 //
 //  This file is part of VictoryCMS.
 //
@@ -27,6 +28,7 @@
  * @category VictoryCMS
  * @package  Core
  * @author   Andrew Crouse <amcrouse@victorycms.org>
+ * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
  */
@@ -94,19 +96,21 @@ class LoadManager
 			throw new \Exception('LoadManager requires json_decode function!');
 		}
 		
-		$path = realpath($path);
+		$path = FileUtils::truepath($path);
 		if ($path === false) {
-			static::$errorMessage = "Cannot find path for configuration file: $path.\n";
+			static::$errorMessage = "Cannot find path for configuration file: $path\n";
 			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
 		
 		$contents = file_get_contents($path);
 		if ($contents === false) {
-			static::$errorMessage = "Cannot read file configuration file: $path.\n";
+			static::$errorMessage = "Cannot read file configuration file: $path\n";
 			throw new \Exception('Cannot get contents of file: '.$path.'');
 		}
 		
+		$contents = FileUtils::removeComments($contents);
 		$json = json_decode($contents, true);
+
 		
 		if($json === null){
 			static::$errorMessage = static::getJsonErrorMessage($path);
@@ -133,17 +137,21 @@ class LoadManager
 						}
 					}
 				} else {
-					if (! in_array($item, $locations)) {
-						Registry::add('load', $item, false);
-						static::load($item);
+					if (! in_array($value, $locations)) {
+						Registry::add('load', $value, false);
+						static::load($value);
 					}
 				}
 				
-			} elseif (isset($json->$key->value)) {
-				if (isset($json->$key->readonly)) {
-					Registry::add($key, ($json->$key->value), $json->$key->readonly);
+			} elseif (is_array($value) && isset($value["value"])){
+				if (isset($value["readonly"])) {
+					Registry::add($key, ($value["value"]), $value["readonly"]);
 				} else {
-					Registry::add($key, ($json->$key->value), false);
+					Registry::add($key, ($value["value"]), false);
+				}
+			} else{
+				if(isset($value)){
+					Registry::add($key, $value, false);
 				}
 			}
 		}

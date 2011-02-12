@@ -64,6 +64,25 @@ class FileUtils
 	}
 	
 	/**
+	 * This function is to remove custom comments. These comments are single
+	 * line comments only and begin with the characters '##'
+	 * 
+	 * @param string The subject to remove comments from.
+	 * @throws \Exception if subject is not a string
+	 * @return string The subject with comments removed.
+	 */
+	public static function removeComments($subject){
+		if (! is_string($subject) ) {
+			throw new \Exception('Path and extension must be a string.');
+		}
+		
+		$regex = "/(##)(.*)/"; // removes comments starting with ##
+		
+		return preg_replace($regex, "", $subject);
+	}
+	
+	
+	/**
 	 * Recursively finds any PHP files in the directory $path or in any number of
 	 * sub-folder's underneath the $path including hidden files.
 	 * 
