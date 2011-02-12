@@ -1,2 +1,12 @@
 {
+
+	## Path(s) to other settings files
+	"load":[],
+	
+	## Global external libraries
+	"lib-external":[],
+	
+	## App-specific external libraries
+	"app-external":[]
+	
 }
