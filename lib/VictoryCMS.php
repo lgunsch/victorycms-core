@@ -112,8 +112,10 @@ class VictoryCMS
 	{
 		echo "Loading external libraries...\n";
 		
+		echo __DIR__."/../app/external/";
+		Autoloader::addDir(__DIR__."/external/");
+		Autoloader::addDir(__DIR__."/../app/external/");
 		try {
-			var_dump(Registry::get(RegistryKeys::lib_external));
 			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::lib_external),Registry::get(RegistryKeys::app_external));
 		} catch (\Exception $e) {
 			echo LibraryLoader::getUserErrorMessage();
