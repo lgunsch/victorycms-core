@@ -33,6 +33,7 @@
 
 namespace Vcms;
 
+
 /**
  * This class loads the external libraries of which are located
  * in directories specified by the configuration file.
@@ -111,18 +112,15 @@ class LibraryLoader
 			}
 			
 			$class_name = $library["class"];
-			try {
+			if (class_exists($class_name)){
 				$obj = new $class_name;
-			} catch (Exception $e){
-				echo "Couldnt instantiate class";
-			}
-			if (! class_exists($class_name)){
-				echo "<br>$class_name doesn't exist";
+			}else{
+				static::$errorMessage = "Library class does not exist - filename might not be recognized by AutoLoader";
 				//TODO: throw exception;
 			}
 			
 			if (! get_parent_class($class_name)==('AbstractLibraryInit')){
-				echo "<br>$class_name doesn't extend AbstractLibraryInit!";
+				 echo "<br>$class_name doesn't extend AbstractLibraryInit!";
 				//TODO:: throw exception
 			}
 			

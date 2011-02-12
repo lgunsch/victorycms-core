@@ -21,8 +21,8 @@
 	##------------------------------------------##
 	"lib_external":[
 			{
-				"name": "MyLibrary2",
-				"class": "Vcms\\AbstractLibraryInit\\MyClassWithNoNamespace"
+				"name": "Test Library",
+				"class": "Vcms\\MyCustomLibrary"
             }
 	],
 	
