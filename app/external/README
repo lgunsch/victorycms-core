@@ -10,14 +10,16 @@ variable 'app_external'. Here is an example:
 "app_external":	[  
 					{
 						"name": "MyLibrary",
-						"class": "Vcms\\AbstractLibraryInit\\class"
+						"class": "Vcms\\class"
 					},
 					{
 						"name": "MyLibrary2",
-						"class": "Vcms\\AbstractLibraryInit\\CustomNamespace\\class"
+						"class": "Vcms\\CustomNamespace\\class"
 					}
 				]
 				
-The class of your library that you specify in this config file is the one to be instantiated by VictoryCMS. In order
-for it to be properly instantiated, it should extend /lib/Vcms-AbstractLibraryInit.php. 
+The class of your library that you specify in this config file is the one to be instantiated by VictoryCMS. 
+In order for it to be properly instantiated, it should extend /lib/Vcms-AbstractLibraryInit.php. It should
+also be named according to the naming convention "Vcms-ClassName.php". 
+
 
