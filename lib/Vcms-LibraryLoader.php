@@ -111,6 +111,7 @@ class LibraryLoader
 			}
 			
 			$class_name = $library["class"];
+			
 			if (class_exists($class_name)){
 				$instance = new $class_name;
 			}else{
@@ -123,21 +124,28 @@ class LibraryLoader
 				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
+			
+			/* Load the library's configuration file if it exists */
 			$path_to_config = static::findLibraryConfig($class_name);
 			if($path_to_config){
 				LoadManager::load($path_to_config);
 			}
+			
+			/* Call the library's bootstrap function*/
+			$instance->bootstrap();
 		}
 		
 	}
 	
 	/**
-	 * Finds and returns the config file for a library
+	 * Finds and returns the config file for a library if it exists
 	 */
 	private static function findLibraryConfig($class_name){
 		$libraryReflector = new \ReflectionClass($class_name);
+		
 		/* Get path to possible config file */
 		$path = dirname($libraryReflector->getFileName())."/config.json";
+		
 		/* Return path if file actually exists */
 		if(is_file($path)){
 			return $path;
