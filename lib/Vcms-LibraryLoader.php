@@ -41,6 +41,8 @@ namespace Vcms;
  * @todo Finish implementing
  * @todo Test
  */
+use Vcms\Exception\ExternalLibraryException;
+
 class LibraryLoader
 {
 	
@@ -98,9 +100,14 @@ class LibraryLoader
 	 */
 	private static function loadArrayOfLibraries($libraries){
 		foreach ($libraries as $library){
+			if (isset($library["name"])){
+				$name = $library["name"];
+			}else{
+				$name = null;
+			}
 			if (! isset($library["class"])){
 				static::$errorMessage = "Library class not set properly in config.json";
-				//TODO: throw exception
+				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
 			$class_name = $library["class"];
@@ -108,12 +115,12 @@ class LibraryLoader
 				$instance = new $class_name;
 			}else{
 				static::$errorMessage = "Library class does not exist - filename might not be recognized by AutoLoader";
-				//TODO: throw exception;
+				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
 			if (! get_parent_class($class_name)==('AbstractLibraryInit')){
 				static::$errorMessage = "Class doesn't extend AbstractLibraryInit.";
-				//TODO:: throw exception
+				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
 			$path_to_config = static::findLibraryConfig($class_name);
