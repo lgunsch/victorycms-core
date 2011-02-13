@@ -56,10 +56,10 @@ class RegistryKeys
  	/** Registry array of Autoload directory paths */
  	const autoload = 'autoload';
  	
- 	/** Path to external libraries - app specific */
+ 	/** Array of external libraries to load - app specific */
  	const app_external = 'app_external';
  	
- 	/** Path to external libraries - global */
+ 	/** Array of external libraries to load- global */
  	const lib_external = 'lib_external';
 }
 ?>
