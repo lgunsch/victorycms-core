@@ -42,7 +42,6 @@ namespace Vcms;
  * @todo Test
  */
 
-use Vcms\Exception\ExternalLibraryException;
 
 class LibraryLoader
 {
