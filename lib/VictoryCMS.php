@@ -112,10 +112,6 @@ class VictoryCMS
 	{
 		echo "Loading external libraries...\n";
 		
-		// Set the paths for the external libraries
-		Autoloader::addDir(__DIR__."/external/");
-		Autoloader::addDir(__DIR__."/../app/external/");
-		
 		try {
 			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::lib_external),Registry::get(RegistryKeys::app_external));
 		} catch (\Exception $e) {
