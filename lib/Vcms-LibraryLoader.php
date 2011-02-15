@@ -93,64 +93,68 @@ class LibraryLoader
 		static::loadArrayOfLibraries($app_external);
 	}
 	
-	
 	/**
 	 * Loads all the libraries in a given array
 	 * @param array of libraries $libraries
 	 */
-	private static function loadArrayOfLibraries($libraries){
-		foreach ($libraries as $library){
-			if (isset($library["name"])){
+	private static function loadArrayOfLibraries($libraries)
+	{
+		foreach ($libraries as $library) {
+			if (isset($library["name"])) {
 				$name = $library["name"];
-			}else{
+			} else {
 				$name = null;
 			}
-			if (! isset($library["class"])){
-				static::$errorMessage = "Library class not set properly in config.json";
+			if (! isset($library["class"])) {
+				static::$errorMessage = 
+					"Library class not set properly in the configuration file.";
 				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
 			$class_name = $library["class"];
 			
-			if (class_exists($class_name)){
+			if (class_exists($class_name)) {
 				$instance = new $class_name;
-			}else{
-				static::$errorMessage = "Library class does not exist - filename might not be recognized by AutoLoader";
+			} else {
+				static::$errorMessage = "Library class does not exist - filename ".
+					"might not be recognized by AutoLoader";
 				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
-			if (! get_parent_class($class_name)==('AbstractLibraryInit')){
+			if (! get_parent_class($class_name) == ('AbstractLibraryInit')) {
 				static::$errorMessage = "Class doesn't extend AbstractLibraryInit.";
 				throw new \Vcms\Exception\ExternalLibraryException($name);
 			}
 			
-			
 			/* Load the library's configuration file if it exists */
 			$path_to_config = static::findLibraryConfig($class_name);
-			if($path_to_config){
+			if ($path_to_config) {
 				LoadManager::load($path_to_config);
 			}
 			
 			/* Call the library's bootstrap function*/
 			$instance->bootstrap();
 		}
-		
 	}
 	
 	/**
 	 * Finds and returns the config file for a library if it exists
 	 */
-	private static function findLibraryConfig($class_name){
+	private static function findLibraryConfig($class_name)
+	{
 		$libraryReflector = new \ReflectionClass($class_name);
 		
 		/* Get path to possible config file */
-		$path = dirname($libraryReflector->getFileName())."/config.json";
+		$path = FileUtils::truepath(
+			dirname($libraryReflector->getFileName())."/config.json"
+		);
 		
 		/* Return path if file actually exists */
-		if(is_file($path)){
+		if (is_file($path)) {
 			return $path;
-		} else return null;
-
+		} else {
+			return null;
+		}
 	}
 	
 	
