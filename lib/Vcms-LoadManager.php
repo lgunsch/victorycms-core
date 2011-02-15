@@ -2,9 +2,9 @@
 //
 //  VictoryCMS - Content managment system and framework.
 //
-//  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
-//  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
-//  Copyright (C) 2010  Mitchell Bosecke <mitchellbosecke@gmail.com>
+//  Copyright (C) 2010,2011  Andrew Crouse <amcrouse@victorycms.org>
+//  Copyright (C) 2010,2011  Lewis Gunsch <lgunsch@victorycms.org>
+//  Copyright (C) 2010,2011  Mitchell Bosecke <mitchellbosecke@gmail.com>
 //
 //  This file is part of VictoryCMS.
 //
@@ -29,6 +29,7 @@
  * @package  Core
  * @author   Andrew Crouse <amcrouse@victorycms.org>
  * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
+ * @author   Lewis Gunsch <lgunsch@victorycms.org>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
  */
@@ -85,7 +86,8 @@ class LoadManager
 	}
 	
 	/**
-	 * Loads a file into the Registry.
+	 * Loads a VictoryCMS configuration file into the Registry. This will first
+	 * remove comment lines starting with '##' characters.
 	 * 
 	 * @param $path To the file to load.
 	 */
