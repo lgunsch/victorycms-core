@@ -159,17 +159,21 @@ class LibraryLoader
 	/**
 	 * Finds and returns the config file for a library if it exists
 	 */
-	private static function findLibraryConfig($class_name){
+	private static function findLibraryConfig($class_name)
+	{
 		$libraryReflector = new \ReflectionClass($class_name);
 		
 		/* Get path to possible config file */
-		$path = dirname($libraryReflector->getFileName())."/config.json";
+		$path = FileUtils::truepath(
+			dirname($libraryReflector->getFileName())."/config.json"
+		);
 		
 		/* Return path if file actually exists */
-		if(is_file($path)){
+		if (is_file($path)) {
 			return $path;
-		} else return null;
-
+		} else {
+			return null;
+		}
 	}
 	
 	
