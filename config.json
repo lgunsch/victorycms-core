@@ -20,12 +20,7 @@
 	##------------------------------------------------------------------##
 	## Global external libraries to load								##
 	##------------------------------------------------------------------##
-	"lib_external":[
-			{
-				"name": "MyCustomLibrary",
-				"class": "Vcms\\MyCustomLibrary"
-            }
-	],
+	"lib_external":[],
 	
 	##------------------------------------------------------------------##
 	## App-specific external libraries to load							##
