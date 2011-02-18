@@ -37,12 +37,11 @@
 namespace Vcms;
 
 /**
- * This class loads the Registry with information 
- * passed in from a settings file.
+ * This class loads the Registry with information passed in from a settings file.
+ * This will produce user friendly error messages which can be retrieved after any
+ * exception is thrown.
  *
  * @package Core
- * @todo Finish implementing
- * @todo Test
  */
 class LoadManager
 {
@@ -63,6 +62,7 @@ class LoadManager
 
 	/**
 	 * The singleton functon for getting the object.
+	 * 
 	 * @return LoadManager Object used to add items to the Registry.
 	 */
 	public static function getInstance()
@@ -90,6 +90,9 @@ class LoadManager
 	 * remove comment lines starting with '##' characters.
 	 * 
 	 * @param $path To the file to load.
+	 * @throws \Exception If json_decode function is not available, path to
+	 * configuration file is invalid, configuration file cannnot be read, or the
+	 * configuration file cannot be properly decoded.
 	 */
 	public static function load($path)
 	{
