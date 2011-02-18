@@ -82,16 +82,22 @@ class VictoryCMS
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
-	}
-
-	protected static function load()
-	{
-		echo "Starting the load process...\n";
 		
 		// Set the lib path and register it with the autoloader
 		Registry::set(RegistryKeys::lib_path, __DIR__);
 		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
-		
+	}
+
+	/**
+	 * Populate the registry with settings from the configuration settings file.
+	 * This will produce a user friendly error message and exit if an error is
+	 * encountered in the configuration settings file.
+	 * 
+	 * @return void;
+	 */
+	protected static function load()
+	{
+		echo "Loading configuration settings...";
 		try {
 			LoadManager::load(Registry::get(RegistryKeys::settings_path));
 		} catch (\Exception $e) {
@@ -141,7 +147,7 @@ class VictoryCMS
 	 */
 	protected static function run()
 	{
-		printf("I AM RUNNING!");
+		printf("I AM RUNNING!\n");
 	}
 
 	/**
