@@ -68,12 +68,13 @@ class FileUtils
 	 * line comments only and begin with the characters '##'
 	 * 
 	 * @param string The subject to remove comments from.
-	 * @throws \Exception if subject is not a string
+	 * @throws \Exception if subject is not a string.
+	 * 
 	 * @return string The subject with comments removed.
 	 */
 	public static function removeComments($subject){
 		if (! is_string($subject) ) {
-			throw new \Exception('Path and extension must be a string.');
+			throw new \Exception('Subject must be a string.');
 		}
 		
 		$regex = "/(##)(.*)/"; // removes comments starting with ##
@@ -93,7 +94,7 @@ class FileUtils
 	 *	}
 	 * 
 	 * @param string $path Directory path from which to find PHP files
-	 * @throws \Exception if path is not a string
+	 * @throws \Exception if path is not a string.
 	 * 
 	 * @return array containing a single index for each PHP file.
 	 */
@@ -113,7 +114,7 @@ class FileUtils
 	 *	}
 	 * 
 	 * @param string $path Directory path from which to find files with extension
-	 * $extension
+	 * $extension.
 	 * @param string $extension The file extension to look for when searching for
 	 * files, but should not have a '.' at the start.
 	 * @param bool $caseSensitive If the extension should be case-sensitive or not;
