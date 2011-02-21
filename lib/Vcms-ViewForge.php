@@ -116,10 +116,10 @@ class ViewForge
 						}
 						if(isset($object["name"])){
 							$name = $object["name"];
+							//TODO: instantiate the view object and pass parameters
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
-						echo "Name: ". $name ."\nParams: ". $params;
 					}
 				
 			} else{
