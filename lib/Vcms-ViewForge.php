@@ -88,8 +88,44 @@ class ViewForge
 	 * @param  $forgeSpec A JSON formatted string 
 	 * @return VcmsResponse object
 	 */
-	public static function forge($forgeSpec){
+	public static function forge($forgeSpec)
+	{
+		if (! function_exists('json_decode')) {
+			static::$errorMessage = "JSON PHP extension is required.\n";
+			throw new \Exception('ViewForge requires json_decode function!');
+		}
 		
+		$contents = FileUtils::removeComments($forgeSpec);
+		$json = json_decode($contents, true);
+		
+		if($json === null){
+			static::$errorMessage = "ForgeSpec cannot be decoded.";
+			throw new \Exception('Configuration file cannot be decoded.');
+		}
+		
+		/* A forgeSpec is an array of objects named 'objects', each object
+		 * in the array having a 'name' key and an optional 'param' key. 
+		 */
+		foreach ($json as $key => $value) {
+			if (($key == 'objects') && is_array($value)){
+				foreach ($value as $object) {
+						if(isset($object["params"])){
+							$params = $object["params"];
+						}else{
+							$params = null;
+						}
+						if(isset($object["name"])){
+							$name = $object["name"];
+						}else{
+							throw new \Exception('Improperly formatted ForgeSpec');
+						}
+						echo "Name: ". $name ."\nParams: ". $params;
+					}
+				
+			} else{
+				throw new \Exception('Improperly formatted ForgeSpec');
+			}
+		}
 	}
 	
 	/**
