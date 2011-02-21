@@ -116,7 +116,8 @@ class ViewForge
 						}
 						if(isset($object["name"])){
 							$name = $object["name"];
-							//require_once(__DIR__."../app/";
+							$view_path = Registry::get("app_path") . "/views/$name.php";
+							require_once($view_path);
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}

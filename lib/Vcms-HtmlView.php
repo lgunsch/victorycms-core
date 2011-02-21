@@ -40,12 +40,10 @@ namespace Vcms;
  */
 abstract class HtmlView extends VcmsView
 {
-	abstract private function render();
-	abstract private function getBody();
-	abstract private function isCacheable();
-
+	
 	public function getContentType(){
 		return "HTML";
 	}
+	
 }
 ?>

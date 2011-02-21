@@ -40,10 +40,11 @@ namespace Vcms;
  */
 abstract class VcmsView
 {
-	abstract private function render();
-	abstract private function getBody();
-	abstract private function getContentType();
-	abstract private function isCacheable();
+	abstract protected function render();
+	abstract protected function getBody();
+	abstract protected function getContentType();
+	abstract protected function isCacheable();
+	
 	
 	public function cache(){
 		//TODO: implement
