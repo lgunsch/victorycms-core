@@ -84,15 +84,10 @@ class VcmsResponse
 			throw new \Vcms\Exception\DataTypeException("Int", $status_code, '$status_code');
 		}
 
-		if(isset($content_type)){
-			$this->content_type = $content_type;
-		}
-		if(isset($body)){
-			$this->body = $body;
-		}
-		
 		$this->status_code = $status_code;
 		$this->status_message = $status_message;
+		$this->content_type = $content_type;
+		$this->body = $body;
 	}
 	
 	/**
