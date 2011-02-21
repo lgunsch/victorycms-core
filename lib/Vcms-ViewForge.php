@@ -117,7 +117,7 @@ class ViewForge
 						if(isset($object["name"])){
 							$view_path = Registry::get("app_path") . "/views/" . $object["name"] . ".php";
 							require_once($view_path);
-							if(! is_subclass_of($object["name"], "\Vcms\HtmlView")){
+							if(! is_subclass_of($object["name"], "\Vcms\VcmsView")){
 								throw new \Exception('View object does not extend VcmsView');
 							}
 							
