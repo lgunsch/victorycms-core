@@ -115,9 +115,14 @@ class ViewForge
 							$params = null;
 						}
 						if(isset($object["name"])){
-							$name = $object["name"];
-							$view_path = Registry::get("app_path") . "/views/$name.php";
+							$view_path = Registry::get("app_path") . "/views/" . $object["name"] . ".php";
 							require_once($view_path);
+							if(! is_subclass_of($object["name"], "\Vcms\HtmlView")){
+								throw new \Exception('View object does not extend VcmsView');
+							}
+							
+							$instance = new $object["name"];
+							$instance->render();
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
