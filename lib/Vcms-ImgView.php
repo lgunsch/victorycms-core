@@ -41,8 +41,9 @@ namespace Vcms;
 abstract class ImgView extends VcmsView
 {
 	/**
-	 * Each concrete ImgView class will implement it's own getContentType()
-	 * function depending on what kind of image it's rendering.
+	 * Unlike the other view types, each concrete ImgView class 
+	 * will implement it's own getContentType() function depending
+	 * on what kind of image it's rendering.
 	 */
 	
 }

@@ -37,19 +37,47 @@ namespace Vcms;
  * This is an abstract class for a Vcms View
  *
  * @package Core
+ * @todo Implement cache() and purge()
  */
 abstract class VcmsView
 {
+	/**
+	 * 
+	 * Renders the view using echo().
+	 * @param Array of parameters needed to render the view $params
+	 */
 	abstract protected function render($params);
+	
+	/**
+	 * 
+	 * Returns the body of the view instead of rendering it.
+	 */
 	abstract protected function getBody();
+	
+	/**
+	 * 
+	 * Returns the content-type of the view.
+	 */
 	abstract protected function getContentType();
+	
+	/**
+	 * 
+	 * Returns true if the view can be cached.
+	 */
 	abstract protected function isCacheable();
 	
-	
+	/**
+	 * 
+	 * Caches the view using Varnish. 
+	 */
 	public function cache(){
 		//TODO: implement
 	}
 	
+	/**
+	 * 
+	 * Purges the cache. 
+	 */
 	public function purge(){
 		//TODO: implement
 	}

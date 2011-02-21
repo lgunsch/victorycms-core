@@ -41,6 +41,11 @@ namespace Vcms;
 abstract class CssView extends VcmsView
 {
 	
+	/**
+	 * Returns the content-type of the view.
+	 * 
+	 * @see Vcms.VcmsView::getContentType()
+	 */
 	public function getContentType(){
 		return "text/css";
 	}

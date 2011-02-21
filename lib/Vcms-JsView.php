@@ -41,6 +41,11 @@ namespace Vcms;
 abstract class JsView extends VcmsView
 {
 	
+	/**
+	 * Returns the content-type of the view.
+	 * 
+	 * @see Vcms.VcmsView::getContentType()
+	 */
 	public function getContentType(){
 		return "text/javascript";
 	}
