@@ -40,7 +40,7 @@ namespace Vcms;
  * a final response object.
  *
  * @package Core
- * @todo Finish implementing
+ * @todo Implement cache() and purge()
  * @todo Test
  */
 
@@ -103,6 +103,18 @@ class ViewForge
 			throw new \Exception('Configuration file cannot be decoded.');
 		}
 		
+		/* list of objects to render after checking their mime types, etc */
+		$objects_to_render = array();
+		
+		/* Variables for creating the VcmsResponse */
+		$response_status_code = 0;
+		$response_status_message = "success";
+		$response_content_type = null;
+		$response_body = null;
+		
+		/* A string to store the last content type to make sure they all match */
+		$last_content_type = null;
+		
 		/* A forgeSpec is an array of objects named 'objects', each object
 		 * in the array having a 'name' key and an optional 'param' key. 
 		 */
@@ -115,14 +127,37 @@ class ViewForge
 							$params = null;
 						}
 						if(isset($object["name"])){
-							$view_path = Registry::get("app_path") . "/views/" . $object["name"] . ".php";
-							require_once($view_path);
-							if(! is_subclass_of($object["name"], "\Vcms\VcmsView")){
+							$name = $object["name"];
+							$path = Registry::get("app_path") . "/views/" . $object["name"] . ".php";
+							require_once($path);
+							
+							if(! is_subclass_of($name, "\Vcms\VcmsView")){
 								throw new \Exception('View object does not extend VcmsView');
 							}
-							
+					
 							$instance = new $object["name"];
-							$instance->render($params);
+							
+							$objects_to_render[] = array($instance, $params);
+							
+							$this_content_type = $instance->getContentType();
+							if($last_content_type == null){
+								print $last_content_type;
+								$last_content_type = $this_content_type;
+								$response_content_type = $this_content_type;
+							}
+							if(! strcmp($last_content_type, $this_content_type) == 0){
+								$response_status_code = 1;
+								$response_status_message = "Content types do not match.";
+								$response_content_type = null;
+								$response_body = null;
+							}
+							
+							if(! $instance->isCacheable()){
+								static::$cacheable = false;
+							}
+							
+							$response_body .= $instance->getBody();
+							
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
@@ -132,6 +167,17 @@ class ViewForge
 				throw new \Exception('Improperly formatted ForgeSpec');
 			}
 		}
+		
+		/* render all of the objects */
+		if($response_status_code === 0){
+			foreach ($objects_to_render as $array){
+				$object = $array[0];
+				$params = $array[1];
+				$object->render($params);
+			}
+		}
+		
+		return new VcmsResponse($response_status_code, $response_status_message, $response_content_type, $response_body);
 	}
 	
 	/**

@@ -77,23 +77,22 @@ class VcmsResponse
 	 */
 	public function __construct($status_code, $status_message, $content_type, $body){
 		
-		if ($status_code === null || $status_message === null || $content_type === null || $body === null) {
+		if ($status_code === null || $status_message === null) {
 			throw new \Vcms\Exception\DataException("Not null", "null", "VcmsResponse parameter");
 		}
 		if (! is_int($status_code) ) {
 			throw new \Vcms\Exception\DataTypeException("Int", $status_code, '$status_code');
 		}
-		if (! is_string($status_message) ) {
-			throw new \Vcms\Exception\DataTypeException("String", $status_message, '$status_message');
+
+		if(isset($content_type)){
+			$this->content_type = $content_type;
 		}
-		if (! is_string($content_type) ) {
-			throw new \Vcms\Exception\DataTypeException("String", $content_type, '$content_type');
+		if(isset($body)){
+			$this->body = $body;
 		}
-		$this->$status_code = $status_code;
-		$this->$status_message = $status_message;
-		$this->$content_type = $content_type;
-		$this->$body = $body;
 		
+		$this->status_code = $status_code;
+		$this->status_message = $status_message;
 	}
 	
 	/**
@@ -123,7 +122,7 @@ class VcmsResponse
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
 	public function getContentType(){
-		return $this->content_type;
+		return isset($this->content_type)? $this->content_type : null;
 	}
 	
 	/**
@@ -133,7 +132,7 @@ class VcmsResponse
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
 	public function getBody(){
-		return $this->body;
+		return isset($this->body)? $this->body : null;
 	}
 	
 	
