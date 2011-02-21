@@ -34,7 +34,7 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a view
+ * This is an abstract class for a Vcms View
  *
  * @package Core
  */
