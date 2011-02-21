@@ -48,22 +48,22 @@ class VcmsResponse
 	 * 0 - success
 	 * 1 - failure
 	 */
-	private status_code;
+	private $status_code;
 	
 	/**
 	 * Status message
 	 */
-	private status_message;
+	private $status_message;
 	
 	/**
 	 * Content type
 	 */
-	private content_type;
+	private $content_type;
 	
 	/**
 	 * Body of the response
 	 */
-	private body;
+	private $body;
 	
 	/**
 	 * 
