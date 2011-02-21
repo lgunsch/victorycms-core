@@ -116,7 +116,7 @@ class ViewForge
 						}
 						if(isset($object["name"])){
 							$name = $object["name"];
-							//TODO: instantiate the view object and pass parameters
+							//require_once(__DIR__."../app/";
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
