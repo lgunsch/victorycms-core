@@ -42,7 +42,7 @@ abstract class HtmlView extends VcmsView
 {
 	
 	public function getContentType(){
-		return "HTML";
+		return "text/html";
 	}
 	
 }

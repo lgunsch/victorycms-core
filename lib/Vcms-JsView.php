@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsView
+ * VictoryCMS - JsView
  *
  * @filesource
  * @category VictoryCMS
@@ -34,26 +34,16 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a Vcms View
+ * This is an abstract class for a Javascript View. 
  *
  * @package Core
  */
-abstract class VcmsView
+abstract class JsView extends VcmsView
 {
-	abstract protected function render($params);
-	abstract protected function getBody();
-	abstract protected function getContentType();
-	abstract protected function isCacheable();
 	
-	
-	public function cache(){
-		//TODO: implement
+	public function getContentType(){
+		return "text/javascript";
 	}
 	
-	public function purge(){
-		//TODO: implement
-	}
-	
-
 }
 ?>

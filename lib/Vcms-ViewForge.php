@@ -122,7 +122,7 @@ class ViewForge
 							}
 							
 							$instance = new $object["name"];
-							$instance->render();
+							$instance->render($params);
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
