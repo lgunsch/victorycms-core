@@ -128,7 +128,11 @@ class ViewForge
 						}
 						if(isset($object["name"])){
 							$name = $object["name"];
-							$path = Registry::get("app_path") . "/views/" . $object["name"] . ".php";
+							$path = Registry::get("app_path") . "/views/" . $name . ".php";
+							
+							if(! is_file($path)){
+								throw new \Exception('View file does not exist');
+							}
 							require_once($path);
 							
 							if(! is_subclass_of($name, "\Vcms\VcmsView")){
