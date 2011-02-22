@@ -85,7 +85,7 @@ class ViewForge
 	 * initiates/renders all of the necessary objects then returns
 	 * a response object.
 	 * 
-	 * @param  $forgeSpec A JSON formatted string 
+	 * @param  A JSON formatted string  $forgeSpec 
 	 * @return VcmsResponse object
 	 */
 	public static function forge($forgeSpec)
@@ -141,7 +141,6 @@ class ViewForge
 							
 							$this_content_type = $instance->getContentType();
 							if($last_content_type == null){
-								print $last_content_type;
 								$last_content_type = $this_content_type;
 								$response_content_type = $this_content_type;
 							}
