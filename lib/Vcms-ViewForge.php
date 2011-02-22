@@ -153,13 +153,14 @@ class ViewForge
 								$response_status_message = "Content types do not match.";
 								$response_content_type = null;
 								$response_body = null;
+							}else{
+								$response_body .= $instance->getBody();
 							}
 							
 							if(! $instance->isCacheable()){
 								static::$cacheable = false;
 							}
 							
-							$response_body .= $instance->getBody();
 							
 						}else{
 							throw new \Exception('Improperly formatted ForgeSpec');
