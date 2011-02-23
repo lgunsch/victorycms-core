@@ -86,6 +86,18 @@ class VictoryCMS
 		echo "done.\n";
 	}
 	
+	protected static function configureAutoloader()
+	{
+		echo "Configuring the VictoryCMS autoloader...";
+		$autoloader = spl_autoload_register(__NAMESPACE__.'\Autoloader::autoload');
+		if (! $autoloader) {
+			exit('VictoryCMS could not attach the required autoloader!');
+		}
+		
+		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
+		echo "done.\n";
+	}
+	
 	/**
 	 * Perform PHP environment initiailization. This will add the exception
 	 * and error handlers into PHP and also create the Autoloader.
@@ -109,13 +121,6 @@ class VictoryCMS
 			
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
-		
-		$autoloader = spl_autoload_register(__NAMESPACE__.'\Autoloader::autoload');
-		if (! $autoloader) {
-			exit('VictoryCMS could not attach the required autoloader!');
-		}
-		
-		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
 		echo "done.\n";
 	}
 
@@ -155,6 +160,7 @@ class VictoryCMS
 	{
 		static::seedRegistry($settings_path, $debug_mode);
 		static::initialize();
+		static::configureAutoloader();
 		static::load();
 		static::run();
 	}
