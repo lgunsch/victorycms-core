@@ -56,6 +56,37 @@ class VictoryCMS
 	const CODE_NAME = "sparkplug";
 
 	/**
+	 * Seed the registry with important required values such as the lib path, debug
+	 * mode, and the configuration settings file path.
+	 * 
+	 * @param string  $settings_path Path to the settings JSON file.
+	 * @param boolean $debug_mode Enable debug mode, disabled by default.
+	 * 
+	 * @return void
+	 */
+	protected static function seedRegistry($settings_path, $debug_mode = false)
+	{
+		echo "Seeding the registry with required values...";
+		if (! is_string($settings_path)) {
+			exit('VictoryCMS must be called with a valid settings file path! '
+				.$settings_path);
+		}
+		if (! is_readable($settings_path)) {
+			exit('Settings file path '.$settings_path.' is not readable!');
+		}
+		if (! is_bool($debug_mode)) {
+			exit('Debug mode must only be enabled with a boolean value!');
+		}
+
+		Registry::set(RegistryKeys::settings_path, $settings_path, true);
+		Registry::set(RegistryKeys::debug_enabled, $debug_mode, true);
+		
+		// Set the lib path to this directory, since we should be in there
+		Registry::set(RegistryKeys::lib_path, __DIR__, true);
+		echo "done.\n";
+	}
+	
+	/**
 	 * Perform PHP environment initiailization. This will add the exception
 	 * and error handlers into PHP and also create the Autoloader.
 	 *
@@ -63,6 +94,7 @@ class VictoryCMS
 	 */
 	protected static function initialize()
 	{
+		echo "Initializing the PHP environment...";
 		// PHP version must be 5.3.1 or greater
 		if (version_compare(phpversion(), "5.3.1", "<")) {
 			throw new \RuntimeException(
@@ -83,9 +115,8 @@ class VictoryCMS
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
 		
-		// Set the lib path and register it with the autoloader
-		Registry::set(RegistryKeys::lib_path, __DIR__);
 		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
+		echo "done.\n";
 	}
 
 	/**
@@ -98,9 +129,11 @@ class VictoryCMS
 	protected static function load()
 	{
 		echo "Loading configuration settings...";
+		$config_path = Registry::get(RegistryKeys::settings_path);
 		try {
-			LoadManager::load(Registry::get(RegistryKeys::settings_path));
+			LoadManager::load($config_path);
 		} catch (\Exception $e) {
+			echo "Error loading in configuration settings: ";
 			echo LoadManager::getUserErrorMessage();
 			exit();
 		}
@@ -120,20 +153,7 @@ class VictoryCMS
 	 */
 	public static function bootstrap($settings_path, $debug_mode = false)
 	{
-		if (! is_string($settings_path)) {
-			exit('VictoryCMS must be called with a valid settings file path! '
-				.$settings_path);
-		}
-		if (! is_readable($settings_path)) {
-			exit('Settings file path '.$settings_path.' is not readable!');
-		}
-		if (! is_bool($debug_mode)) {
-			exit('Debug mode must only be enabled with a boolean value!');
-		}
-
-		Registry::set(RegistryKeys::settings_path, $settings_path, true);
-		Registry::set(RegistryKeys::debug_enabled, $debug_mode, true);
-		
+		static::seedRegistry($settings_path, $debug_mode);
 		static::initialize();
 		static::load();
 		static::run();
