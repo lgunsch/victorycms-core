@@ -86,6 +86,11 @@ class VictoryCMS
 		echo "done.\n";
 	}
 	
+	/**
+	 * Configure and register the autoloader for VictoryCMS.
+	 * 
+	 * @return void
+	 */
 	protected static function configureAutoloader()
 	{
 		echo "Configuring the VictoryCMS autoloader...";
