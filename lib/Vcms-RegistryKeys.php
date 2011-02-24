@@ -53,6 +53,9 @@ class RegistryKeys
  	/** Path to the VictoryCMS lib directory */
  	const lib_path = "lib_path";
  	
+ 	/** Path to the VictoryCMS app directory */
+ 	const app_path = "app_path";
+
  	/** Registry array of Autoload directory paths */
  	const autoload = 'autoload';
  	
@@ -60,6 +63,6 @@ class RegistryKeys
  	const app_external = 'app_external';
  	
  	/** Array of external libraries to load- global */
- 	const lib_external = 'lib_external';
+ 	const lib_external = 'lib_external'; 	
 }
 ?>
