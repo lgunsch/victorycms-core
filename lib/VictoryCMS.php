@@ -306,7 +306,7 @@ class VictoryCMS
 			} elseif (isset($v['function']) && empty($trace)) {
 				$trace = (static::isCli())? 'in function '.$v['function'].'(' :
 					'in class '.$v['function'].'(';
-				if (!empty($v['args'])) {
+				if (! empty($v['args'])) {
 
 					$separator = '';
 
@@ -384,7 +384,7 @@ class VictoryCMS
 				$ret = 'array(';
 				$separtor = '';
 				foreach ($arg as $k => $v) {
-					$ret .= $separtor.getArgument($k).' => '.static::getArgument($v);
+					$ret .= $separtor.static::getArgument($k).' => '.static::getArgument($v);
 					$separtor = ', ';
 				}
 				$ret .= ')';
@@ -422,7 +422,7 @@ class VictoryCMS
 			if (is_array($value)) {
 				echo $tab.(static::isCli())? "[$key]\n" : "[<strong><u>$key</u></strong>]<br />";
 				$count++;
-				print_ar($value, $returnText, $count);
+				static::printArray($value, $count);
 				$count--;
 			} else {
 				$tab2 = substr($tab, 0, -12);
