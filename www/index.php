@@ -1,13 +1,12 @@
 <?php
 
 /* Should normally resolve to the web document root,
- * ./../../lib/VictoryCMSTestRunner.php or you can just set it to
- * "path/to/web_root/test_lib/VictoryCMSRunner.php"
+ * ./../../ or you can just set it to "path/to/web_root/"
  */
 $webRoot = ''.dirname(__DIR__).DIRECTORY_SEPARATOR;
 
-// Path: "../include/VictoryCMS.php"
+// Path to VictoryCMS.php: "../lib/VictoryCMS.php"
 require_once $webRoot.'lib'.DIRECTORY_SEPARATOR.'VictoryCMS.php';
 
-// Change the below path to config.json as needed
+// Change the below path to config.json as required
 Vcms\VictoryCMS::bootstrap($webRoot.'config.json');
