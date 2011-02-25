@@ -21,11 +21,11 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsCommand
+ * VictoryCMS - VcmsController
  *
  * @filesource
  * @category VictoryCMS
- * @package  Core
+ * @package  Controller
  * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
@@ -34,32 +34,49 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a VcmsCommand class
+ * This is an abstract class for a Vcms Controller
  *
- * @todo: fill in documentation
  */
-abstract class VcmsCommand
+abstract class VcmsController
 {
 	/**
-	 * 
+	 * The main function for a controller
 	 */
-	abstract protected function staging();
+	abstract protected function process();
 	
 	/**
 	 * 
+	 * Returns true if the view can be cached.
 	 */
-	abstract protected function execute();
+	protected function isCacheable()
+	{
+		return false;
+	}
 	
 	/**
 	 * 
+	 * Caches the controller response; this function will not cache the results, but
+	 * is here so that you may extend it to provide cacheing capability if you need.
 	 */
-	abstract protected function tearDown();
+	public function cache()
+	{
+		/*
+		 * This is an empty implementation so that cacheing capability is not
+		 * required, but may be implemented.
+		 */
+	}
 	
 	/**
-	 *  
+	 * 
+	 * Purges the cache; this function will not purge the cache, but is here so that
+	 * you may extend it to provide cacheing capability if you need.
 	 */
-	abstract protected function result();
-	
-
+	public function purge()
+	{
+		/*
+		 * This is an empty implementation so that cacheing capability is not
+		 * required, but may be implemented.
+		 */
+	}
 }
 ?>

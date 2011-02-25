@@ -21,11 +21,11 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsView
+ * VictoryCMS - VcmsCommand
  *
  * @filesource
  * @category VictoryCMS
- * @package  Core
+ * @package  Command
  * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
@@ -34,54 +34,30 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a Vcms View
+ * This is an abstract class for a VcmsCommand class
  *
- * @package Core
- * @todo Implement cache() and purge()
+ * @todo: fill in documentation
  */
-abstract class VcmsView
+abstract class VcmsCommand
 {
 	/**
 	 * 
-	 * Renders the view using echo().
-	 * @param Array of parameters needed to render the view $params
 	 */
-	abstract protected function render($params);
+	abstract protected function staging();
 	
 	/**
 	 * 
-	 * Returns the body of the view instead of rendering it.
 	 */
-	abstract protected function getBody();
+	abstract protected function execute();
 	
 	/**
 	 * 
-	 * Returns the content-type of the view.
 	 */
-	abstract protected function getContentType();
+	abstract protected function tearDown();
 	
 	/**
-	 * 
-	 * Returns true if the view can be cached.
+	 *  
 	 */
-	abstract protected function isCacheable();
-	
-	/**
-	 * 
-	 * Caches the view using Varnish. 
-	 */
-	public function cache(){
-		//TODO: implement
-	}
-	
-	/**
-	 * 
-	 * Purges the cache. 
-	 */
-	public function purge(){
-		//TODO: implement
-	}
-	
-
+	abstract protected function result();
 }
 ?>

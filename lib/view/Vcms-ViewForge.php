@@ -25,7 +25,7 @@
  *
  * @filesource
  * @category VictoryCMS
- * @package  Core
+ * @package  View
  * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
@@ -39,15 +39,12 @@ namespace Vcms;
  * to those objects, and then renders those objects. It will then return
  * a final response object.
  *
- * @package Core
+ * @package View
  * @todo Implement cache() and purge()
  * @todo Test
  */
-
-
 class ViewForge
 {
-	
 	/** Singleton instance to ViewForge */
 	private static $instance;
 	
@@ -71,7 +68,7 @@ class ViewForge
 	 */
 	public static function getInstance()
 	{
-		if (!isset(static::$instance)) {
+		if (! isset(static::$instance)) {
 			$c = __CLASS__;
 			static::$instance = new $c;
 			static::$errorMessage = '';
@@ -98,7 +95,7 @@ class ViewForge
 		$contents = FileUtils::removeComments($forgeSpec);
 		$json = json_decode($contents, true);
 		
-		if($json === null){
+		if ($json === null) {
 			static::$errorMessage = "ForgeSpec cannot be decoded.";
 			throw new \Exception('Configuration file cannot be decoded.');
 		}
@@ -119,23 +116,23 @@ class ViewForge
 		 * in the array having a 'name' key and an optional 'param' key. 
 		 */
 		foreach ($json as $key => $value) {
-			if (($key == 'objects') && is_array($value)){
+			if (($key == 'objects') && is_array($value)) {
 				foreach ($value as $object) {
-						if(isset($object["params"])){
+						if (isset($object["params"])) {
 							$params = $object["params"];
-						}else{
+						} else {
 							$params = null;
 						}
-						if(isset($object["name"])){
+						if (isset($object["name"])) {
 							$name = $object["name"];
 							$path = Registry::get("app_path") . "/views/" . $name . ".php";
 							
-							if(! is_file($path)){
+							if (! is_file($path)) {
 								throw new \Exception('View file does not exist');
 							}
 							require_once($path);
 							
-							if(! is_subclass_of($name, "\Vcms\VcmsView")){
+							if (! is_subclass_of($name, "\Vcms\VcmsView")) {
 								throw new \Exception('View object does not extend VcmsView');
 							}
 					
@@ -144,25 +141,24 @@ class ViewForge
 							$objects_to_render[] = array($instance, $params);
 							
 							$this_content_type = $instance->getContentType();
-							if($last_content_type == null){
+							if ($last_content_type == null) {
 								$last_content_type = $this_content_type;
 								$response_content_type = $this_content_type;
 							}
-							if(! strcmp($last_content_type, $this_content_type) == 0){
+							if (! strcmp($last_content_type, $this_content_type) == 0) {
 								$response_status_code = 1;
 								$response_status_message = "Content types do not match.";
 								$response_content_type = null;
 								$response_body = null;
-							}else{
+							} else {
 								$response_body .= $instance->getBody();
 							}
 							
-							if(! $instance->isCacheable()){
+							if (! $instance->isCacheable()) {
 								static::$cacheable = false;
 							}
 							
-							
-						}else{
+						} else {
 							throw new \Exception('Improperly formatted ForgeSpec');
 						}
 					}
@@ -173,8 +169,8 @@ class ViewForge
 		}
 		
 		/* render all of the objects */
-		if($response_status_code === 0){
-			foreach ($objects_to_render as $array){
+		if ($response_status_code === 0) {
+			foreach ($objects_to_render as $array) {
 				$object = $array[0];
 				$params = $array[1];
 				$object->render($params);
@@ -190,7 +186,8 @@ class ViewForge
 	 * 
 	 * @return boolean
 	 */
-	public static function isCacheable(){
+	public static function isCacheable()
+	{
 		return static::$cacheable;
 	}
 	
@@ -198,16 +195,27 @@ class ViewForge
 	 * 
 	 * Caches the views
 	 */
-	public static function cache(){
+	public static function cache()
+	{
 		//TODO: implement
+		/*
+		 * This will simply call cache on all of the view objects, if and only if
+		 * all of them are cacheable.
+		 */
 	}
 	
 	/**
 	 * 
 	 * Purges the cached views
 	 */
-	public static function purge(){
+	public static function purge()
+	{
 		//TODO: implement
+		/*
+		 * This will simply call purge on all of the view objects that are cacheable,
+		 * and not on any that are not cacheable.
+		 * 
+		 */
 	}
 	
 	/**
@@ -220,7 +228,6 @@ class ViewForge
 		return static::$errorMessage;
 	}
 	
-	
 	/**
 	 * Preventing cloning of this class
 	 */
@@ -228,7 +235,5 @@ class ViewForge
 	{
 		throw new \Vcms\Exception\SingletonCopyException;
 	}
-	
-	
 }
 ?>

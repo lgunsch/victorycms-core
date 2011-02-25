@@ -21,11 +21,11 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsController
+ * VictoryCMS - CssView
  *
  * @filesource
  * @category VictoryCMS
- * @package  Core
+ * @package  View
  * @author   Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     http://www.victorycms.org/
@@ -34,34 +34,20 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a Vcms Controller
+ * This is an abstract class for a Css View. 
  *
+ * @package View
  */
-abstract class VcmsController
+abstract class CssView extends VcmsView
 {
 	/**
-	 * The main function for a controller
-	 */
-	abstract protected function process();
-	
-	/**
+	 * Returns the content-type of the view.
 	 * 
-	 * Returns true if the view can be cached.
+	 * @see Vcms.VcmsView::getContentType()
 	 */
-	abstract protected function isCacheable();
-	
-	/**
-	 * 
-	 * Caches the view using Varnish. 
-	 */
-	abstract protected function cache();
-	
-	/**
-	 * 
-	 * Purges the cache. 
-	 */
-	abstract protected function purge();
-	
-
+	public function getContentType()
+	{
+		return "text/css";
+	}
 }
 ?>
