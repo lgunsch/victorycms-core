@@ -131,6 +131,24 @@ class VictoryCMS
 	}
 
 	/**
+	 * Register any user configured autoload directories; these should be set in the
+	 * configuration file.
+	 * 
+	 * @return void
+	 */
+	protected static function finaizlizeAutoloader()
+	{
+		//TODO: implement me.
+		echo "Registering user configured autoload directories...";
+		/*
+		 * Loop through any paths located in the autoload registry key and use 
+		 * Autoloader::addDir() to add the directory to the autoloader. The
+		 * autoloader will resolve the truepath of the configured path.
+		 */
+		echo "done.\n";
+	}
+	
+	/**
 	 * Populate the registry with settings from the configuration settings file.
 	 * This will produce a user friendly error message and exit if an error is
 	 * encountered in the configuration settings file.
@@ -182,6 +200,7 @@ class VictoryCMS
 		static::initialize();
 		static::configureAutoloader();
 		static::load();
+		static::finaizlizeAutoloader();
 		static::loadLibraries();
 		static::run();
 	}
