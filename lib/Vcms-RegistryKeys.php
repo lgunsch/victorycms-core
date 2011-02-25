@@ -53,7 +53,7 @@ class RegistryKeys
  	/** Path to the VictoryCMS lib directory */
  	const lib_path = "lib_path";
  	
- 	/** Path to the application directory */
+ 	/** Path to the VictoryCMS app directory */
  	const app_path = "app_path";
  	
  	/** Registry array of Autoload directory paths */
