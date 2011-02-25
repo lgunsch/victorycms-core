@@ -171,11 +171,13 @@ class VictoryCMS
 	
 	protected static function loadLibraries()
 	{
-		echo "Loading external libraries...\n";
-		
+		echo "Loading external libraries...";
+		$libExt = Registry::get(RegistryKeys::lib_external);
+		$appExt = Registry::get(RegistryKeys::app_external);
 		try {
-			LibraryLoader::loadLibraries(Registry::get(RegistryKeys::lib_external),Registry::get(RegistryKeys::app_external));
+			LibraryLoader::loadLibraries($libExt, $appExt);
 		} catch (\Exception $e) {
+			echo "Error loading the external libraries: ";
 			echo LibraryLoader::getUserErrorMessage();
 			exit();
 		}
