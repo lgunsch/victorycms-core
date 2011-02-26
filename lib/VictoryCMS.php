@@ -136,15 +136,13 @@ class VictoryCMS
 	 * 
 	 * @return void
 	 */
-	protected static function finaizlizeAutoloader()
+	protected static function finalizeAutoloader()
 	{
-		//TODO: implement me.
 		echo "Registering user configured autoload directories...";
-		/*
-		 * Loop through any paths located in the autoload registry key and use 
-		 * Autoloader::addDir() to add the directory to the autoloader. The
-		 * autoloader will resolve the truepath of the configured path.
-		 */
+		$autoload_array = Registry::get('autoload');
+		foreach($autoload_array as $path){
+			Autoloader::addDir($path);
+		}
 		echo "done.\n";
 	}
 	
@@ -202,7 +200,7 @@ class VictoryCMS
 		static::initialize();
 		static::configureAutoloader();
 		static::load();
-		static::finaizlizeAutoloader();
+		static::finalizeAutoloader();
 		static::loadLibraries();
 		static::run();
 	}
