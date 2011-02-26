@@ -131,6 +131,50 @@ class VcmsResponse
 		return isset($this->body)? $this->body : null;
 	}
 	
+	/**
+	 * Sets the status code of the VcmsResponse.
+	 * 
+	 * @throws \Vcms\Exception\DataException
+	 * @throws \Vcms\Exception\DataTypeException
+	 */
+	public function setStatusCode($status_code)
+	{
+		$this->status_code = $status_code;
+	}
+	
+	/**
+	 * Sets the status message of the VcmsResponse.
+	 * 
+	 * @throws \Vcms\Exception\DataException
+	 * @throws \Vcms\Exception\DataTypeException
+	 */
+	public function setStatusMessage($status_message)
+	{
+		$this->status_message = $status_message;
+	}
+	
+	/**
+	 * Sets the content type of the VcmsResponse.
+	 * 
+	 * @throws \Vcms\Exception\DataException
+	 * @throws \Vcms\Exception\DataTypeException
+	 */
+	public function setContentType($content_type)
+	{
+		$this->content_type = $content_type;
+	}
+	
+	/**
+	 * Sets the body of the VcmsResponse.
+	 * 
+	 * @throws \Vcms\Exception\DataException
+	 * @throws \Vcms\Exception\DataTypeException
+	 */
+	public function setBody($body)
+	{
+		$this->body = $body;
+	}
+	
 	/**#@+
 	 * 
      * HTTP status codes.

@@ -47,7 +47,7 @@ abstract class CssView extends VcmsView
 	 */
 	public function getContentType()
 	{
-		return "text/css";
+		return "text/css; charset=utf-8";
 	}
 }
 ?>

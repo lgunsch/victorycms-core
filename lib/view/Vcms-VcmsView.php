@@ -40,12 +40,14 @@ namespace Vcms;
  */
 abstract class VcmsView
 {
+	
+	abstract public function __construct($params);
 	/**
 	 * 
 	 * Renders the view using echo().
 	 * @param Array of parameters needed to render the view $params
 	 */
-	abstract protected function render($params);
+	abstract protected function render();
 	
 	/**
 	 * 

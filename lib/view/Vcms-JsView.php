@@ -47,7 +47,7 @@ abstract class JsView extends VcmsView
 	 */
 	public function getContentType()
 	{
-		return "text/javascript";
+		return "text/javascript; charset=utf-8";
 	}
 }
 ?>
