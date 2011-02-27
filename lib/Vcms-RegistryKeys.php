@@ -59,6 +59,9 @@ class RegistryKeys
  	/** Registry array of Autoload directory paths */
  	const autoload = 'autoload';
  	
+ 	/** Front controller for the user application */
+ 	const front_controller = 'front_controller';
+ 	
  	/** Array of external libraries to load - app specific */
  	const app_external = 'app_external';
  	

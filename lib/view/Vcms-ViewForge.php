@@ -138,8 +138,6 @@ class ViewForge
 						if (! is_subclass_of($class, "\Vcms\VcmsView")) {
 							throw new \Exception('View object does not extend VcmsView');
 						}
-						
-						
 				
 						$instance = new $class($params);
 						

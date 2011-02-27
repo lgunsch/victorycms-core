@@ -214,6 +214,28 @@ class VictoryCMS
 	protected static function run()
 	{
 		printf("I AM RUNNING!\n");
+		
+		if(Registry::isKey('front_controller')){
+			$controller = Registry::get(RegistryKeys::front_controller);
+		}
+		
+		if(isset($controller) && class_exists($controller)){
+			$reflection = new \ReflectionClass($controller);
+			$constructor = $reflection->getConstructor();
+	                
+			if ($constructor == null || $constructor->isPrivate() || $constructor->isProtected()) {
+			    throw new \Exception('Can not instantiate front controller');
+			}
+			
+			if (! is_subclass_of($class, "\Vcms\VcmsController")) {
+				throw new \Exception('Front controller does not extend VcmsController');
+			}
+			
+			$front_controller = new controller();
+			
+			$front_controller->process();
+		}
+
 	}
 
 	/**
