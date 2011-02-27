@@ -53,6 +53,9 @@ class ViewForge
 	
 	/** Cacheable boolean */
 	private static $cacheable = false;
+	
+	/** All the view objects */
+	private static $view_objects = array();
 
 	/**
 	 * private constructor for singleton pattern
@@ -101,8 +104,8 @@ class ViewForge
 			throw new \Exception('Configuration file cannot be decoded.');
 		}
 		
-		/* list of objects to render after checking their mime types, etc */
-		$objects_to_render = array();
+		/* Clear the view_objects array with every new forgeSpec */
+		static::$view_objects = array();
 		
 		/* Vcms Response */
 		$response = new VcmsResponse(200, 'OK', null, null);
@@ -140,7 +143,7 @@ class ViewForge
 				
 						$instance = new $class($params);
 						
-						$objects_to_render[] = $instance;
+						static::$view_objects[] = $instance;
 						
 						/* Ensure all view objects have the same content type */
 						$this_content_type = $instance->getContentType();
@@ -171,7 +174,7 @@ class ViewForge
 		
 		/* render all of the objects */
 		if ($response->getStatusCode() === 200) {
-			foreach ($objects_to_render as $object) {
+			foreach (static::$view_objects as $object) {
 				$object->render();
 			}
 		}
@@ -192,29 +195,31 @@ class ViewForge
 	
 	/**
 	 * 
-	 * Caches the views
+	 * This will simply call cache on all of the view objects, if and only if
+	 * all of them are cacheable.
 	 */
 	public static function cache()
 	{
-		//TODO: implement
-		/*
-		 * This will simply call cache on all of the view objects, if and only if
-		 * all of them are cacheable.
-		 */
+		if(static::isCacheable()){
+			foreach(static::$view_objects as $object){
+				$object->cache();
+			}
+		}
 	}
 	
 	/**
 	 * 
-	 * Purges the cached views
+	 * This will simply call purge on all of the view objects that are cacheable,
+	 * and not on any that are not cacheable.
 	 */
 	public static function purge()
 	{
-		//TODO: implement
-		/*
-		 * This will simply call purge on all of the view objects that are cacheable,
-		 * and not on any that are not cacheable.
-		 * 
-		 */
+		foreach(static::$view_objects as $object){
+			if($object->isCacheable()){
+				$object->purge();
+			}
+		}
+		
 	}
 	
 	/**
