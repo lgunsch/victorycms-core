@@ -5,10 +5,11 @@
 	## This file is the main configuration file for VictoryCMS.
 	##
 
+	"app_path": "../../app",
 	##------------------------------------------------------------------##
 	## Path(s) to user configured autoload directories. 				##
 	##------------------------------------------------------------------##
-	"autoload": ["app/"],
+	"autoload": ["../app/"],
 	
 	##------------------------------------------------------------------##
 	## Path(s) to other settings files.									##
