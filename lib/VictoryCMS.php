@@ -235,7 +235,7 @@ class VictoryCMS
 			
 			$front_controller->process();
 		}
-
+		
 	}
 
 	/**
