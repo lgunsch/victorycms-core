@@ -43,18 +43,8 @@ abstract class VcmsCommand
 	/**
 	 * 
 	 */
-	abstract protected function staging();
-	
-	/**
-	 * 
-	 */
 	abstract protected function execute();
-	
-	/**
-	 * 
-	 */
-	abstract protected function tearDown();
-	
+
 	/**
 	 *  
 	 */
