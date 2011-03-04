@@ -39,6 +39,9 @@ namespace Vcms;
  */
 abstract class VcmsController
 {
+	
+	function __construct(){
+	}
 	/**
 	 * The main function for a controller
 	 */
