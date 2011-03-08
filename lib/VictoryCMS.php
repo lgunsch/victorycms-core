@@ -218,7 +218,6 @@ class VictoryCMS
 		if(Registry::isKey('front_controller')){
 			$controller = Registry::get(RegistryKeys::front_controller);
 		}
-		
 		if(isset($controller) && class_exists($controller)){
 			$reflection = new \ReflectionClass($controller);
 			$constructor = $reflection->getConstructor();
@@ -227,11 +226,11 @@ class VictoryCMS
 			    throw new \Exception('Can not instantiate front controller');
 			}
 			
-			if (! is_subclass_of($class, "\Vcms\VcmsController")) {
+			if (! is_subclass_of($controller, "\Vcms\VcmsController")) {
 				throw new \Exception('Front controller does not extend VcmsController');
 			}
 			
-			$front_controller = new controller();
+			$front_controller = new $controller();
 			
 			$front_controller->process();
 		}

@@ -40,6 +40,11 @@ namespace Vcms;
 abstract class VcmsController
 {
 	/**
+	 * Constructor for a controller object
+	 */
+	function __construct(){}
+	
+	/**
 	 * The main function for a controller
 	 */
 	abstract protected function process();
