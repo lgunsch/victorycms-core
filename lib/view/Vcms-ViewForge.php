@@ -129,7 +129,15 @@ class ViewForge
 						);
 						
 						$reflection = new \ReflectionClass($class);
-						$constructor = $reflection->getConstructor();
+						try{
+							$constructor = $reflection->getConstructor();
+						}catch(\Exception $e){
+							$response->setStatusCode(404);
+							$response->setStatusMessage("Not Found");
+							$response->setContentType(null);
+							$response->setBody(null);
+							return $response;
+						}
                 
 						if ($constructor == null || $constructor->isPrivate() || $constructor->isProtected()) {
 						    throw new \Exception('Can not instantiate view object');

@@ -67,7 +67,6 @@ class VictoryCMS
 	 */
 	protected static function seedRegistry($settings_path, $debug_mode = false)
 	{
-		echo "Seeding the registry with required values...";
 		if (! is_string($settings_path)) {
 			exit('VictoryCMS must be called with a valid settings file path! '
 				.$settings_path);
@@ -84,7 +83,6 @@ class VictoryCMS
 		
 		// Set the lib path to this directory, since we should be in there
 		Registry::set(RegistryKeys::lib_path, __DIR__, true);
-		echo "done.\n";
 	}
 	
 	/**
@@ -94,14 +92,12 @@ class VictoryCMS
 	 */
 	protected static function configureAutoloader()
 	{
-		echo "Configuring the VictoryCMS autoloader...";
 		$autoloader = spl_autoload_register(__NAMESPACE__.'\Autoloader::autoload');
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
 		
 		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
-		echo "done.\n";
 	}
 	
 	/**
@@ -112,7 +108,6 @@ class VictoryCMS
 	 */
 	protected static function initialize()
 	{
-		echo "Initializing the PHP environment...";
 		// PHP version must be 5.3.1 or greater
 		if (version_compare(phpversion(), "5.3.1", "<")) {
 			throw new \RuntimeException(
@@ -127,7 +122,6 @@ class VictoryCMS
 			
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
-		echo "done.\n";
 	}
 
 	/**
@@ -138,12 +132,10 @@ class VictoryCMS
 	 */
 	protected static function finalizeAutoloader()
 	{
-		echo "Registering user configured autoload directories...";
 		$autoload_array = Registry::get('autoload');
 		foreach($autoload_array as $path){
 			Autoloader::addDir($path);
 		}
-		echo "done.\n";
 	}
 	
 	/**
@@ -155,7 +147,6 @@ class VictoryCMS
 	 */
 	protected static function load()
 	{
-		echo "Loading configuration settings...";
 		$config_path = Registry::get(RegistryKeys::settings_path);
 		try {
 			LoadManager::load($config_path);
@@ -164,12 +155,10 @@ class VictoryCMS
 			echo LoadManager::getUserErrorMessage();
 			exit();
 		}
-		echo "done.\n";
 	}
 	
 	protected static function loadLibraries()
 	{
-		echo "Loading external libraries...";
 		$libExt = Registry::get(RegistryKeys::lib_external);
 		$appExt = Registry::get(RegistryKeys::app_external);
 		try {
@@ -179,7 +168,6 @@ class VictoryCMS
 			echo LibraryLoader::getUserErrorMessage();
 			exit();
 		}
-		echo "done.\n";
 	}
 	
 	
@@ -213,8 +201,6 @@ class VictoryCMS
 	 */
 	protected static function run()
 	{
-		printf("I AM RUNNING!\n");
-		
 		if(Registry::isKey('front_controller')){
 			$controller = Registry::get(RegistryKeys::front_controller);
 		}
