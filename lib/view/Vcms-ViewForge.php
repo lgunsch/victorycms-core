@@ -172,6 +172,8 @@ class ViewForge
 		
 		/* render all of the objects */
 		if ($response->getStatusCode() === 200) {
+			$content_type = $response->getContentType();
+			header("Content-Type: $content_type; UTF-8");
 			foreach (static::$view_objects as $object) {
 				$object->render();
 			}
