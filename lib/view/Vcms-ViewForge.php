@@ -104,9 +104,6 @@ class ViewForge
 			throw new \Exception('Configuration file cannot be decoded.');
 		}
 		
-		/* Clear the view_objects array with every new forgeSpec */
-		static::$view_objects = array();
-		
 		/* Vcms Response */
 		$response = new VcmsResponse(200, 'OK', null, null);
 		$response_body = ""; 
@@ -149,8 +146,6 @@ class ViewForge
 				
 						$instance = new $class($params);
 						
-						static::$view_objects[] = $instance;
-						
 						/* Ensure all view objects have the same content type */
 						$this_content_type = $instance->getContentType();
 						if ($last_content_type == null) {
@@ -162,9 +157,10 @@ class ViewForge
 							$response->setStatusCode(500);
 							$response->setStatusMessage("Internal Server Error");
 							$response->setContentType(null);
-							$response_body = null;
+							$response->setBody(null);
+							return $response;
 						} else {
-							$response_body .= $instance->getBody();
+							$response_body .= $instance->render();
 						}
 						
 						if (! $instance->isCacheable()) {
@@ -175,15 +171,6 @@ class ViewForge
 					$response->setBody($response_body);
 			} else{
 				throw new \Exception('Improperly formatted ForgeSpec');
-			}
-		}
-		
-		/* render all of the objects */
-		if ($response->getStatusCode() === 200) {
-			$content_type = $response->getContentType();
-			header("Content-Type: $content_type; UTF-8");
-			foreach (static::$view_objects as $object) {
-				$object->render();
 			}
 		}
 		

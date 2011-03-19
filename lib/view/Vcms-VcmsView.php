@@ -44,16 +44,10 @@ abstract class VcmsView
 	abstract public function __construct($params);
 	/**
 	 * 
-	 * Renders the view using echo().
+	 * Returns a string representation of the view.
 	 * @param Array of parameters needed to render the view $params
 	 */
 	abstract protected function render();
-	
-	/**
-	 * 
-	 * Returns the body of the view instead of rendering it.
-	 */
-	abstract protected function getBody();
 	
 	/**
 	 * 
