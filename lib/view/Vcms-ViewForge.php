@@ -125,8 +125,8 @@ class ViewForge
 							'Improperly formatted ForgeSpec'
 						);
 						
-						$reflection = new \ReflectionClass($class);
 						try{
+							$reflection = new \ReflectionClass($class);
 							$constructor = $reflection->getConstructor();
 						}catch(\Exception $e){
 							$response->setStatusCode(404);
