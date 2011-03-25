@@ -5,35 +5,28 @@
 	## This file is the main configuration file for VictoryCMS.
 	##
 
+	## Path to the application directory.
 	"app_path": "../../app",
-	##------------------------------------------------------------------##
-	## Path(s) to user configured autoload directories. 				##
-	##------------------------------------------------------------------##
+
+	## Path(s) to user configured autoload directories.
 	"autoload": ["../app/"],
-	
-	##------------------------------------------------------------------##
-	## Front Controller									 				##
-	##------------------------------------------------------------------##
+
+	## Application authenticator fully qualified class name.
+	"authenticator": "",
+
+	## Application front controller fully qualified class name.
 	"front_controller": "",
-	
-	##------------------------------------------------------------------##
-	## Path(s) to other settings files.									##
-	##------------------------------------------------------------------##
-	"load":[],
-	
-	##------------------------------------------------------------------##
-	## Administrator's email address									##
-	##------------------------------------------------------------------##
+
+	## Path(s) to other settings files.
+  	"load":[],
+
+	## Administrator's email address.
 	"admin_email":"",
-		
-	##------------------------------------------------------------------##
-	## Global external libraries to load								##
-	##------------------------------------------------------------------##
+
+	## Global external libraries to load.
 	"lib_external":[],
-	
-	##------------------------------------------------------------------##
-	## App-specific external libraries to load							##
-	##------------------------------------------------------------------##
+
+	## Application-specific external libraries to load.
 	"app_external":[]
-	
+
 }
