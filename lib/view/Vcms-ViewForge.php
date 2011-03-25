@@ -46,21 +46,21 @@ namespace Vcms;
 class ViewForge
 {
 	/** Singleton instance to ViewForge */
-	private static $instance;
+	protected static $instance;
 	
 	/** User friendly error message */
-	private static $errorMessage;
+	protected static $errorMessage;
 	
 	/** Cacheable boolean */
-	private static $cacheable = false;
+	protected static $cacheable = false;
 	
 	/** All the view objects */
-	private static $view_objects = array();
+	protected static $view_objects = array();
 
 	/**
 	 * private constructor for singleton pattern
 	 */
-	private function __construct()
+	protected function __construct()
 	{
 	}
 
@@ -71,9 +71,8 @@ class ViewForge
 	 */
 	public static function getInstance()
 	{
-		if (! isset(static::$instance)) {
-			$c = __CLASS__;
-			static::$instance = new $c;
+		if(! isset(static::$instance)) {
+			static::$instance = new static();
 			static::$errorMessage = '';
 		}
 		return static::$instance;

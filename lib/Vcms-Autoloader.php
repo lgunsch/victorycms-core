@@ -71,9 +71,8 @@ class Autoloader {
 	 */
 	public static function getInstance()
 	{
-		if (! isset(static::$instance)) {
-			$c = __CLASS__;
-			static::$instance = new $c;
+		if(! isset(static::$instance)) {
+			static::$instance = new static();
 		}
 		return static::$instance;
 	}

@@ -95,9 +95,8 @@ abstract class AbstractAuthenticator
 	 */
 	public static function getInstance()
 	{
-		if (! isset(static::$instance)) {
-			$c = __CLASS__;
-			static::$instance = new $c;
+		if(! isset(static::$instance)){
+			static::$instance = new static();
 		}
 		return static::$instance;
 	}
@@ -106,7 +105,7 @@ abstract class AbstractAuthenticator
 	 * @todo: I require detailed documentation.
 	 * 
 	 */
-	abstract public static function process();
+	abstract public function process();
 	
 	/**
 	 * Returns the current authentication state for this session, this can be

@@ -42,25 +42,26 @@ abstract class VcmsView
 {
 	
 	abstract public function __construct($params);
+	
 	/**
 	 * 
 	 * Returns a string representation of the view.
 	 * @param Array of parameters needed to render the view $params
 	 */
-	abstract protected function render();
+	abstract public function render();
 	
 	/**
 	 * 
 	 * Returns the content-type of the view.
 	 */
-	abstract protected function getContentType();
+	abstract public function getContentType();
 	
 	/**
 	 * 
 	 * Returns true if the view can be cached; the default is false and this can be
 	 * overridden if a VcmsView has caching capability.
 	 */
-	protected function isCacheable()
+	public function isCacheable()
 	{
 		return false;
 	}

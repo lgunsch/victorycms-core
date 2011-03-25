@@ -47,13 +47,13 @@ abstract class VcmsController
 	/**
 	 * The main function for a controller
 	 */
-	abstract protected function process();
+	abstract public function process();
 	
 	/**
 	 * 
 	 * Returns true if the view can be cached.
 	 */
-	protected function isCacheable()
+	public function isCacheable()
 	{
 		return false;
 	}

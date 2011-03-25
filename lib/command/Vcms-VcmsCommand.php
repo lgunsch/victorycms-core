@@ -43,11 +43,11 @@ abstract class VcmsCommand
 	/**
 	 * 
 	 */
-	abstract protected function execute();
+	abstract public function execute();
 
 	/**
 	 *  
 	 */
-	abstract protected function result();
+	abstract public function result();
 }
 ?>

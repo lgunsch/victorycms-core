@@ -48,12 +48,12 @@ class Registry
 	private $vars = array();
 
 	/** Singleton instance to Registry */
-	private static $instance;
+	protected static $instance;
 
 	/**
 	 * Private Registry constructor.
 	 */
-	private function __construct()
+	protected function __construct()
 	{
 		
 	}
@@ -65,9 +65,8 @@ class Registry
 	 */
 	public static function getInstance()
 	{
-		if (!isset(static::$instance)) {
-			$c = __CLASS__;
-			static::$instance = new $c;
+		if(! isset(static::$instance)) {
+			static::$instance = new static();
 		}
 		return static::$instance;
 	}

@@ -47,15 +47,15 @@ class LoadManager
 {
 	
 	/** Singleton instance to LoadManager */
-	private static $instance;
+	protected static $instance;
 	
 	/** User friendly error message */
-	private static $errorMessage;
+	protected static $errorMessage;
 	
 	/**
 	 * private constructor; prevents direct creation of object.
 	 */
-	private function __construct()
+	protected function __construct()
 	{
 		
 	}
@@ -67,9 +67,8 @@ class LoadManager
 	 */
 	public static function getInstance()
 	{
-		if (!isset(static::$instance)) {
-			$c = __CLASS__;
-			static::$instance = new $c;
+		if(! isset(static::$instance)) {
+			static::$instance = new static();
 			static::$errorMessage = '';
 		}
 		return static::$instance;
