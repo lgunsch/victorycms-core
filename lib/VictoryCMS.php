@@ -201,10 +201,26 @@ class VictoryCMS
 	 */
 	protected static function run()
 	{
-		if(Registry::isKey('front_controller')){
+		/* load and process the authenticator */
+		if (Registry::isKey(RegistryKeys::authenticator)) {
+			$authenticator = Registry::get(RegistryKeys::authenticator);
+		}
+		if (isset($authenticator) && class_exists($authenticator)) {
+			if (! is_subclass_of($authenticator, "\Vcms\AbstractAuthenticator")) {
+				throw new \Exception('Authenticator does not extend AbstractAuthenticator');
+			}
+			
+			$authenticatorObj = $authenticator::getInstance();
+			$authenticatorObj->process();
+		} elseif (isset($authenticator)) {
+			echo "Authenticator class '$authenticator' could not be found.\n";
+		}
+		
+		/* load and process the front controller */
+		if (Registry::isKey(RegistryKeys::front_controller)) {
 			$controller = Registry::get(RegistryKeys::front_controller);
 		}
-		if(isset($controller) && class_exists($controller)){
+		if(isset($controller) && class_exists($controller)) {
 			$reflection = new \ReflectionClass($controller);
 			$constructor = $reflection->getConstructor();
 	                
@@ -217,8 +233,9 @@ class VictoryCMS
 			}
 			
 			$front_controller = new $controller();
-			
 			$front_controller->process();
+		} elseif (isset($controller)) {
+			echo "Controller class '$controller' could not be found.\n";
 		}
 		
 	}
