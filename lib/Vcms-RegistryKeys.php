@@ -59,6 +59,7 @@ class RegistryKeys
  	/** Registry array of Autoload directory paths */
  	const autoload = 'autoload';
  	
+ 	/** Authenticator object for the user application */
  	const authenticator = 'authenticator';
  	
  	/** Front controller for the user application */
