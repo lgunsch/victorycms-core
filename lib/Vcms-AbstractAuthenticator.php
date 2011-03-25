@@ -34,26 +34,59 @@ namespace Vcms;
 
 /**
  * This abstract class may be extended to provide user authentication; this will be
- * processed before the application front controller is processed.
+ * processed before the application front controller is processed. In you
+ * configuration file you should set the 'authenticator' key to the fully qualified
+ * class name of your class, including the namespace, which should extend from this
+ * class. In your process method you are required to change the state to one of
+ * ROOT, AUTHENTICATED, or ANONYMOUS as you see fit. After, other classes may use
+ * <your class>::isAuthenticated() and <your class>::getState() to check for user
+ * authentication and current privilege level, or also you can check for root level
+ * privileges with <your class>::isRoot().
  *
  * @package Core
  */
 abstract class AbstractAuthenticator
 {
+	/**
+	 * Represents root level privileges for the currently authenticated user.
+	 * 
+	 * @example static::$state = static::ROOT;
+	 */
 	const ROOT = 0;
+	
+	/**
+	 * Represents user level privileges for the currently authenticated user.
+	 * 
+	 * @example static::$state = static::AUTHENTICATED;
+	 */
 	const AUTHENTICATED = 1;
+	
+	/**
+	 * Represents guest level privileges for the currently anonymous user.
+	 * 
+	 * @example static::$state = static::ANONYMOUS;
+	 */
 	const ANONYMOUS = 2;
 	
-	/** Singleton instance to Autoloader */
+	/**
+	 * Current state of authentication; either ROOT, AUTHENTICATED, or ANONYMOUS.
+	 * This should be properly updated by the implementing class after the process
+	 * method has been called.
+	 * 
+	 * @example static::$state = static::AUTHENTICATED;
+	 */
+	protected static $state;
+	
+	/** Singleton instance to the authenticator */
 	protected static $instance;
 	
 	/**
-	 * protected constructor; prevents direct creation of Authenticator object. This
+	 * protected constructor; prevents direct creation of authenticator object. This
 	 * may be extended to allow for proper object construction. 
 	 */
 	protected function __construct()
 	{
-
+		static::$state = static::ANONYMOUS;
 	}
 
 	/**
@@ -70,38 +103,50 @@ abstract class AbstractAuthenticator
 	}
 	
 	/**
-	 * 
+	 * @todo: I require detailed documentation.
 	 * 
 	 */
-	abstract public function process();
+	abstract public static function process();
 	
 	/**
+	 * Returns the current authentication state for this session, this can be
+	 * AUTHENTICATED, ANONYMOUS, or ROOT.
 	 * 
-	 * 
+	 * @return current authentication state: ANONYMOUS, AUTHENTICATED, or ROOT.
 	 */
-	public function getState()
+	public static function getState()
 	{
-		//TODO: implement me
+		return static::$state;
 	}
 	
 	/**
+	 * Returns true if user is authenticated, and false if anonymous,
+	 * and is not authenticated yet.
 	 * 
-	 * 
+	 * @return bool true if user is authenticated, false if anonymous.
 	 */
 	public static function isAuthenticated()
 	{
-		$auth = static::getInstance();
-		//TODO: implement me
+		if (static::$state === ROOT || static::$state === static::AUTHENTICATED) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
+	 * Returns true if the currently authenticated user has root level privileges,
+	 * and false if not.
 	 * 
-	 * 
+	 * @return bool true if authenticated user has root privileges, false if not.
 	 */
 	public static function isRoot()
 	{
-		$auth = static::getInstance();
-		//TODO: implement me
+		if (static::$state === static::ROOT) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
