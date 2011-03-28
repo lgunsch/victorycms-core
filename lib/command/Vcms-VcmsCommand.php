@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsCommand
+ * VictoryCMS - Command
  *
  * @filesource
  * @category VictoryCMS
@@ -34,11 +34,11 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a VcmsCommand class
+ * This is an abstract class for a Command class
  *
  * @todo: fill in documentation
  */
-abstract class VcmsCommand
+abstract class Command
 {
 	/**
 	 * 
