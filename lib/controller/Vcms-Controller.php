@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsController
+ * VictoryCMS - Controller
  *
  * @filesource
  * @category VictoryCMS
@@ -37,7 +37,7 @@ namespace Vcms;
  * This is an abstract class for a Vcms Controller
  *
  */
-abstract class VcmsController
+abstract class Controller
 {
 	/**
 	 * Constructor for a controller object
