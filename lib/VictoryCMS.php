@@ -228,8 +228,8 @@ class VictoryCMS
 			    throw new \Exception('Can not instantiate front controller');
 			}
 			
-			if (! is_subclass_of($controller, "\Vcms\VcmsController")) {
-				throw new \Exception('Front controller does not extend VcmsController');
+			if (! is_subclass_of($controller, "\Vcms\Controller")) {
+				throw new \Exception('Front controller does not extend Controller');
 			}
 			
 			$front_controller = new $controller();
