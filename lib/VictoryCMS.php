@@ -210,8 +210,7 @@ class VictoryCMS
 				throw new \Exception('Authenticator does not extend AbstractAuthenticator');
 			}
 			
-			$authenticatorObj = $authenticator::getInstance();
-			$authenticatorObj->process();
+			$authenticator::process();
 		} elseif (isset($authenticator)) {
 			echo "Authenticator class '$authenticator' could not be found.\n";
 		}
