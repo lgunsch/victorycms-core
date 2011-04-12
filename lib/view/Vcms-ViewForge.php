@@ -81,9 +81,9 @@ class ViewForge
 	/**
 	 * 
 	 * The main forge function which receives a forgespec and
-	 * instantiates all view objects while building a Vcms Response
-	 * object. If everything goes well, it will render the view
-	 * objects and return the final vcms response with status code.
+	 * builds a Vcms Response object using the appropriate views.
+	 * If everything goes well, it will render the view objects
+	 * and return the final vcms response with status code.
 	 * 
 	 * @param  A JSON formatted string  $forgeSpec 
 	 * @return VcmsResponse object
