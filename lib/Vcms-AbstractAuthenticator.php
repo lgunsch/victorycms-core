@@ -34,11 +34,17 @@ namespace Vcms;
 
 /**
  * This abstract class may be extended to provide user authentication; this will be
- * processed before the application front controller is processed. In you
- * configuration file you should set the 'authenticator' key to the fully qualified
- * class name of your class, including the namespace, which should extend from this
- * class. In your process method you are required to change the state to one of
- * ROOT, AUTHENTICATED, or ANONYMOUS as you see fit. After, other classes may use
+ * processed before the application front controller is processed and the user
+ * authenticated will become the owner of this session. The current state of
+ * authentication may be polled by the isRoot and isAuthenticated methods.
+ * 
+ * In you configuration file you should set the 'authenticator' key to the fully
+ * qualified class name of your class, including the namespace, which should extend
+ * from this class. You should also override the process method with your own process
+ * method.
+ * 
+ * In your process method you are required to change the state to one of ROOT,
+ * AUTHENTICATED, or ANONYMOUS as you see fit. After, other classes may use
  * <your class>::isAuthenticated() and <your class>::getState() to check for user
  * authentication and current privilege level, or also you can check for root level
  * privileges with <your class>::isRoot().
@@ -48,68 +54,50 @@ namespace Vcms;
 abstract class AbstractAuthenticator
 {
 	/**
-	 * Represents root level privileges for the currently authenticated user.
+	 * Represents root level privileges.
 	 * 
 	 * @example static::$state = static::ROOT;
 	 */
 	const ROOT = 0;
 	
 	/**
-	 * Represents user level privileges for the currently authenticated user.
+	 * Represents user level privileges.
 	 * 
 	 * @example static::$state = static::AUTHENTICATED;
 	 */
 	const AUTHENTICATED = 1;
 	
 	/**
-	 * Represents guest level privileges for the currently anonymous user.
+	 * Represents guest level privileges.
 	 * 
 	 * @example static::$state = static::ANONYMOUS;
 	 */
 	const ANONYMOUS = 2;
 	
 	/**
-	 * Current state of authentication; either ROOT, AUTHENTICATED, or ANONYMOUS.
-	 * This should be properly updated by the implementing class after the process
-	 * method has been called.
+	 * Current state of user authentication for the owner of this session; either
+	 * ROOT, AUTHENTICATED, or ANONYMOUS. This should be properly updated by the
+	 * implementing class after the process method has been called.
 	 * 
 	 * @example static::$state = static::AUTHENTICATED;
 	 */
-	protected static $state;
-	
-	/** Singleton instance to the authenticator */
-	protected static $instance;
+	protected static $state = self::ANONYMOUS;
 	
 	/**
-	 * protected constructor; prevents direct creation of authenticator object. This
-	 * may be extended to allow for proper object construction. 
-	 */
-	protected function __construct()
-	{
-		static::$state = static::ANONYMOUS;
-	}
-
-	/**
-	 * The singleton functon for getting the Authenticator object.
-	 * @return Autoloader Object used to autoload classes.
-	 */
-	public static function getInstance()
-	{
-		if(! isset(static::$instance)){
-			static::$instance = new static();
-		}
-		return static::$instance;
-	}
-	
-	/**
-	 * @todo: I require detailed documentation.
+	 * Process method called by 
 	 * 
+	 * @todo: I require detailed documentation.
 	 */
-	abstract public function process();
+	public static function process()
+	{
+		/*
+		 * This function must be extended to provide authentication functionality.
+		 */
+	}
 	
 	/**
-	 * Returns the current authentication state for this session, this can be
-	 * AUTHENTICATED, ANONYMOUS, or ROOT.
+	 * Returns the current authentication state for the user who owns this session,
+	 * this can be AUTHENTICATED, ANONYMOUS, or ROOT.
 	 * 
 	 * @return current authentication state: ANONYMOUS, AUTHENTICATED, or ROOT.
 	 */
@@ -119,8 +107,9 @@ abstract class AbstractAuthenticator
 	}
 	
 	/**
-	 * Returns true if user is authenticated, and false if anonymous,
-	 * and is not authenticated yet.
+	 * Returns true if user is authenticated, and false if anonymous and not
+	 * authenticated yet; this only checks the authentication state of the user
+	 * who owns the session, not any instantiated user.
 	 * 
 	 * @return bool true if user is authenticated, false if anonymous.
 	 */
@@ -135,7 +124,8 @@ abstract class AbstractAuthenticator
 	
 	/**
 	 * Returns true if the currently authenticated user has root level privileges,
-	 * and false if not.
+	 * and false if not; this only checks the authentication state of the user
+	 * who owns the session, not any instantiated user.
 	 * 
 	 * @return bool true if authenticated user has root privileges, false if not.
 	 */
@@ -146,14 +136,6 @@ abstract class AbstractAuthenticator
 		} else {
 			return false;
 		}
-	}
-	
-	/**
-	 * Disables the clone of this class.
-	 */
-	public function __clone()
-	{
-		throw new \Vcms\Exception\SingletonCopyException;
 	}
 }
 ?>
