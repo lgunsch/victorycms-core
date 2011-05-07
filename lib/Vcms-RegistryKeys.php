@@ -42,33 +42,33 @@ namespace Vcms;
 class RegistryKeys
 {
 	/** Enable debug mode */
- 	const debug_enabled = "debug_enabled";
+ 	const DEBUG = "debug_enabled";
  	
  	/** Administrator's email address. */
- 	const admin_email = "admin_email";
+ 	const ADMIN_EMAIL = "admin_email";
  	
  	/** Path to the settings file */
- 	const settings_path = "settings_path";
+ 	const SETTINGS_PATH = "settings_path";
  	
  	/** Path to the VictoryCMS lib directory */
- 	const lib_path = "lib_path";
+ 	const LIB_PATH = "lib_path";
  	
  	/** Path to the VictoryCMS app directory */
- 	const app_path = "app_path";
+ 	const APP_PATH = "app_path";
 	
  	/** Registry array of Autoload directory paths */
- 	const autoload = 'autoload';
+ 	const AUTOLOAD = 'autoload';
  	
  	/** Authenticator object for the user application */
- 	const authenticator = 'authenticator';
+ 	const AUTHENTICATOR = 'authenticator';
  	
  	/** Front controller for the user application */
- 	const front_controller = 'front_controller';
+ 	const FRONT_CONTROLLER = 'front_controller';
  	
  	/** Array of external libraries to load - app specific */
- 	const app_external = 'app_external';
+ 	const APP_EXTERNAL = 'app_external';
  	
  	/** Array of external libraries to load- global */
- 	const lib_external = 'lib_external'; 	
+ 	const LIB_EXTERNAL = 'lib_external';
 }
 ?>

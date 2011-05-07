@@ -78,11 +78,11 @@ class VictoryCMS
 			exit('Debug mode must only be enabled with a boolean value!');
 		}
 
-		Registry::set(RegistryKeys::settings_path, $settings_path, true);
-		Registry::set(RegistryKeys::debug_enabled, $debug_mode, true);
+		Registry::set(RegistryKeys::SETTINGS_PATH, $settings_path, true);
+		Registry::set(RegistryKeys::DEBUG, $debug_mode, true);
 		
 		// Set the lib path to this directory, since we should be in there
-		Registry::set(RegistryKeys::lib_path, __DIR__, true);
+		Registry::set(RegistryKeys::LIB_PATH, __DIR__, true);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ class VictoryCMS
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
 		
-		Autoloader::addDir(Registry::get(RegistryKeys::lib_path));
+		Autoloader::addDir(Registry::get(RegistryKeys::LIB_PATH));
 	}
 	
 	/**
@@ -132,7 +132,7 @@ class VictoryCMS
 	 */
 	protected static function finalizeAutoloader()
 	{
-		$autoload_array = Registry::get('autoload');
+		$autoload_array = Registry::get(RegistryKeys::AUTOLOAD);
 		foreach($autoload_array as $path){
 			Autoloader::addDir($path);
 		}
@@ -147,7 +147,7 @@ class VictoryCMS
 	 */
 	protected static function load()
 	{
-		$config_path = Registry::get(RegistryKeys::settings_path);
+		$config_path = Registry::get(RegistryKeys::SETTINGS_PATH);
 		try {
 			LoadManager::load($config_path);
 		} catch (\Exception $e) {
@@ -159,8 +159,8 @@ class VictoryCMS
 	
 	protected static function loadLibraries()
 	{
-		$libExt = Registry::get(RegistryKeys::lib_external);
-		$appExt = Registry::get(RegistryKeys::app_external);
+		$libExt = Registry::get(RegistryKeys::LIB_EXTERNAL);
+		$appExt = Registry::get(RegistryKeys::APP_EXTERNAL);
 		try {
 			LibraryLoader::loadLibraries($libExt, $appExt);
 		} catch (\Exception $e) {
@@ -202,8 +202,8 @@ class VictoryCMS
 	protected static function run()
 	{
 		/* load and process the authenticator */
-		if (Registry::isKey(RegistryKeys::authenticator)) {
-			$authenticator = Registry::get(RegistryKeys::authenticator);
+		if (Registry::isKey(RegistryKeys::AUTHENTICATOR)) {
+			$authenticator = Registry::get(RegistryKeys::AUTHENTICATOR);
 		}
 		if (isset($authenticator) && class_exists($authenticator)) {
 			if (! is_subclass_of($authenticator, "\Vcms\AbstractAuthenticator")) {
@@ -216,8 +216,8 @@ class VictoryCMS
 		}
 		
 		/* load and process the front controller */
-		if (Registry::isKey(RegistryKeys::front_controller)) {
-			$controller = Registry::get(RegistryKeys::front_controller);
+		if (Registry::isKey(RegistryKeys::FRONT_CONTROLLER)) {
+			$controller = Registry::get(RegistryKeys::FRONT_CONTROLLER);
 		}
 		if(isset($controller) && class_exists($controller)) {
 			$reflection = new \ReflectionClass($controller);
@@ -267,13 +267,13 @@ class VictoryCMS
 		}
 
 		// get the necessary varaibles from the Registry if they exist
-		if (Registry::isKey(RegistryKeys::debug_enabled)) {
-			$debugging = Registry::get(RegistryKeys::debug_enabled);
+		if (Registry::isKey(RegistryKeys::DEBUG)) {
+			$debugging = Registry::get(RegistryKeys::DEBUG);
 		} else {
 			$debugging = false;
 		}
-		if (Registry::isKey(RegistryKeys::admin_email)) {
-			$email_path = Registry::get(RegistryKeys::admin_email);
+		if (Registry::isKey(RegistryKeys::ADMIN_EMAIL)) {
+			$email_path = Registry::get(RegistryKeys::ADMIN_EMAIL);
 		} else {
 			$email_path = '';
 		}
@@ -448,7 +448,7 @@ class VictoryCMS
 	 */
 	public static function printArray($array, $count=0)
 	{
-		if (! Registry::get(RegistryKeys::debug_enabled)) {
+		if (! Registry::get(RegistryKeys::DEBUG)) {
 			throw new Exception('Cannot call PrintArray while not in debug mode!');
 		}
 		$i=0;

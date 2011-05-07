@@ -249,7 +249,7 @@ class Autoloader {
 			throw new \Vcms\Exception\DataTypeException();
 		}
 		$path = static::truepath($directory);
-		Registry::add(RegistryKeys::autoload, $path, false);
+		Registry::add(RegistryKeys::AUTOLOAD, $path, false);
 		static::loadDir($directory);
 	}
 	
@@ -265,8 +265,8 @@ class Autoloader {
 	public static function listDirs()
 	{
 		// Check for any user configured autoload directories
-		if (Registry::isKey(RegistryKeys::autoload)) {
-			$autoload = Registry::get(RegistryKeys::autoload);
+		if (Registry::isKey(RegistryKeys::AUTOLOAD)) {
+			$autoload = Registry::get(RegistryKeys::AUTOLOAD);
 		} else {
 			$autoload = array();
 		}
