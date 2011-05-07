@@ -33,9 +33,9 @@ require_once 'Vcms-LibraryLoader.php';
  * system. It initializes the error handlers, the class autoloader and
  * contains some important functions.
  *
- * <strong>Note:</strong> This depends on <strong>Registry.php</strong>, 
- * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong> 
- * for storing system variables. It also depends on 
+ * <strong>Note:</strong> This depends on <strong>Registry.php</strong>,
+ * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong>
+ * for storing system variables. It also depends on
  * <strong>Autoloader.php</strong> and <strong>LoadManager.php</strong> for
  * loading required classes. These should be in the same directory as this file,
  * and all located in the VictoryCMS 'lib' directory.
@@ -52,17 +52,17 @@ class VictoryCMS
 {
 	/** VictoryCMS version number **/
 	const VERSION = 0.1;
-	
+
 	/** VictoryCMS version code name **/
 	const CODE_NAME = "sparkplug";
 
 	/**
 	 * Seed the registry with important required values such as the lib path, debug
 	 * mode, and the configuration settings file path.
-	 * 
-	 * @param string  $settings_path Path to the settings JSON file.
-	 * @param boolean $debug_mode Enable debug mode, disabled by default.
-	 * 
+	 *
+	 * @param string  $settings_path path to the settings JSON file.
+	 * @param boolean $debug_mode    enable debug mode, disabled by default.
+	 *
 	 * @return void
 	 */
 	protected static function seedRegistry($settings_path, $debug_mode = false)
@@ -80,14 +80,14 @@ class VictoryCMS
 
 		Registry::set(RegistryKeys::SETTINGS_PATH, $settings_path, true);
 		Registry::set(RegistryKeys::DEBUG, $debug_mode, true);
-		
+
 		// Set the lib path to this directory, since we should be in there
 		Registry::set(RegistryKeys::LIB_PATH, __DIR__, true);
 	}
-	
+
 	/**
 	 * Configure and register the autoloader for VictoryCMS.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected static function configureAutoloader()
@@ -96,10 +96,10 @@ class VictoryCMS
 		if (! $autoloader) {
 			exit('VictoryCMS could not attach the required autoloader!');
 		}
-		
+
 		Autoloader::addDir(Registry::get(RegistryKeys::LIB_PATH));
 	}
-	
+
 	/**
 	 * Perform PHP environment initiailization. This will add the exception
 	 * and error handlers into PHP and also create the Autoloader.
@@ -118,8 +118,8 @@ class VictoryCMS
 
 		// Error debug info displaying is determined by debug mode
 		error_reporting(E_STRICT | -1); // -1 is important to display sytax errors
-		ini_set('display_errors', 1); 
-			
+		ini_set('display_errors', 1);
+
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
 	}
@@ -127,22 +127,22 @@ class VictoryCMS
 	/**
 	 * Register any user configured autoload directories; these should be set in the
 	 * configuration file.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected static function finalizeAutoloader()
 	{
 		$autoload_array = Registry::get(RegistryKeys::AUTOLOAD);
-		foreach($autoload_array as $path){
+		foreach ($autoload_array as $path) {
 			Autoloader::addDir($path);
 		}
 	}
-	
+
 	/**
 	 * Populate the registry with settings from the configuration settings file.
 	 * This will produce a user friendly error message and exit if an error is
 	 * encountered in the configuration settings file.
-	 * 
+	 *
 	 * @return void;
 	 */
 	protected static function load()
@@ -156,7 +156,15 @@ class VictoryCMS
 			exit();
 		}
 	}
-	
+
+	/**
+	 * This will load and bootstrap all app external libraries and lib external
+	 * libraries. Each external library's configuration file is loaded into the
+	 * registry, and the AbstractLibraryInit::bootstrap initializer function is
+	 * run.
+	 *
+	 * @return void
+	 */
 	protected static function loadLibraries()
 	{
 		$libExt = Registry::get(RegistryKeys::LIB_EXTERNAL);
@@ -169,16 +177,16 @@ class VictoryCMS
 			exit();
 		}
 	}
-	
-	
+
+
 	/**
 	 * The main startup method for initializing VictoryCMS and to process
 	 * the request. This should be called with the path to the config.json
 	 * file. This is normally called from the index.php file, or default
 	 * start page.
 	 *
-	 * @param string  $settings_path Path to the settings JSON file.
-	 * @param boolean $debug_mode Enable debug mode, disabled by default.
+	 * @param string  $settings_path path to the settings JSON file.
+	 * @param boolean $debug_mode    enable debug mode, disabled by default.
 	 *
 	 * @return void
 	 */
@@ -196,7 +204,7 @@ class VictoryCMS
 	/**
 	 * The main run method for starting up the VictorCMS front controller
 	 * and beginning processing.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected static function run()
@@ -209,55 +217,62 @@ class VictoryCMS
 			if (! is_subclass_of($authenticator, "\Vcms\AbstractAuthenticator")) {
 				throw new \Exception('Authenticator does not extend AbstractAuthenticator');
 			}
-			
+
 			$authenticator::process();
 		} elseif (isset($authenticator)) {
 			echo "Authenticator class '$authenticator' could not be found.\n";
 		}
-		
+
 		/* load and process the front controller */
 		if (Registry::isKey(RegistryKeys::FRONT_CONTROLLER)) {
 			$controller = Registry::get(RegistryKeys::FRONT_CONTROLLER);
 		}
-		if(isset($controller) && class_exists($controller)) {
+		if (isset($controller) && class_exists($controller)) {
 			$reflection = new \ReflectionClass($controller);
 			$constructor = $reflection->getConstructor();
-	                
+
 			if ($constructor == null || $constructor->isPrivate() || $constructor->isProtected()) {
 			    throw new \Exception('Can not instantiate front controller');
 			}
-			
+
 			if (! is_subclass_of($controller, "\Vcms\Controller")) {
 				throw new \Exception('Front controller does not extend Controller');
 			}
-			
+
 			$front_controller = new $controller();
 			$front_controller->process();
 		} elseif (isset($controller)) {
 			echo "Controller class '$controller' could not be found.\n";
 		}
-		
+
 	}
 
 	/**
 	 * Are we operating on the command line interface, or a web server?
 	 *
-	 * @return boolean true if This PHP class was called from the command line.
+	 * @return boolean true if this PHP class was called from the command line.
 	 */
 	public static function isCli()
 	{
 		return !isset($_SERVER['HTTP_HOST']);
 	}
-	
+
 	/**
 	 * An error handler for Vcms for exceptions and php errors. It will
 	 * print out the file and line number, as well as a back trace and
 	 * the current php context.
 	 *
+	 * @param integer $errno   the level of the error raised.
+	 * @param string  $errstr  the error message.
+	 * @param string  $errfile filename that the error was raised in.
+	 * @param integer $errline the line number the error was raised at.
+	 *
 	 * @todo let the user configure their own pulblic error message via Settings.xml
 	 * @todo the admin email should be set in the Settings.xml file, not here.
 	 *
 	 * @see http://www.php.net/set_error_handler
+	 *
+	 * @return void|false if normal error handling should continue.
 	 */
 	public static function errorHandler($errno, $errstr='', $errfile='', $errline='')
 	{
@@ -277,7 +292,7 @@ class VictoryCMS
 		} else {
 			$email_path = '';
 		}
-		
+
 		// check if function has been called by an exception
 		if (func_num_args() == 5) {
 			// called by trigger_error()
@@ -333,7 +348,7 @@ class VictoryCMS
 			if (isset($v['class'])) {
 				$trace = (static::isCli())? 'in class '.$v['class'].'::'.$v['function'].'(' :
 					'in class '.$v['class'].'::'.$v['function'].'(';
-				
+
 				if (isset($v['args'])) {
 					$separator = '';
 					foreach ($v['args'] as $arg ) {
@@ -342,7 +357,7 @@ class VictoryCMS
 					}
 				}
 				$trace .= (static::isCli())? ')' : ')</strong>';
-				
+
 			} elseif (isset($v['function']) && empty($trace)) {
 				$trace = (static::isCli())? 'in function '.$v['function'].'(' :
 					'in class '.$v['function'].'(';
@@ -403,7 +418,7 @@ class VictoryCMS
 	 * Creates a string representation of an argument
 	 * sent to a function.
 	 *
-	 * @param $arg The argument to output.
+	 * @param mixed $arg argument to output.
 	 *
 	 * @return string
 	 */
@@ -435,6 +450,7 @@ class VictoryCMS
 
 			default:
 				return var_export($arg, true);
+				break;
 		}
 	}
 
@@ -443,8 +459,10 @@ class VictoryCMS
 	 * prints out array's nicely. This should not be used
 	 * in a production environment.
 	 *
-	 * @param $array The array to print out.
-	 * @param $count Recursive call parameter - DO NOT use directly
+	 * @param array   $array to print out.
+	 * @param integer $count recursive call parameter - DO NOT use directly.
+	 *
+	 * @return void
 	 */
 	public static function printArray($array, $count=0)
 	{

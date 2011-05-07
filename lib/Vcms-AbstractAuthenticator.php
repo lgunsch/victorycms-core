@@ -37,12 +37,12 @@ namespace Vcms;
  * processed before the application front controller is processed and the user
  * authenticated will become the owner of this session. The current state of
  * authentication may be polled by the isRoot and isAuthenticated methods.
- * 
+ *
  * In you configuration file you should set the 'authenticator' key to the fully
  * qualified class name of your class, including the namespace, which should extend
  * from this class. You should also override the process method with your own process
  * method.
- * 
+ *
  * In your process method you are required to change the state to one of ROOT,
  * AUTHENTICATED, or ANONYMOUS as you see fit. After, other classes may use
  * <your class>::isAuthenticated() and <your class>::getState() to check for user
@@ -55,38 +55,40 @@ abstract class AbstractAuthenticator
 {
 	/**
 	 * Represents root level privileges.
-	 * 
+	 *
 	 * @example static::$state = static::ROOT;
 	 */
 	const ROOT = 0;
-	
+
 	/**
 	 * Represents user level privileges.
-	 * 
+	 *
 	 * @example static::$state = static::AUTHENTICATED;
 	 */
 	const AUTHENTICATED = 1;
-	
+
 	/**
 	 * Represents guest level privileges.
-	 * 
+	 *
 	 * @example static::$state = static::ANONYMOUS;
 	 */
 	const ANONYMOUS = 2;
-	
+
 	/**
 	 * Current state of user authentication for the owner of this session; either
 	 * ROOT, AUTHENTICATED, or ANONYMOUS. This should be properly updated by the
 	 * implementing class after the process method has been called.
-	 * 
+	 *
 	 * @example static::$state = static::AUTHENTICATED;
 	 */
 	protected static $state = self::ANONYMOUS;
-	
+
 	/**
-	 * Process method called by 
-	 * 
+	 * Process method called by VictoryCMS.
+	 *
 	 * @todo: I require detailed documentation.
+	 *
+	 * @return void
 	 */
 	public static function process()
 	{
@@ -94,23 +96,23 @@ abstract class AbstractAuthenticator
 		 * This function must be extended to provide authentication functionality.
 		 */
 	}
-	
+
 	/**
 	 * Returns the current authentication state for the user who owns this session,
 	 * this can be AUTHENTICATED, ANONYMOUS, or ROOT.
-	 * 
+	 *
 	 * @return current authentication state: ANONYMOUS, AUTHENTICATED, or ROOT.
 	 */
 	public static function getState()
 	{
 		return static::$state;
 	}
-	
+
 	/**
 	 * Returns true if user is authenticated, and false if anonymous and not
 	 * authenticated yet; this only checks the authentication state of the user
 	 * who owns the session, not any instantiated user.
-	 * 
+	 *
 	 * @return bool true if user is authenticated, false if anonymous.
 	 */
 	public static function isAuthenticated()
@@ -121,12 +123,12 @@ abstract class AbstractAuthenticator
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns true if the currently authenticated user has root level privileges,
 	 * and false if not; this only checks the authentication state of the user
 	 * who owns the session, not any instantiated user.
-	 * 
+	 *
 	 * @return bool true if authenticated user has root privileges, false if not.
 	 */
 	public static function isRoot()

@@ -36,32 +36,39 @@ namespace Vcms;
 /**
  * This is an abstract class for a Vcms Controller
  *
+ * @package Controllers
  */
 abstract class Controller
 {
 	/**
 	 * Constructor for a controller object
 	 */
-	function __construct(){}
-	
+	function __construct()
+	{
+	}
+
 	/**
-	 * The main function for a controller
+	 * The main function for a controller.
+	 *
+	 * @return void
 	 */
 	abstract public function process();
-	
+
 	/**
-	 * 
-	 * Returns true if the view can be cached.
+	 * Returns true if the view can be cached, default is false.
+	 *
+	 * @return boolean true if controller results are cachable, false if not.
 	 */
 	public function isCacheable()
 	{
 		return false;
 	}
-	
+
 	/**
-	 * 
 	 * Caches the controller response; this function will not cache the results, but
 	 * is here so that you may extend it to provide cacheing capability if you need.
+	 *
+	 * @return void
 	 */
 	public function cache()
 	{
@@ -70,11 +77,12 @@ abstract class Controller
 		 * required, but may be implemented.
 		 */
 	}
-	
+
 	/**
-	 * 
 	 * Purges the cache; this function will not purge the cache, but is here so that
 	 * you may extend it to provide cacheing capability if you need.
+	 *
+	 * @return void
 	 */
 	public function purge()
 	{

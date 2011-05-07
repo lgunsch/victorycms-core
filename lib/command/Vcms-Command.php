@@ -37,16 +37,26 @@ namespace Vcms;
  * This is an abstract class for a Command class
  *
  * @todo: fill in documentation
+ *
+ * @package Commands
  */
 abstract class Command
 {
 	/**
-	 * 
+	 * Execute.
+	 *
+	 * @todo: fill in documentation
+	 *
+	 * @return void
 	 */
 	abstract public function execute();
 
 	/**
-	 *  
+	 * Results.
+	 *
+	 * @todo: fill in documentation
+	 *
+	 * @return mixed result of command execution.
 	 */
 	abstract public function result();
 }

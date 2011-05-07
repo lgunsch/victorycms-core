@@ -44,16 +44,16 @@ class RegistryNode
 {
 	/** Stored value */
 	private $value;
-	 
+
 	/** Boolean read only flag */
 	private $readonly;
 
 	/**
 	 * Registry Node constructor.
-	 * 
-	 * @param mixed $value Value to set the RegistryNode to.
-	 * @param bool $readonly sets the RegistryNode to read-only
-	 * 
+	 *
+	 * @param mixed $value    Value to set the RegistryNode to.
+	 * @param bool  $readonly sets the RegistryNode to read-only
+	 *
 	 * @throws \Vcms\Exception\DataException if $readonly is not a bool value.
 	 */
 	public function __construct($value, $readonly = false)
@@ -68,7 +68,7 @@ class RegistryNode
 	/**
 	 * Returns the value of the RegistryNode.
 	 *
-	 * @return Returns the value of the RegistryNode.
+	 * @return mixed value of the RegistryNode.
 	 */
 	public function getValue()
 	{
@@ -80,8 +80,10 @@ class RegistryNode
 	 * if the value is marked as read-only.
 	 *
 	 * @param mixed $value Value to set the RegistryNode to.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\OverwriteException If the value is read-only.
+	 *
+	 * @return void
 	 */
 	public function setValue($value)
 	{
@@ -97,10 +99,12 @@ class RegistryNode
 	 * Sets the value of the node using a reference to the value; The value
 	 * should be instantiated before calling attach. This will also throw
 	 * an Overwrite exception if the value is marked as read-only.
-	 * 
-	 * @param mixed $objAddress Value to set the RegistryNode reference to.
-	 * 
+	 *
+	 * @param mixed &$objAddress Value to set the RegistryNode reference to.
+	 *
 	 * @throws \Vcms\Exception\OverwriteException If the value is read-only.
+	 *
+	 * @return void
 	 */
 	public function setAttachedValue(& $objAddress)
 	{
@@ -111,10 +115,10 @@ class RegistryNode
 		/* this throws an exception to keep developers from ignoring a false return */
 		throw new \Vcms\Exception\OverwriteException('Binding', $value);
 	}
-	
+
 	/**
 	 * Sets the RegistryNode to read-only.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setReadOnly()
@@ -125,7 +129,7 @@ class RegistryNode
 	/**
 	 * Returns if the value is read-only or not.
 	 *
-	 * @return true if the value is read-only; false otherwise.
+	 * @return boolean true if the value is read-only; false otherwise.
 	 */
 	public function isReadOnly()
 	{
