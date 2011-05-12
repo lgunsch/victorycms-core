@@ -45,24 +45,24 @@ class VcmsResponse
 	 * Response status code.
 	 */
 	private $status_code;
-	
+
 	/**
 	 * Status message
 	 */
 	private $status_message;
-	
+
 	/**
 	 * Content type
 	 */
 	private $content_type;
-	
+
 	/**
 	 * Body of the response
 	 */
 	private $body;
-	
+
 	/**
-	 * 
+	 *
 	 * Constructor of a VcmsResponse object
 	 * @param int $status_code
 	 * @param string $status_message
@@ -73,7 +73,7 @@ class VcmsResponse
 	 */
 	public function __construct($status_code, $status_message, $content_type, $body)
 	{
-		
+
 		if ($status_code === null || $status_message === null) {
 			throw new \Vcms\Exception\DataException("Not null", "null", "VcmsResponse parameter");
 		}
@@ -86,10 +86,10 @@ class VcmsResponse
 		$this->content_type = $content_type;
 		$this->body = $body;
 	}
-	
+
 	/**
 	 * Returns the status code of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -97,10 +97,10 @@ class VcmsResponse
 	{
 		return $this->status_code;
 	}
-	
+
 	/**
 	 * Returns the status message of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -108,10 +108,10 @@ class VcmsResponse
 	{
 		return $this->status_message;
 	}
-	
+
 	/**
 	 * Returns the content type of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -119,10 +119,10 @@ class VcmsResponse
 	{
 		return isset($this->content_type)? $this->content_type : null;
 	}
-	
+
 	/**
 	 * Returns the body of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -130,10 +130,10 @@ class VcmsResponse
 	{
 		return isset($this->body)? $this->body : null;
 	}
-	
+
 	/**
 	 * Sets the status code of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -141,10 +141,10 @@ class VcmsResponse
 	{
 		$this->status_code = $status_code;
 	}
-	
+
 	/**
 	 * Sets the status message of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -152,10 +152,10 @@ class VcmsResponse
 	{
 		$this->status_message = $status_message;
 	}
-	
+
 	/**
 	 * Sets the content type of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -163,10 +163,10 @@ class VcmsResponse
 	{
 		$this->content_type = $content_type;
 	}
-	
+
 	/**
 	 * Sets the body of the VcmsResponse.
-	 * 
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -174,9 +174,9 @@ class VcmsResponse
 	{
 		$this->body = $body;
 	}
-	
+
 	/**#@+
-	 * 
+	 *
      * HTTP status codes.
      * @var string
      */
@@ -203,7 +203,7 @@ class VcmsResponse
 	const HTTP_404='Not Found';
 	const HTTP_405='Method Not Allowed';
 	const HTTP_406='Not Acceptable';
-	const TTP_407='Proxy Authentication Required';
+	const HTTP_407='Proxy Authentication Required';
 	const HTTP_408='Request Timeout';
 	const HTTP_409='Conflict';
 	const HTTP_410='Gone';
