@@ -39,7 +39,7 @@ namespace Vcms;
  * @package View
  * @todo Test
  */
-class VcmsResponse
+class Response
 {
 	/**
 	 * Response status code.
