@@ -104,7 +104,7 @@ class ViewForge
 		}
 
 		/* Vcms Response */
-		$response = new Response(200, 'OK', null, null);
+		$response = new Response(200, Response::HTTP_MSG_200, null, null);
 		$response_body = "";
 
 		/* A string to store the last content type to make sure they all match */
@@ -129,7 +129,7 @@ class ViewForge
 							$constructor = $reflection->getConstructor();
 						}catch(\Exception $e){
 							$response->setStatusCode(404);
-							$response->setStatusMessage("Not Found");
+							$response->setStatusMessage(Response::HTTP_MSG_404);
 							$response->setContentType(null);
 							$response->setBody(null);
 							return $response;
@@ -154,7 +154,7 @@ class ViewForge
 
 						if (! strcmp($last_content_type, $this_content_type) == 0) {
 							$response->setStatusCode(500);
-							$response->setStatusMessage("Internal Server Error");
+							$response->setStatusMessage(Response::HTTP_MSG_500);
 							$response->setContentType(null);
 							$response->setBody(null);
 							return $response;
