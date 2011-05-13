@@ -466,7 +466,9 @@ class VictoryCMS
 	 */
 	public static function printArray($array, $count=0)
 	{
-		if (! Registry::get(RegistryKeys::DEBUG)) {
+		if (   Registry::isKey(RegistryKeys::DEBUG) == false
+			|| Registry::get(RegistryKeys::DEBUG) == false
+		) {
 			throw new Exception('Cannot call PrintArray while not in debug mode!');
 		}
 		$i=0;
