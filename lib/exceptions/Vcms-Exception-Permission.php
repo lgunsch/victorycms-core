@@ -20,7 +20,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - DataTypeException
+ * VictoryCMS - Permission
  *
  * @license http://www.gnu.org/licenses/gpl.html
  * @author Andrew Crouse <amcrouse@victorycms.org>
@@ -31,24 +31,18 @@
 namespace Vcms\Exception;
 
 /**
- * This represents an invalid data type exception. Thrown when data is in the
- * incorrect type.
+ * This represents an invalid permission level exception.
  *
  * @package Exceptions
  */
-class DataTypeException extends  \Vcms\Exception
+class Permission extends  \Vcms\Exception
 {
 	/**
-	 * Constructs a new DataTypeException.
-	 *
-	 * @param string $expected valid input type.
-	 * @param string $got      invalid input type received.
-	 * @param string $for      paramter name which received invalide input type.
+	 * Constructs a new Permission.
 	 */
-	public function __construct($expected='valid data type', $got='invalid data type',
-		$for='variable'
-	) {
-		parent::__construct('Expected '.$expected.', recevied '.$got.' for '.$for.'.');
+	public function __construct()
+	{
+		parent::__construct('Invalid Permission Level.');
 	}
 }
 ?>

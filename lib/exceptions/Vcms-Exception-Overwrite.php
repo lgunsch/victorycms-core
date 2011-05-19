@@ -5,7 +5,7 @@
 //  Copyright (C) 2009  Andrew Crouse <amcrouse@victorycms.org>
 //
 //  This file is part of VictoryCMS.
-//  
+//
 //  VictoryCMS is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 2 of the License, or
@@ -15,13 +15,13 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - PermissionKeyException
- * 
+ * VictoryCMS - Overwrite
+ *
  * @license http://www.gnu.org/licenses/gpl.html
  * @author Andrew Crouse <amcrouse@victorycms.org>
  * @filesource
@@ -31,19 +31,20 @@
 namespace Vcms\Exception;
 
 /**
- * This represents an invalid permission key exception. This is
- * usually thrown whenever a permission key is not an unsigned integer
+ * This represents a overwrite Exception. This is usually thrown
+ * whenever a object is asked to overwrite an value. This can
+ * usually be fix by unsetting the object before assigning to it.
  *
  * @package Exceptions
  */
-class PermissionKeyException extends  \Vcms\Exception
+class Overwrite extends  \Vcms\Exception
 {
 	/**
-	 * Constructs a new PermissionKeyException.
+	 * Constructs a new Overwrite.
 	 */
-	public function __construct()
-	{	
-		parent::__construct('Invalid Permission Key: Key must be an unsigned integer.');
+	public function __construct($type='Class', $name='Var')
+	{
+		parent::__construct($type.'.'.$name.' already exists, clear '.$type.'.'.$name.' before setting it again.');
 	}
 }
 ?>

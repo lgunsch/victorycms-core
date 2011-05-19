@@ -93,10 +93,10 @@ class Registry
 	{
 		/* this throws an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \Vcms\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\InvalidType("bool", $readonly, '$readonly');
 		}
 
 		$gl = static::getInstance();
@@ -104,7 +104,7 @@ class Registry
 		if (array_key_exists($key, $gl->vars)) {
 			// Key-value already exists, so merge in value if not read-only
 			if ($gl->vars[$key]->isReadOnly()) {
-				throw new \Vcms\Exception\OverwriteException('Binding', $key);
+				throw new \Vcms\Exception\Overwrite('Binding', $key);
 			}
 			$valueArray = array_merge(
 				$gl->vars[$key]->getValue(),
@@ -138,10 +138,10 @@ class Registry
 	{
 		/* this throws an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \Vcms\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\InvalidType("bool", $readonly, '$readonly');
 		}
 
 		$gl = static::getInstance();
@@ -153,7 +153,7 @@ class Registry
 			$gl->vars[$key] = $node;
 			return true;
 		}
-		throw new \Vcms\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\Overwrite('Binding', $value);
 	}
 
 	/**
@@ -176,10 +176,10 @@ class Registry
 	{
 		/* these throw an exception to keep developers from ignoring the false return */
 		if ($key === null || $value === null) {
-			throw new \Vcms\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "key");
 		}
 		if (! is_bool($readonly)) {
-			throw new \Vcms\Exception\DataException("bool", $readonly, '$readonly');
+			throw new \Vcms\Exception\InvalidType("bool", $readonly, '$readonly');
 		}
 
 		$gl = static::getInstance();
@@ -188,7 +188,7 @@ class Registry
 			return true;
 		}
 
-		throw new \Vcms\Exception\OverwriteException('Binding', $key);
+		throw new \Vcms\Exception\Overwrite('Binding', $key);
 	}
 
 	/**
@@ -231,7 +231,7 @@ class Registry
 
 		/* these throw an exception to keep developers from ignoring the false return */
 		if ($key === null) {
-			throw new \Vcms\Exception\DataException("Not null", "null", "key");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "key");
 		}
 		if (! array_key_exists($key, $gl->vars)) {
 			throw new \Exception("Key '$key' does not exist!");
@@ -283,7 +283,7 @@ class Registry
 			throw new \Exception("Key '$key' does not exist!");
 		}
 		if ($gl->vars[$key]->isReadOnly()) {
-			throw new \Vcms\Exception\OverwriteException('Binding', $key);
+			throw new \Vcms\Exception\Overwrite('Binding', $key);
 		}
 
 		unset($gl->vars[$key]);
@@ -297,7 +297,7 @@ class Registry
 	 */
 	public function __clone()
 	{
-		throw new \Vcms\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
 ?>

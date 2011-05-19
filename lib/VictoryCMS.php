@@ -21,12 +21,28 @@
 
 namespace Vcms;
 
+/*
+ * Require all the core classes.
+ */
 require_once 'Vcms-RegistryKeys.php';
 require_once 'Vcms-Registry.php';
 require_once 'Vcms-Autoloader.php';
 require_once 'Vcms-RegistryNode.php';
 require_once 'Vcms-LoadManager.php';
 require_once 'Vcms-LibraryLoader.php';
+
+/*
+ * Require core exception classes.
+ */
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-InvalidType.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-InvalidValue.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-NotFound.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-Overwrite.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-Permission.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-SingletonCopy.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-ExternalLibrary.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-FileSize.php';
 
 /**
  * VictoryCMS core class; this class is the entry point to the VictoryCMS
@@ -38,7 +54,9 @@ require_once 'Vcms-LibraryLoader.php';
  * for storing system variables. It also depends on
  * <strong>Autoloader.php</strong> and <strong>LoadManager.php</strong> for
  * loading required classes. These should be in the same directory as this file,
- * and all located in the VictoryCMS 'lib' directory.
+ * and all located in the VictoryCMS 'lib' directory. VictoryCMS also depends
+ * on the exceptions located in the "exceptions" directory in order to bootstrap
+ * properly.
  *
  * @filesource
  * @category VictoryCMS

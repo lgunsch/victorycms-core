@@ -115,7 +115,7 @@ class LibraryLoader
 			if (! isset($library["class"])) {
 				static::$errorMessage
 					= "Library class not set properly in the configuration file.";
-				throw new \Vcms\Exception\ExternalLibraryException($name);
+				throw new \Vcms\Exception\ExternalLibrary($name);
 			}
 
 			$class_name = $library["class"];
@@ -125,12 +125,12 @@ class LibraryLoader
 			} else {
 				static::$errorMessage = "Library class does not exist - filename ".
 					"might not be recognized by AutoLoader";
-				throw new \Vcms\Exception\ExternalLibraryException($name);
+				throw new \Vcms\Exception\ExternalLibrary($name);
 			}
 
 			if (! get_parent_class($class_name) == ('AbstractLibraryInit')) {
 				static::$errorMessage = "Class doesn't extend AbstractLibraryInit.";
-				throw new \Vcms\Exception\ExternalLibraryException($name);
+				throw new \Vcms\Exception\ExternalLibrary($name);
 			}
 
 			/* Load the library's configuration file if it exists */
@@ -176,7 +176,7 @@ class LibraryLoader
 	 */
 	public function __clone()
 	{
-		throw new \Vcms\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
 ?>

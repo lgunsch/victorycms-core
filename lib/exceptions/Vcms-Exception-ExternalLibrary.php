@@ -2,7 +2,8 @@
 //
 //  VictoryCMS - Content managment system and framework.
 //
-//  Copyright (C) 2009  Andrew Crouse <amcrouse@victorycms.org>
+//  Copyright (C) 2009,2011 Andrew Crouse <amcrouse@victorycms.org>
+// 	Copyright (C) 2010,2011	Mitchell Bosecke <mitchellbosecke@gmail.com>
 //
 //  This file is part of VictoryCMS.
 //
@@ -20,10 +21,10 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - DataException
+ * VictoryCMS - ExternalLibrary
  *
  * @license http://www.gnu.org/licenses/gpl.html
- * @author Andrew Crouse <amcrouse@victorycms.org>
+ * @author Mitchell Bosecke <mitchellbosecke@gmail.com>
  * @filesource
  * @package Exceptions
  */
@@ -31,20 +32,20 @@
 namespace Vcms\Exception;
 
 /**
- * This represents an invalid data exception. Thrown when data is in the correct
- * type, but an unexpected value. See DataTypeException for when data is not in
- * the correct data type.
+ * Finish documentation.
+ *
+ * @todo Documentation.
  *
  * @package Exceptions
  */
-class DataException extends  \Vcms\Exception
+class ExternalLibrary extends  \Vcms\Exception
 {
 	/**
-	 * Constructs a new DataException.
+	 * Constructs a new ExternalLibrary.
 	 */
-	public function __construct($variable='variable', $value='required value')
+	public function __construct($library = 'Unknown')
 	{
-		parent::__construct('Could not set '.$variable.' to '.$value.'.');
+		parent::__construct('The external library, '.$library.', could not be properly loaded');
 	}
 }
 ?>

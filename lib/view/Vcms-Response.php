@@ -75,10 +75,10 @@ class Response
 	{
 
 		if ($status_code === null || $status_message === null) {
-			throw new \Vcms\Exception\DataException("Not null", "null", "VcmsResponse parameter");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "VcmsResponse parameter");
 		}
 		if (! is_int($status_code) ) {
-			throw new \Vcms\Exception\DataTypeException("Int", $status_code, '$status_code');
+			throw new \Vcms\Exception\InvalidType("Int", $status_code, '$status_code');
 		}
 
 		$this->status_code = $status_code;

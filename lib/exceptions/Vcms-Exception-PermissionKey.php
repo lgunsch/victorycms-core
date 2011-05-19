@@ -20,7 +20,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - DataException
+ * VictoryCMS - PermissionKey
  *
  * @license http://www.gnu.org/licenses/gpl.html
  * @author Andrew Crouse <amcrouse@victorycms.org>
@@ -31,25 +31,19 @@
 namespace Vcms\Exception;
 
 /**
- * This represents an invalid data exception. Thrown when data is in the correct
- * type, but an unexpected value. See DataTypeException for when data is not in
- * the correct data type.
+ * This represents an invalid permission key exception. This is
+ * usually thrown whenever a permission key is not an unsigned integer
  *
  * @package Exceptions
  */
-class DataException extends  \Vcms\Exception
+class PermissionKey extends  \Vcms\Exception
 {
 	/**
-	 * Constructs a new DataException.
-	 *
-	 * @param sting  $expected valid input type.
-	 * @param string $got      invalid input type received.
-	 * @param string $for      paramter name which received invalide input type.
+	 * Constructs a new PermissionKey.
 	 */
-	public function __construct($expected='valid input', $got='invalid data',
-		$for='variable'
-	) {
-		parent::__construct('Expected '.$expected.', recevied '.$got.' for '.$for.'.');
+	public function __construct()
+	{
+		parent::__construct('Invalid Permission Key: Key must be an unsigned integer.');
 	}
 }
 ?>

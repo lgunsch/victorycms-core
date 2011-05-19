@@ -60,7 +60,7 @@ class RegistryNode
 	{
 		$this->value = $value;
 		if (! is_bool($readonly)) {
-			throw new \Vcms\Exception\DataException("bool", "$readonly", 'readonly');
+			throw new \Vcms\Exception\InvalidType("bool", "$readonly", 'readonly');
 		}
 		$this->readonly = $readonly;
 	}
@@ -92,7 +92,7 @@ class RegistryNode
 			return true;
 		}
 		/* this throws an exception to keep developers from ignoring a false return */
-		throw new \Vcms\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\Overwrite('Binding', $value);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class RegistryNode
 			return true;
 		}
 		/* this throws an exception to keep developers from ignoring a false return */
-		throw new \Vcms\Exception\OverwriteException('Binding', $value);
+		throw new \Vcms\Exception\Overwrite('Binding', $value);
 	}
 
 	/**

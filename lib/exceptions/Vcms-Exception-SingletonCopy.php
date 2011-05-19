@@ -5,7 +5,7 @@
 //  Copyright (C) 2009  Andrew Crouse <amcrouse@victorycms.org>
 //
 //  This file is part of VictoryCMS.
-//  
+//
 //  VictoryCMS is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 2 of the License, or
@@ -15,13 +15,13 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - SingletonCopyException
- * 
+ * VictoryCMS - SingletonCopy
+ *
  * @license http://www.gnu.org/licenses/gpl.html
  * @author Andrew Couse <amcrouse@victorycms.org>
  * @filesource
@@ -35,10 +35,10 @@ namespace Vcms\Exception;
  *
  * @package Exceptions
  */
-class SingletonCopyException extends \Vcms\Exception
+class SingletonCopy extends \Vcms\Exception
 {
 	/**
-	 * Constructs a new SingletonCopyException.
+	 * Constructs a new SingletonCopy.
 	 */
 	public function __construct()
 	{

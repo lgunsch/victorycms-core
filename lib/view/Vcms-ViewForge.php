@@ -231,7 +231,7 @@ class ViewForge
 	 */
 	public function __clone()
 	{
-		throw new \Vcms\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
 ?>

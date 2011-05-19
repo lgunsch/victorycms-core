@@ -258,7 +258,8 @@ class Autoloader
 	public static function addDir($directory)
 	{
 		if (! is_string($directory) || empty($directory)) {
-			throw new \Vcms\Exception\DataTypeException();
+			//TODO: fix me, I should be 2 different exceptions
+			throw new \Vcms\Exception\InvalidType();
 		}
 		$path = static::truepath($directory);
 		Registry::add(RegistryKeys::AUTOLOAD, $path, false);
@@ -292,7 +293,7 @@ class Autoloader
 	 */
 	public function __clone()
 	{
-		throw new \Vcms\Exception\SingletonCopyException;
+		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
 ?>
