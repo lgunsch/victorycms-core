@@ -140,4 +140,3 @@ abstract class AbstractAuthenticator
 		}
 	}
 }
-?>

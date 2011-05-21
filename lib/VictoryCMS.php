@@ -512,4 +512,3 @@ class VictoryCMS
 		$count--;
 	}
 }
-?>

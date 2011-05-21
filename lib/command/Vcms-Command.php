@@ -60,4 +60,3 @@ abstract class Command
 	 */
 	abstract public function result();
 }
-?>

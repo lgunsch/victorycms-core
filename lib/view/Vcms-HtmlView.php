@@ -34,7 +34,7 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for an HTML View. 
+ * This is an abstract class for an HTML View.
  *
  * @package View
  */
@@ -42,12 +42,12 @@ abstract class HtmlView extends VcmsView
 {
 	/**
 	 * Returns the content-type of the view.
-	 * 
+	 *
 	 * @see Vcms.VcmsView::getContentType()
+	 * @return string HTML mime type.
 	 */
 	public function getContentType()
 	{
 		return "text/html; charset=utf-8";
 	}
 }
-?>

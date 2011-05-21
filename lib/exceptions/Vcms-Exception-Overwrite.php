@@ -41,10 +41,12 @@ class Overwrite extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new Overwrite.
+	 *
+	 * @param string $type of object.
+	 * @param string $name of property.
 	 */
 	public function __construct($type='Class', $name='Var')
 	{
 		parent::__construct($type.'.'.$name.' already exists, clear '.$type.'.'.$name.' before setting it again.');
 	}
 }
-?>

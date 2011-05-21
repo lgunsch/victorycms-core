@@ -203,4 +203,3 @@ class LoadManager
 		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
-?>

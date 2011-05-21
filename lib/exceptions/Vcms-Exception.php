@@ -5,7 +5,7 @@
 //  Copyright (C) 2009  Andrew Crouse <amcrouse@victorycms.org>
 //
 //  This file is part of VictoryCMS.
-//  
+//
 //  VictoryCMS is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 2 of the License, or
@@ -15,13 +15,13 @@
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU General Public License
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * VictoryCMS - Exception
- * 
+ *
  * @license http://www.gnu.org/licenses/gpl.html
  * @author Andrew Crouse <amcrouse@victorycms.org>
  * @filesource
@@ -39,6 +39,9 @@ class Exception extends \Exception
 {
 	/**
 	 * Constructs a new VictoryCMS Exception.
+	 *
+	 * @param string $message exception.
+	 * @param int    $code    exception integer code.
 	 */
 	public function __construct($message, $code=0)
 	{
@@ -47,10 +50,11 @@ class Exception extends \Exception
 
 	/**
 	 * Returns the exception in a string.
+	 *
+	 * @return string exception as string.
 	 */
 	public function __toString()
 	{
 		return __CLASS__.':['.$this->code.']: '.$this->message.'\n';
 	}
 }
-?>

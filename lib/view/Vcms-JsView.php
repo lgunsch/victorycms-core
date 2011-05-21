@@ -34,7 +34,7 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a Javascript View. 
+ * This is an abstract class for a Javascript View.
  *
  * @package View
  */
@@ -42,12 +42,12 @@ abstract class JsView extends VcmsView
 {
 	/**
 	 * Returns the content-type of the view.
-	 * 
+	 *
 	 * @see Vcms.VcmsView::getContentType()
+	 * @return string javascript mime type.
 	 */
 	public function getContentType()
 	{
 		return "text/javascript; charset=utf-8";
 	}
 }
-?>

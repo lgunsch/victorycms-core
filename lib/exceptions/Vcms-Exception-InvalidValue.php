@@ -50,4 +50,3 @@ class InvalidValue extends  \Vcms\Exception
 		parent::__construct('Could not set '.$variable.' to '.$value.'.');
 	}
 }
-?>

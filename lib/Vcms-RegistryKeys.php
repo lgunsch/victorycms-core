@@ -71,4 +71,3 @@ class RegistryKeys
  	/** Array of external libraries to load- global */
  	const LIB_EXTERNAL = 'lib_external';
 }
-?>

@@ -179,4 +179,3 @@ class LibraryLoader
 		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
-?>

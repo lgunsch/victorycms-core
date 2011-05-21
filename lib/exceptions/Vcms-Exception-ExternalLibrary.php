@@ -42,10 +42,11 @@ class ExternalLibrary extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new ExternalLibrary.
+	 *
+	 * @param string $library name requested to be loaded.
 	 */
 	public function __construct($library = 'Unknown')
 	{
 		parent::__construct('The external library, '.$library.', could not be properly loaded');
 	}
 }
-?>

@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - VcmsResponse
+ * VictoryCMS - Response
  *
  * @filesource
  * @category VictoryCMS
@@ -34,40 +34,35 @@
 namespace Vcms;
 
 /**
- * An object use to pass messages between Vcms classes
+ * An object used to pass messages between Vcms classes, and to controllers
+ * rending views to the user.
  *
  * @package View
  * @todo Test
+ * @todo Document me
  */
 class Response
 {
-	/**
-	 * Response status code.
-	 */
+	/** Response status code. */
 	private $status_code;
 
-	/**
-	 * Status message
-	 */
+	/** Status message */
 	private $status_message;
 
-	/**
-	 * Content type
-	 */
+	/** Content type */
 	private $content_type;
 
-	/**
-	 * Body of the response
-	 */
+	/** Body of the response */
 	private $body;
 
 	/**
+	 * Constructor of a Response object.
 	 *
-	 * Constructor of a VcmsResponse object
-	 * @param int $status_code
-	 * @param string $status_message
-	 * @param string $content_type
-	 * @param mixed $body
+	 * @param int    $status_code    response.
+	 * @param string $status_message response message.
+	 * @param string $content_type   response mime type.
+	 * @param mixed  $body           response body object.
+	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
 	 */
@@ -75,7 +70,7 @@ class Response
 	{
 
 		if ($status_code === null || $status_message === null) {
-			throw new \Vcms\Exception\InvalidValue("Not null", "null", "VcmsResponse parameter");
+			throw new \Vcms\Exception\InvalidValue("Not null", "null", "Response parameter");
 		}
 		if (! is_int($status_code) ) {
 			throw new \Vcms\Exception\InvalidType("Int", $status_code, '$status_code');
@@ -88,10 +83,12 @@ class Response
 	}
 
 	/**
-	 * Returns the status code of the VcmsResponse.
+	 * Returns the status code of the Response.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return int status code response.
 	 */
 	public function getStatusCode()
 	{
@@ -99,10 +96,12 @@ class Response
 	}
 
 	/**
-	 * Returns the status message of the VcmsResponse.
+	 * Returns the status message of the Response.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return string status message
 	 */
 	public function getStatusMessage()
 	{
@@ -110,10 +109,12 @@ class Response
 	}
 
 	/**
-	 * Returns the content type of the VcmsResponse.
+	 * Returns the content type of the Response.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return string content type
 	 */
 	public function getContentType()
 	{
@@ -121,10 +122,12 @@ class Response
 	}
 
 	/**
-	 * Returns the body of the VcmsResponse.
+	 * Returns the body of the Response.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return mixed body of response.
 	 */
 	public function getBody()
 	{
@@ -132,43 +135,68 @@ class Response
 	}
 
 	/**
-	 * Sets the status code of the VcmsResponse.
+	 * Sets the status code of the Response.
+	 *
+	 * @param integer $status_code response.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return void
 	 */
 	public function setStatusCode($status_code)
 	{
+		if (! is_int($status_code) ) {
+			throw new \Vcms\Exception\InvalidType("Int", $status_code, '$status_code');
+		}
 		$this->status_code = $status_code;
 	}
 
 	/**
-	 * Sets the status message of the VcmsResponse.
+	 * Sets the status message of the Response.
+	 *
+	 * @param string $status_message response message.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return void
 	 */
 	public function setStatusMessage($status_message)
 	{
+		if (! is_string($status_message) ) {
+			throw new \Vcms\Exception\InvalidType("string", $status_code, '$status_code');
+		}
 		$this->status_message = $status_message;
 	}
 
 	/**
-	 * Sets the content type of the VcmsResponse.
+	 * Sets the content type of the Response.
+	 *
+	 * @param string $content_type response mime type.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return void
 	 */
 	public function setContentType($content_type)
 	{
+		if (! is_string($content_type) ) {
+			throw new \Vcms\Exception\InvalidType("string", $status_code, '$status_code');
+		}
 		$this->content_type = $content_type;
 	}
 
 	/**
-	 * Sets the body of the VcmsResponse.
+	 * Sets the body of the Response.
+	 *
+	 * @param mixed $body response body object.
 	 *
 	 * @throws \Vcms\Exception\DataException
 	 * @throws \Vcms\Exception\DataTypeException
+	 *
+	 * @return void
 	 */
 	public function setBody($body)
 	{
@@ -214,10 +242,19 @@ class Response
 	const HTTP_MSG_415 = 'Unsupported Media Type';
 	const HTTP_MSG_416 = 'Requested Range Not Satisfiable';
 	const HTTP_MSG_417 = 'Expectation Failed';
+	const HTTP_MSG_418 = 'I\'m a teapot';
 	const HTTP_MSG_500 = 'Internal Server Error';
 	const HTTP_MSG_501 = 'Not Implemented';
 	const HTTP_MSG_502 = 'Bad Gateway';
 	const HTTP_MSG_503 = 'Service Unavailable';
 	const HTTP_MSG_504 = 'Gateway Timeout';
 	const HTTP_MSG_505 = 'HTTP Version Not Supported';
+
+	/**#@+
+	 *
+     * Command line interface status code integers.
+     * @var int
+     */
+	const EXIT_SUCCESS = 0;
+	const EXIT_FAILURE = 1;
 }

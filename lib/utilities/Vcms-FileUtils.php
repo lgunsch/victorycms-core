@@ -35,11 +35,6 @@ namespace Vcms;
 /**
  * A collection of file and directory manipulating methods.
  *
- * @author Lewis Gunsch
- * @filesource
- * @package Utilities
- * @license http://www.gnu.org/licenses/gpl.html
- *
  * @package Utilities
  */
 class FileUtils

@@ -34,16 +34,15 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for an Image View. 
+ * This is an abstract class for an Image View.
  *
  * @package View
  */
 abstract class ImgView extends VcmsView
 {
-	/**
-	 * Unlike the other view types, each concrete ImgView class 
+	/*
+	 * Unlike the other view types, each concrete ImgView class
 	 * will implement it's own getContentType() function depending
 	 * on what kind of image it's rendering.
 	 */
 }
-?>

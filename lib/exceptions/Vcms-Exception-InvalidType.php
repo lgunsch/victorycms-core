@@ -52,4 +52,3 @@ class InvalidType extends  \Vcms\Exception
 		parent::__construct('Expected '.$expected.', recevied '.$got.' for '.$for.'.');
 	}
 }
-?>

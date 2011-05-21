@@ -34,16 +34,21 @@
 namespace Vcms;
 
 /**
- * This is an abstract class with functionality to initialize 
+ * This is an abstract class with functionality to initialize
  * an external library.
  *
  * @package Core
  */
 abstract class AbstractLibraryInit
 {
-	/* Main initializer function */
+	/**
+	 * Main library initializer function; this should setup any required
+	 * autoloaders and other initialization necessary to have the library ready
+	 * to use.
+	 *
+	 * @return void
+	 */
 	abstract protected function bootstrap();
-	
+
 
 }
-?>

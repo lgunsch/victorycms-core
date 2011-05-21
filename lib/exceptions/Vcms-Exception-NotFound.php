@@ -41,10 +41,11 @@ class NotFound extends  \Vcms\Exception
 {
 	/**
 	 * Constructs a new NotFound.
+	 *
+	 * @param string $class name requested.
 	 */
 	public function __construct($class = 'Unknown')
 	{
 		parent::__construct($class.' can not be found and/or loaded.');
 	}
 }
-?>

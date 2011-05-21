@@ -47,4 +47,3 @@ class FileSize extends  \Vcms\Exception
 		parent::__construct('File size out of bounds.');
 	}
 }
-?>

@@ -296,4 +296,3 @@ class Autoloader
 		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
-?>

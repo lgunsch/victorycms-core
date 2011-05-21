@@ -136,4 +136,3 @@ class RegistryNode
 		return $this->readonly;
 	}
 }
-?>

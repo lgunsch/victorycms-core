@@ -300,4 +300,3 @@ class Registry
 		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
-?>

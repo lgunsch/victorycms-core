@@ -239,4 +239,3 @@ class ViewForge
 		throw new \Vcms\Exception\SingletonCopy;
 	}
 }
-?>

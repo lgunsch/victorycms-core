@@ -46,4 +46,3 @@ class PermissionKey extends  \Vcms\Exception
 		parent::__construct('Invalid Permission Key: Key must be an unsigned integer.');
 	}
 }
-?>

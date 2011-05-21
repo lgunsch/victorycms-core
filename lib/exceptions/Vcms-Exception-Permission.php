@@ -45,4 +45,3 @@ class Permission extends  \Vcms\Exception
 		parent::__construct('Invalid Permission Level.');
 	}
 }
-?>

@@ -34,7 +34,7 @@
 namespace Vcms;
 
 /**
- * This is an abstract class for a Css View. 
+ * This is an abstract class for a Css View.
  *
  * @package View
  */
@@ -42,12 +42,12 @@ abstract class CssView extends VcmsView
 {
 	/**
 	 * Returns the content-type of the view.
-	 * 
+	 *
 	 * @see Vcms.VcmsView::getContentType()
+	 * @return string CSS mime type.
 	 */
 	public function getContentType()
 	{
 		return "text/css; charset=utf-8";
 	}
 }
-?>

@@ -45,4 +45,3 @@ class SingletonCopy extends \Vcms\Exception
 		parent::__construct('Clone is not allowed on a singleton.');
 	}
 }
-?>

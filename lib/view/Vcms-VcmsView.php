@@ -40,36 +40,44 @@ namespace Vcms;
  */
 abstract class VcmsView
 {
-	
-	abstract public function __construct($params);
-	
+
 	/**
-	 * 
+	 * Construct a new VcmsView object.
+	 *
+	 * @param array $params required to render view.
+	 */
+	abstract public function __construct($params);
+
+	/**
 	 * Returns a string representation of the view.
-	 * @param Array of parameters needed to render the view $params
+	 *
+	 * @return string result of rendered view.
 	 */
 	abstract public function render();
-	
+
 	/**
-	 * 
 	 * Returns the content-type of the view.
+	 *
+	 * @return string view mime type.
 	 */
 	abstract public function getContentType();
-	
+
 	/**
-	 * 
 	 * Returns true if the view can be cached; the default is false and this can be
 	 * overridden if a VcmsView has caching capability.
+	 *
+	 * @return boolean true if view is cacheable.
 	 */
 	public function isCacheable()
 	{
 		return false;
 	}
-	
+
 	/**
-	 * 
 	 * Caches the view; this function will not cache the view, but is here so that
 	 * you may extend it to provide cacheing capability.
+	 *
+	 * @return void
 	 */
 	public function cache()
 	{
@@ -78,11 +86,12 @@ abstract class VcmsView
 		 * required, but may be implemented.
 		 */
 	}
-	
+
 	/**
-	 * 
 	 * Purges the cache; this function will not purge the cache, but is here so that
 	 * you may extend it to provide cacheing capability.
+	 *
+	 * @return void
 	 */
 	public function purge()
 	{
@@ -92,4 +101,3 @@ abstract class VcmsView
 		 */
 	}
 }
-?>
