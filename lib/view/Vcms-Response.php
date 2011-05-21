@@ -146,7 +146,7 @@ class Response
 	 */
 	public function setStatusCode($status_code)
 	{
-		if (! is_int($status_code) ) {
+		if (! is_int($status_code) && $status_code != null) {
 			throw new \Vcms\Exception\InvalidType("Int", $status_code, '$status_code');
 		}
 		$this->status_code = $status_code;
@@ -164,7 +164,7 @@ class Response
 	 */
 	public function setStatusMessage($status_message)
 	{
-		if (! is_string($status_message) ) {
+		if (! is_string($status_message) && $status_message != null) {
 			throw new \Vcms\Exception\InvalidType("string", $status_code, '$status_code');
 		}
 		$this->status_message = $status_message;
@@ -182,8 +182,8 @@ class Response
 	 */
 	public function setContentType($content_type)
 	{
-		if (! is_string($content_type) ) {
-			throw new \Vcms\Exception\InvalidType("string", $status_code, '$status_code');
+		if (! is_string($content_type) && $content_type != null) {
+			throw new \Vcms\Exception\InvalidType("string", $content_type, '$status_code');
 		}
 		$this->content_type = $content_type;
 	}
