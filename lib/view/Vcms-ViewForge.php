@@ -71,7 +71,7 @@ class ViewForge
 	 */
 	public static function getInstance()
 	{
-		if(! isset(static::$instance)) {
+		if (! isset(static::$instance)) {
 			static::$instance = new static();
 			static::$errorMessage = '';
 		}
@@ -79,13 +79,13 @@ class ViewForge
 	}
 
 	/**
-	 *
 	 * The main forge function which receives a forgespec and
 	 * builds a Vcms Response object using the appropriate views.
 	 * If everything goes well, it will render the view objects
 	 * and return the final vcms response with status code.
 	 *
-	 * @param  A JSON formatted string  $forgeSpec
+	 * @param string $forgeSpec JSON formatted string  $forgeSpec
+	 *
 	 * @return Response object
 	 */
 	public static function forge($forgeSpec)
@@ -114,73 +114,74 @@ class ViewForge
 		 * in the array having a 'name' key and an optional 'param' key.
 		 */
 		foreach ($json as $key => $value) {
-			if (($key == 'objects') && is_array($value)) {
-				foreach ($value as $object) {
 
-						$params = (isset($object["params"]))? $object["params"] : null;
-						$class = (isset($object["name"]))? $object["name"] : null;
-
-						if (is_null($class)) throw new \Exception(
-							'Improperly formatted ForgeSpec'
-						);
-
-						try{
-							$reflection = new \ReflectionClass($class);
-							$constructor = $reflection->getConstructor();
-						}catch(\Exception $e){
-							$response->setStatusCode(404);
-							$response->setStatusMessage(Response::HTTP_MSG_404);
-							$response->setContentType(null);
-							$response->setBody(null);
-							return $response;
-						}
-
-						if ($constructor == null || $constructor->isPrivate() || $constructor->isProtected()) {
-						    throw new \Exception('Can not instantiate view object');
-						}
-
-						if (! is_subclass_of($class, "\Vcms\VcmsView")) {
-							throw new \Exception('View object does not extend VcmsView');
-						}
-
-						$instance = new $class($params);
-
-						/* Ensure all view objects have the same content type */
-						$this_content_type = $instance->getContentType();
-						if ($last_content_type == null) {
-							$last_content_type = $this_content_type;
-							$response->setContentType($this_content_type);
-						}
-
-						if (! strcmp($last_content_type, $this_content_type) == 0) {
-							$response->setStatusCode(500);
-							$response->setStatusMessage(Response::HTTP_MSG_500);
-							$response->setContentType(null);
-							$response->setBody(null);
-							return $response;
-						} else {
-							$response_body .= $instance->render();
-						}
-
-						if (! $instance->isCacheable()) {
-							static::$cacheable = false;
-						}
-					}
-
-					$response->setBody($response_body);
-			} else{
+			if (! ($key == 'objects') && ! is_array($value)) {
 				throw new \Exception('Improperly formatted ForgeSpec');
 			}
+
+			foreach ($value as $object) {
+
+				$params = (isset($object["params"]))? $object["params"] : null;
+				$class = (isset($object["name"]))? $object["name"] : null;
+
+				if (is_null($class)) {
+					throw new \Exception('Improperly formatted ForgeSpec');
+				}
+
+				try {
+					$reflection = new \ReflectionClass($class);
+					$constructor = $reflection->getConstructor();
+				} catch(\Exception $e) {
+					$response->setStatusCode(404);
+					$response->setStatusMessage(Response::HTTP_MSG_404);
+					$response->setContentType(null);
+					$response->setBody(null);
+					return $response;
+				}
+
+				if (   $constructor == null || $constructor->isPrivate()
+					|| $constructor->isProtected()
+				) {
+				    throw new \Exception('Can not instantiate view object');
+				}
+
+				if (! is_subclass_of($class, "\Vcms\VcmsView")) {
+					throw new \Exception('View object does not extend VcmsView');
+				}
+
+				$instance = new $class($params);
+				/* Ensure all view objects have the same content type */
+				$this_content_type = $instance->getContentType();
+				if ($last_content_type == null) {
+					$last_content_type = $this_content_type;
+					$response->setContentType($this_content_type);
+				}
+
+				if (! strcmp($last_content_type, $this_content_type) == 0) {
+					$response->setStatusCode(500);
+					$response->setStatusMessage(Response::HTTP_MSG_500);
+					$response->setContentType(null);
+					$response->setBody(null);
+					return $response;
+				} else {
+						$response_body .= $instance->render();
+				}
+
+				if (! $instance->isCacheable()) {
+					static::$cacheable = false;
+				}
+			}
+
+			$response->setBody($response_body);
 		}
 
 		return $response;
 	}
 
 	/**
-	 *
 	 * Returns true if all of the rendered views are cacheable.
 	 *
-	 * @return boolean
+	 * @return boolean true if view is cacheable.
 	 */
 	public static function isCacheable()
 	{
@@ -188,28 +189,30 @@ class ViewForge
 	}
 
 	/**
-	 *
 	 * This will simply call cache on all of the view objects, if and only if
 	 * all of them are cacheable.
+	 *
+	 * @return void
 	 */
 	public static function cache()
 	{
-		if(static::isCacheable()){
-			foreach(static::$view_objects as $object){
+		if (static::isCacheable()) {
+			foreach (static::$view_objects as $object) {
 				$object->cache();
 			}
 		}
 	}
 
 	/**
-	 *
 	 * This will simply call purge on all of the view objects that are cacheable,
 	 * and not on any that are not cacheable.
+	 *
+	 * @return void
 	 */
 	public static function purge()
 	{
-		foreach(static::$view_objects as $object){
-			if($object->isCacheable()){
+		foreach (static::$view_objects as $object) {
+			if ($object->isCacheable()) {
 				$object->purge();
 			}
 		}
@@ -227,7 +230,9 @@ class ViewForge
 	}
 
 	/**
-	 * Preventing cloning of this class
+	 * Disables the clone of this class.
+	 *
+	 * @return void
 	 */
 	public function __clone()
 	{
