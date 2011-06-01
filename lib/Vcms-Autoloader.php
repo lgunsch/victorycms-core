@@ -90,17 +90,17 @@ class Autoloader
 	{
 		// Search all autoload directories for the class to load.
 		foreach (static::listDirs() as $directory) {
-			if (static::autoloadDir($class, $directory) === true) {
+			if (static::autoloadDir($class, $directory)) {
 				return true;
 			}
 		}
 
 		// If we did not find the class the first time rescan the directories and
-		// try again. This is code duplication, but at least it will rescan and
-		// search again only when necessary.
+		// try again. This is code duplication and also very expensive, but it
+		// should occur very seldom.
 		static::rescanDirs();
 		foreach (static::listDirs() as $directory) {
-			if (static::autoloadDir($class, $directory) === true) {
+			if (static::autoloadDir($class, $directory)) {
 				return true;
 			}
 		}
@@ -114,7 +114,7 @@ class Autoloader
 	 *
 	 * @param string $class     class name to search for.
 	 * @param string $directory directory index of array to search in
-	 * directoryFiles.
+	 *                          directoryFiles.
 	 *
 	 * @return boolean true if class is loaded, false if not.
 	 */
@@ -125,8 +125,18 @@ class Autoloader
 		}
 
 		$files = static::$directoryFiles[$directory];
+
+		// try and find the class path by using the expected key before searching
+		$fileKey = str_replace('\\', '-', strtolower($class));
+		if (array_key_exists($fileKey, $files)) {
+			require_once $files[$fileKey];
+			return true;
+		}
+
 		$pattern = static::getPattern($class);
 
+		// This search is exceedingly expensive when done for every class needed,
+		// avoid it if possible.
 		foreach ($files as $file) {
 			if (preg_match($pattern, pathinfo($file, PATHINFO_FILENAME)) == 1) {
 				require_once $file;
@@ -160,9 +170,14 @@ class Autoloader
 
 	/**
 	 * Loads PHP file paths from a directory or any sub-directories into an array in
-	 * the directoryFiles array with the directory path used as the index.
+	 * the directoryFiles array with the directory path used as the index; the file
+	 * path will be set to lower case and used as the key for the entry for that
+	 * directory, with the value being the full directory path.
 	 *
 	 * @param string $directory directory to search for PHP files.
+	 *
+	 * @example static::$directoryFiles[$directory]['vcms-autoloader']
+	 *  = '/lib/Vcms-Autoloader.php'
 	 *
 	 * @return void
 	 */
@@ -187,7 +202,9 @@ class Autoloader
 		// Use the iterator to build the list of PHP files
 		$files = array();
 		foreach ($iterator as $match) {
-			array_push(static::$directoryFiles[$directory], $match[0]);
+			$file = pathinfo($match[0], PATHINFO_FILENAME);
+			$fileNameKey = str_replace('.', '-', strtolower($file));
+			static::$directoryFiles[$directory][$fileNameKey] = $match[0];
 		}
 	}
 
