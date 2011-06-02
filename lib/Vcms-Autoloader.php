@@ -2,7 +2,6 @@
 //
 //  VictoryCMS - Content managment system and framework.
 //
-//  Copyright (C) 2010  Andrew Crouse <amcrouse@victorycms.org>
 //  Copyright (C) 2010  Lewis Gunsch <lgunsch@victorycms.org>
 //
 //  This file is part of VictoryCMS.
@@ -45,6 +44,18 @@ class Autoloader
 	/** Singleton instance to Autoloader */
 	protected static $instance;
 
+	/** Array of arrays of PHP file paths */
+	protected static $directoryFilesCache = array();
+
+	/** Array list of directory paths to search for PHP classes */
+	protected static $searchDirs = array();
+
+	/** Array of directory paths to ignore during autoloading */
+	protected static $ignoreDirs = array();
+
+	/** Try using regular expressions to locate class, rather than regular methods. */
+	protected static $searchEnable = false;
+
 	/** Namespace separator pattern: dot, or a dash. */
 	private static $NSSeparatorPattern = '(\.|-)+';
 
@@ -54,18 +65,12 @@ class Autoloader
 	/** Class file search pattern: [class.]%s[.class OR .inc]  */
 	private static $pattern = '/^(class\.)?%s(\.class|\.inc){0,2}$/i';
 
-	/** Array of arrays of PHP file paths */
-	protected static $directoryFiles = array();
-
 	/**
 	 * protected constructor; prevents direct creation of object. Also adds a few default values for seach for.
 	 */
 	protected function __construct()
 	{
-		// disable autoloader class searching by default
-		if (! Registry::isKey(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
-			Registry::set(RegistryKeys::AUTOLOAD_SEARCH_ENABLE, false);
-		}
+
 	}
 
 	/**
@@ -99,21 +104,11 @@ class Autoloader
 			}
 		}
 
-		// If we did not find the class the first time rescan the directories and
-		// try again. This is code duplication and also very expensive, but it
-		// should occur very seldom.
-		static::rescanDirs();
-		foreach (static::listDirs() as $directory) {
-			if (static::autoloadDir($class, $directory)) {
-				return true;
-			}
-		}
-
 		return false;
 	}
 
 	/**
-	 * This searchs the directoryFiles array for the required class
+	 * This searchs the directoryFilesCache array for the required class
 	 * and loads it.
 	 *
 	 * @param string $class     class name to search for.
@@ -126,11 +121,15 @@ class Autoloader
 	{
 		static::getInstance(); // cause constructor to run if necessary
 
-		if (! array_key_exists($directory, static::$directoryFiles)) {
+		if (! isset(static::$directoryFilesCache)) {
 			return false;
 		}
 
-		$files = static::$directoryFiles[$directory];
+		if (! array_key_exists($directory, static::$directoryFilesCache)) {
+			return false;
+		}
+
+		$files = static::$directoryFilesCache[$directory];
 
 		// try and find the class path by using the expected key before searching
 		$fileKey = str_replace('\\', '-', strtolower($class));
@@ -140,7 +139,7 @@ class Autoloader
 		}
 
 		// Skip autoloader search if it is disabled
-		if (! Registry::get(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
+		if (! static::$searchEnable) {
 			return false;
 		}
 
@@ -148,8 +147,7 @@ class Autoloader
 
 		// This search is exceedingly expensive when done for every class needed,
 		// avoid it if possible.
-		//TODO: perhaps we should skip searching external libraries which
-		// slow this down quite a bit.
+		//TODO: perhaps we should skip searching the ignore directories
 		foreach ($files as $file) {
 			if (preg_match($pattern, pathinfo($file, PATHINFO_FILENAME)) == 1) {
 				require_once $file;
@@ -191,7 +189,7 @@ class Autoloader
 	 *
 	 * @param string $directory directory to search for PHP files.
 	 *
-	 * @example static::$directoryFiles[$directory]['vcms-autoloader']
+	 * @example static::$directoryFilesCache[$directory]['vcms-autoloader']
 	 *  = '/lib/Vcms-Autoloader.php'
 	 *
 	 * @return void
@@ -201,7 +199,7 @@ class Autoloader
 		static::getInstance(); // cause constructor to run if necessary
 
 		$directory = static::truepath($directory);
-		static::$directoryFiles[$directory] = array();
+		static::$directoryFilesCache[$directory] = array();
 
 		if (! is_dir($directory)) {
 			throw new \Exception($directory.' is not a valid directory!');
@@ -209,7 +207,7 @@ class Autoloader
 
 		// Create a PHP file recursive iterator
 		$dirIterator = new \RecursiveDirectoryIterator($directory);
-		$dirFilter = new RecursiveDirectoryFilter($dirIterator);
+		$dirFilter = new RecursiveAutoloaderFilter($dirIterator);
 		$recursiveIterator = new \RecursiveIteratorIterator($dirFilter);
 		$iterator = new \RegexIterator(
 			$recursiveIterator,
@@ -222,7 +220,7 @@ class Autoloader
 		foreach ($iterator as $match) {
 			$file = pathinfo($match[0], PATHINFO_FILENAME);
 			$fileNameKey = str_replace('.', '-', strtolower($file));
-			static::$directoryFiles[$directory][$fileNameKey] = $match[0];
+			static::$directoryFilesCache[$directory][$fileNameKey] = $match[0];
 		}
 	}
 
@@ -269,12 +267,13 @@ class Autoloader
 	}
 
 	/**
-	 * This will rescan all the directories for PHP files and rebuild the file path
-	 * cache; be frugal in calling this function as it can be expensive.
+	 * This will scan all the directories for PHP files and rebuild the file path
+	 * cache; this function must be called before any PHP classes can be autoloaded.
+	 * Be frugal in calling this function as it can be *very* expensive.
 	 *
 	 * @return void
 	 */
-	public static function rescanDirs()
+	public static function scanDirs()
 	{
 		static::getInstance(); // cause constructor to run if necessary
 
@@ -290,7 +289,7 @@ class Autoloader
 	 * added into the Autoloader.
 	 *
 	 * @param string $directory Directory to search in, not a sub-directory of one
-	 * already added.
+	 *                          already added.
 	 *
 	 * @return void
 	 */
@@ -298,13 +297,15 @@ class Autoloader
 	{
 		static::getInstance(); // cause constructor to run if necessary
 
-		if (! is_string($directory) || empty($directory)) {
-			//TODO: fix me, I should be 2 different exceptions
-			throw new \Vcms\Exception\InvalidType();
+		if ($directory == null) {
+			throw new \Vcms\Exception\InvalidValue('$directory', 'null');
 		}
+		if (! is_string($directory)) {
+			throw new \Vcms\Exception\InvalidType('string', $directory, '$directory');
+		}
+
 		$path = static::truepath($directory);
-		Registry::add(RegistryKeys::AUTOLOAD, $path, false);
-		static::loadDir($directory);
+		array_push(static::$searchDirs, $path);
 	}
 
 	/**
@@ -319,14 +320,68 @@ class Autoloader
 	{
 		static::getInstance(); // cause constructor to run if necessary
 
-		// Check for any user configured autoload directories
-		if (Registry::isKey(RegistryKeys::AUTOLOAD)) {
-			$autoload = Registry::get(RegistryKeys::AUTOLOAD);
-		} else {
-			$autoload = array();
+		return static::$searchDirs;
+	}
+
+	/**
+	 * Adds a directory to ignore searching in for the required class; all
+	 * sub-directories below this the directory will also be ignored. The directory
+	 * should be a valid readable directory.
+	 *
+	 * @param string $directory Directory to ignore.
+	 *
+	 * @return void
+	 */
+	public static function addIgnoreDir($directory)
+	{
+		static::getInstance(); // cause constructor to run if necessary
+
+		if ($directory == null) {
+			throw new \Vcms\Exception\InvalidValue('$directory', 'null');
+		}
+		if (! is_string($directory)) {
+			throw new \Vcms\Exception\InvalidType('string', $directory, '$directory');
 		}
 
-		return $autoload;
+		$path = static::truepath($directory);
+		if (! in_array($path, static::$ignoreDirs)) {
+			array_push(static::$ignoreDirs, $path);
+		}
+		RecursiveAutoloaderFilter::setDirFilter(static::$ignoreDirs);
+	}
+
+	/**
+	 * Returns the directory paths which are being ignored by the autoloader.
+	 *
+	 * @return array list of directory paths.
+	 */
+	public static function listIgnoreDirs()
+	{
+		static::getInstance(); // cause constructor to run if necessary
+
+		return static::$ignoreDirs;
+	}
+
+	/**
+	 * Set whether classes will be found using regular expression searching to
+	 * locate class, rather than regular methods; enableing this can cause
+	 * autoloading to become *very* slow.
+	 *
+	 * @param bool $enabled use regular expressions to locate class, rather than
+	 *                      regular methods.
+	 *
+	 * @return void
+	 */
+	public static function setSearchEnable($enabled)
+	{
+		if ($enabled == null) {
+			throw new \Vcms\Exception\InvalidValue('$enabled', 'null');
+		}
+		if (! is_bool($enabled)) {
+			throw new \Vcms\Exception\InvalidType('bool', $enabled, '$enabled');
+		}
+
+		static::$searchEnable = $enabled;
 	}
 
 	/**
@@ -342,15 +397,40 @@ class Autoloader
 
 /**
  * This Autoloader internal class represents a recursive directory filter iterator
- * that is used to ignore specific directory paths when iterating over the
- * filesystem.
+ * that is used to ignore specific directory paths and non-php files when iterating
+ * over the filesystem.
  *
  * @package Core
  */
-class RecursiveDirectoryFilter extends \RecursiveFilterIterator
+class RecursiveAutoloaderFilter extends \RecursiveFilterIterator
 {
+	/** List of directory paths to filter out */
+	private static $ignoreDirFilter = array();
+
+	/** File extensions to accept */
+	private static $acceptExtension = 'php';
+
 	/**
-	 * Returns whether the current directory of the iterator is acceptable
+	 * This will set the filter to ignore the provided directory paths, this will
+	 * not correct any paths, so full complete paths should be provided.
+	 *
+	 * @param array $dirs of directory paths to filter out.
+	 *
+	 * @throws \Vcms\Exception\InvalidType if $dirs is not an array
+	 *
+	 * @return void
+	 */
+	public static function setDirFilter($dirs)
+	{
+		if (! is_array($dirs)) {
+			throw new \Vcms\Exception\InvalidType();
+		}
+
+		static::$ignoreDirFilter = $dirs;
+	}
+
+	/**
+	 * Returns whether the current directory or file of the iterator is acceptable
 	 * through this filter.
 	 *
 	 * @see http://ca3.php.net/manual/en/filteriterator.accept.php
@@ -359,22 +439,16 @@ class RecursiveDirectoryFilter extends \RecursiveFilterIterator
 	 */
 	public function accept()
 	{
-		if (! Registry::isKey(RegistryKeys::AUTOLOAD_PATH_IGNORE)) {
-			return true;
+		// do not accept non-php files
+		$path = $this->current()->getFilename();
+		if (strlen($path) >= 3 && $this->current()->isFile()) {
+			if (strcmp(strtolower(substr($path, strlen($path) - 3)), 'php') != 0) {
+				return false;
+			}
 		}
 
-		$filter = Registry::get(RegistryKeys::AUTOLOAD_PATH_IGNORE);
-		if (! is_array($filter)) {
-			$filter = array($filter);
-		}
-
-		$count = count($filter);
-		for ($i = 0; $i < $count; $i++) {
-			$path = Autoloader::truepath($filter[$i]);
-			$filter[$i] = $path;
-		}
-
-		$accept = ! in_array($this->current()->getPath(), $filter);
+		// accept everything not in the ignore array
+		$accept = ! in_array($this->current()->getPath(), static::$ignoreDirFilter);
 		return $accept;
 	}
 }

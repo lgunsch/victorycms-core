@@ -22,7 +22,7 @@
 namespace Vcms;
 
 /*
- * Require all the core classes.
+ * Require all the core classes necessary for boostrapping.
  */
 require_once 'Vcms-RegistryKeys.php';
 require_once 'Vcms-Registry.php';
@@ -30,6 +30,7 @@ require_once 'Vcms-Autoloader.php';
 require_once 'Vcms-RegistryNode.php';
 require_once 'Vcms-LoadManager.php';
 require_once 'Vcms-LibraryLoader.php';
+require_once 'utilities'.DIRECTORY_SEPARATOR.'Vcms-FileUtils.php';
 
 /*
  * Require core exception classes.
@@ -143,17 +144,35 @@ class VictoryCMS
 	}
 
 	/**
-	 * Register any user configured autoload directories; these should be set in the
-	 * configuration file.
+	 * Register any user configured autoload directories or ignore directories;
+	 * these should be set in the configuration file.
 	 *
 	 * @return void
 	 */
 	protected static function finalizeAutoloader()
 	{
-		$autoload_array = Registry::get(RegistryKeys::AUTOLOAD);
-		foreach ($autoload_array as $path) {
-			Autoloader::addDir($path);
+		if (Registry::isKey(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
+			Autoloader::setSearchEnable(
+				Registry::get(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)
+			);
 		}
+
+		if (Registry::isKey(RegistryKeys::AUTOLOAD_PATH_IGNORE)) {
+			$paths = Registry::get(RegistryKeys::AUTOLOAD_PATH_IGNORE);
+			$size = count($paths);
+			for ($i=0; $i < $size; $i++) {
+				Autoloader::addIgnoreDir($paths[$i]);
+			}
+		}
+
+		if (Registry::isKey(RegistryKeys::AUTOLOAD)) {
+			$autoload_array = Registry::get(RegistryKeys::AUTOLOAD);
+			foreach ($autoload_array as $path) {
+				Autoloader::addDir($path);
+			}
+		}
+
+		Autoloader::scanDirs();
 	}
 
 	/**

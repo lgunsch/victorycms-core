@@ -31,6 +31,8 @@
 	"autoload_path_ignore": [
 		"../lib/simpletest",
 		"../lib/external",
-		"../app/external"
+		"../app/external",
+		"../lib/test",
+		"../app/test"
 	]
 }
