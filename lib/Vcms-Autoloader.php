@@ -42,7 +42,6 @@ namespace Vcms;
  */
 class Autoloader
 {
-
 	/** Singleton instance to Autoloader */
 	protected static $instance;
 
@@ -63,7 +62,10 @@ class Autoloader
 	 */
 	protected function __construct()
 	{
-
+		// disable autoloader class searching by default
+		if (! Registry::isKey(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
+			Registry::set(RegistryKeys::AUTOLOAD_SEARCH_ENABLE, false, true);
+		}
 	}
 
 	/**
@@ -88,6 +90,8 @@ class Autoloader
 	 */
 	public static function autoload($class)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		// Search all autoload directories for the class to load.
 		foreach (static::listDirs() as $directory) {
 			if (static::autoloadDir($class, $directory)) {
@@ -120,6 +124,8 @@ class Autoloader
 	 */
 	private static function autoloadDir($class, $directory)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		if (! array_key_exists($directory, static::$directoryFiles)) {
 			return false;
 		}
@@ -133,10 +139,17 @@ class Autoloader
 			return true;
 		}
 
+		// Skip autoloader search if it is disabled
+		if (! Registry::get(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
+			return false;
+		}
+
 		$pattern = static::getPattern($class);
 
 		// This search is exceedingly expensive when done for every class needed,
 		// avoid it if possible.
+		//TODO: perhaps we should skip searching external libraries which
+		// slow this down quite a bit.
 		foreach ($files as $file) {
 			if (preg_match($pattern, pathinfo($file, PATHINFO_FILENAME)) == 1) {
 				require_once $file;
@@ -157,6 +170,8 @@ class Autoloader
 	 */
 	protected static function getPattern($class)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		// Create the namespace and class pattern
 		$class = trim($class);
 		$fixed = ($class{0} == '\\')? substr($class, 1) : $class;
@@ -183,6 +198,8 @@ class Autoloader
 	 */
 	protected static function loadDir($directory)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		$directory = static::truepath($directory);
 		static::$directoryFiles[$directory] = array();
 
@@ -220,6 +237,8 @@ class Autoloader
 	 */
 	public static function truepath($path)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		// attempts to detect if path is relative in which case, add cwd
 		if (strpos($path, ':') === false
 			&& (strlen($path) == 0 || $path{0} != '/')
@@ -256,6 +275,8 @@ class Autoloader
 	 */
 	public static function rescanDirs()
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		foreach (static::listDirs() as $directory) {
 			static::loadDir($directory);
 		}
@@ -274,6 +295,8 @@ class Autoloader
 	 */
 	public static function addDir($directory)
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		if (! is_string($directory) || empty($directory)) {
 			//TODO: fix me, I should be 2 different exceptions
 			throw new \Vcms\Exception\InvalidType();
@@ -293,6 +316,8 @@ class Autoloader
 	 */
 	public static function listDirs()
 	{
+		static::getInstance(); // cause constructor to run if necessary
+
 		// Check for any user configured autoload directories
 		if (Registry::isKey(RegistryKeys::AUTOLOAD)) {
 			$autoload = Registry::get(RegistryKeys::AUTOLOAD);

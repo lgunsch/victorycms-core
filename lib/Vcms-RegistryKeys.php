@@ -70,4 +70,7 @@ class RegistryKeys
 
  	/** Array of external libraries to load- global */
  	const LIB_EXTERNAL = 'lib_external';
+
+ 	/** If Autoloader class searching is enabled  or not, default is false */
+ 	const AUTOLOAD_SEARCH_ENABLE = 'autoload_search_enable';
 }
