@@ -375,11 +375,6 @@ class RecursiveDirectoryFilter extends \RecursiveFilterIterator
 		}
 
 		$accept = ! in_array($this->current()->getPath(), $filter);
-		if ($accept) {
-			echo 'letting through '.$this->current()."\n";
-		} else {
-			echo 'ignoring '.$this->current()."\n";
-		}
 		return $accept;
 	}
 }
