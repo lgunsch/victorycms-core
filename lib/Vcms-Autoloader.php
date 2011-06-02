@@ -64,7 +64,7 @@ class Autoloader
 	{
 		// disable autoloader class searching by default
 		if (! Registry::isKey(RegistryKeys::AUTOLOAD_SEARCH_ENABLE)) {
-			Registry::set(RegistryKeys::AUTOLOAD_SEARCH_ENABLE, false, true);
+			Registry::set(RegistryKeys::AUTOLOAD_SEARCH_ENABLE, false);
 		}
 	}
 
