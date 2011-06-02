@@ -209,7 +209,8 @@ class Autoloader
 
 		// Create a PHP file recursive iterator
 		$dirIterator = new \RecursiveDirectoryIterator($directory);
-		$recursiveIterator = new \RecursiveIteratorIterator($dirIterator);
+		$dirFilter = new RecursiveDirectoryFilter($dirIterator);
+		$recursiveIterator = new \RecursiveIteratorIterator($dirFilter);
 		$iterator = new \RegexIterator(
 			$recursiveIterator,
 			static::$phpFilePattern,
@@ -336,5 +337,49 @@ class Autoloader
 	public function __clone()
 	{
 		throw new \Vcms\Exception\SingletonCopy;
+	}
+}
+
+/**
+ * This Autoloader internal class represents a recursive directory filter iterator
+ * that is used to ignore specific directory paths when iterating over the
+ * filesystem.
+ *
+ * @package Core
+ */
+class RecursiveDirectoryFilter extends \RecursiveFilterIterator
+{
+	/**
+	 * Returns whether the current directory of the iterator is acceptable
+	 * through this filter.
+	 *
+	 * @see http://ca3.php.net/manual/en/filteriterator.accept.php
+	 *
+	 * @return bool true if directory is acceptable.
+	 */
+	public function accept()
+	{
+		if (! Registry::isKey(RegistryKeys::AUTOLOAD_PATH_IGNORE)) {
+			return true;
+		}
+
+		$filter = Registry::get(RegistryKeys::AUTOLOAD_PATH_IGNORE);
+		if (! is_array($filter)) {
+			$filter = array($filter);
+		}
+
+		$count = count($filter);
+		for ($i = 0; $i < $count; $i++) {
+			$path = Autoloader::truepath($filter[$i]);
+			$filter[$i] = $path;
+		}
+
+		$accept = ! in_array($this->current()->getPath(), $filter);
+		if ($accept) {
+			echo 'letting through '.$this->current()."\n";
+		} else {
+			echo 'ignoring '.$this->current()."\n";
+		}
+		return $accept;
 	}
 }

@@ -1,6 +1,4 @@
 {
-	## Copyright (C) 2010-2011	Lewis Gunsch <lgunsch@victorycms.org>
-	## Copyright (C) 2010-2011 	Mitchell Bosecke <mitchellbosecke@gmail.com>
 	##
 	## This file is the main configuration file for VictoryCMS.
 	##
@@ -27,6 +25,12 @@
 	"lib_external":[],
 
 	## Application-specific external libraries to load.
-	"app_external":[]
+	"app_external":[],
 
+	## Set the path(s) that the autoloader should ignore
+	"autoload_path_ignore": [
+		"../lib/simpletest",
+		"../lib/external",
+		"../app/external"
+	]
 }

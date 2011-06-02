@@ -73,4 +73,7 @@ class RegistryKeys
 
  	/** If Autoloader class searching is enabled  or not, default is false */
  	const AUTOLOAD_SEARCH_ENABLE = 'autoload_search_enable';
+
+ 	/** Paths that the autoloader should ignore */
+ 	const AUTOLOAD_PATH_IGNORE = 'autoload_path_ignore';
 }
