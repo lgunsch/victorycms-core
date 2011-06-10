@@ -124,9 +124,9 @@ class LoadManager
 		}
 
 		foreach ($json as $key => $value) {
-			if ($key == 'load') {
-				if (Registry::isKey('load')) {
-					$locations = Registry::get('load');
+			if ($key == RegistryKeys::LOAD) {
+				if (Registry::isKey(RegistryKeys::LOAD)) {
+					$locations = Registry::get(RegistryKeys::LOAD);
 				} else {
 					$locations = array();
 				}
@@ -138,14 +138,14 @@ class LoadManager
 							);
 						} else {
 							if (! in_array($item, $locations)) {
-								Registry::add('load', $item, false);
+								Registry::add(RegistryKeys::LOAD, $item, false);
 								static::load($item);
 							}
 						}
 					}
 				} elseif (isset($value["value"])) {
 					if (! in_array($value, $locations)) {
-						Registry::add('load', $value, false);
+						Registry::add(RegistryKeys::LOAD, $value, false);
 						static::load($value);
 					}
 				}

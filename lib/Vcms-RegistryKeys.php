@@ -71,6 +71,9 @@ class RegistryKeys
  	/** Array of external libraries to load- global */
  	const LIB_EXTERNAL = 'lib_external';
 
+ 	/** Configuration file keyword for loading multiple config files */
+ 	const LOAD = 'load';
+
  	/** If Autoloader class searching is enabled  or not, default is false */
  	const AUTOLOAD_SEARCH_ENABLE = 'autoload_search_enable';
 
