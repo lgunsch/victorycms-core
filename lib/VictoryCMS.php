@@ -29,7 +29,6 @@ require_once 'Vcms-Registry.php';
 require_once 'Vcms-Autoloader.php';
 require_once 'Vcms-RegistryNode.php';
 require_once 'Vcms-LoadManager.php';
-require_once 'Vcms-LibraryLoader.php';
 require_once 'utilities'.DIRECTORY_SEPARATOR.'Vcms-FileUtils.php';
 
 /*
