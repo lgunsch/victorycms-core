@@ -50,14 +50,14 @@ require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-FileSize.php';
  * system. It initializes the error handlers, the class autoloader and
  * contains some important functions.
  *
- * <strong>Note:</strong> This depends on <strong>Registry.php</strong>,
- * <strong>RegistryNode.php</strong> and <strong>RegistryKeys.php</strong>
- * for storing system variables. It also depends on
- * <strong>Autoloader.php</strong> and <strong>LoadManager.php</strong> for
- * loading required classes. These should be in the same directory as this file,
- * and all located in the VictoryCMS 'lib' directory. VictoryCMS also depends
- * on the exceptions located in the "exceptions" directory in order to bootstrap
- * properly.
+ * <strong>Note:</strong> This depends on <strong>Registry</strong>,
+ * <strong>RegistryNode</strong> and <strong>RegistryKeys</strong> for storing
+ * system variables. It also depends on <strong>Autoloader</strong> and
+ * <strong>LoadManager</strong> for loading required classes. These should be in
+ * the same directory as this file, and all located in the VictoryCMS 'lib'
+ * directory. VictoryCMS also depends on the exceptions located in the "exceptions"
+ * directory and <strong>FileUtils</strong> located in the "utilities" directory
+ * in order to bootstrap properly.
  *
  * @filesource
  * @category VictoryCMS
@@ -252,7 +252,7 @@ class VictoryCMS
 		}
 		if (isset($authenticator) && class_exists($authenticator)) {
 			if (! is_subclass_of($authenticator, "\Vcms\AbstractAuthenticator")) {
-				throw new \Exception('Authenticator does not extend AbstractAuthenticator');
+				throw new Exception\InvalidType('Authenticator does not extend AbstractAuthenticator');
 			}
 
 			$authenticator::process();
@@ -269,11 +269,11 @@ class VictoryCMS
 			$constructor = $reflection->getConstructor();
 
 			if ($constructor == null || $constructor->isPrivate() || $constructor->isProtected()) {
-			    throw new \Exception('Can not instantiate front controller');
+			    throw new Exception\NotFound('Cannot instantiate front controller');
 			}
 
 			if (! is_subclass_of($controller, "\Vcms\Controller")) {
-				throw new \Exception('Front controller does not extend Controller');
+				throw new Exception\InvalidType('Front controller does not extend Controller');
 			}
 
 			$front_controller = new $controller();
