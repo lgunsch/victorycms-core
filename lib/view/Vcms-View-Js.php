@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - HtmlView
+ * VictoryCMS - JsView
  *
  * @filesource
  * @category VictoryCMS
@@ -31,23 +31,23 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace Vcms;
+namespace Vcms\View;
 
 /**
- * This is an abstract class for an HTML View.
+ * This is an abstract class for a Javascript View.
  *
  * @package View
  */
-abstract class HtmlView extends VcmsView
+abstract class Js extends \Vcms\View
 {
 	/**
 	 * Returns the content-type of the view.
 	 *
 	 * @see Vcms.VcmsView::getContentType()
-	 * @return string HTML mime type.
+	 * @return string javascript mime type.
 	 */
 	public function getContentType()
 	{
-		return "text/html; charset=utf-8";
+		return "text/javascript; charset=utf-8";
 	}
 }

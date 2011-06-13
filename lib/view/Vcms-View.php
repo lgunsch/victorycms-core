@@ -38,7 +38,7 @@ namespace Vcms;
  *
  * @package View
  */
-abstract class VcmsView
+abstract class View
 {
 
 	/**

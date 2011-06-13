@@ -145,8 +145,8 @@ class ViewForge
 				    throw new \Exception('Can not instantiate view object');
 				}
 
-				if (! is_subclass_of($class, "\Vcms\VcmsView")) {
-					throw new \Exception('View object does not extend VcmsView');
+				if (! is_subclass_of($class, "\Vcms\View")) {
+					throw new \Exception('View object does not extend View');
 				}
 
 				$instance = new $class($params);

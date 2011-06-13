@@ -21,7 +21,7 @@
 //  along with VictoryCMS.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * VictoryCMS - ImgView
+ * VictoryCMS - HtmlView
  *
  * @filesource
  * @category VictoryCMS
@@ -31,18 +31,23 @@
  * @link     http://www.victorycms.org/
  */
 
-namespace Vcms;
+namespace Vcms\View;
 
 /**
- * This is an abstract class for an Image View.
+ * This is an abstract class for an HTML View.
  *
  * @package View
  */
-abstract class ImgView extends VcmsView
+abstract class Html extends \Vcms\View
 {
-	/*
-	 * Unlike the other view types, each concrete ImgView class
-	 * will implement it's own getContentType() function depending
-	 * on what kind of image it's rendering.
+	/**
+	 * Returns the content-type of the view.
+	 *
+	 * @see Vcms.VcmsView::getContentType()
+	 * @return string HTML mime type.
 	 */
+	public function getContentType()
+	{
+		return "text/html; charset=utf-8";
+	}
 }
