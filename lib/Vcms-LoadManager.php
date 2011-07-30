@@ -100,19 +100,21 @@ class LoadManager
 	{
 		if (! function_exists('json_decode')) {
 			static::$errorMessage = "JSON PHP extension is required.\n";
-			throw new \Exception('LoadManager requires json_decode function!');
+			throw new \Vcms\Exception\NotFound('\'json_decode\'');
 		}
 
 		$path = FileUtils::truepath($path);
-		if ($path === false) {
+		if (! file_exists($path)) {
 			static::$errorMessage = "Cannot find path for configuration file: $path\n";
-			throw new \Exception('Cannot get contents of file: '.$path.'');
+			throw new \Vcms\Exception\NotFound($path);
 		}
 
 		$contents = file_get_contents($path);
 		if ($contents === false) {
-			static::$errorMessage = "Cannot read file configuration file: $path\n";
-			throw new \Exception('Cannot get contents of file: '.$path.'');
+			static::$errorMessage = "Cannot read configuration file: $path\n";
+			//  This should only happen when file has wrong permissions thus,
+			//  it should be caught by file_exists before here.
+			throw new \Vcms\Exception\NotFound($path);
 		}
 
 		$contents = FileUtils::removeComments($contents);
@@ -120,7 +122,7 @@ class LoadManager
 
 		if ($json === null) {
 			static::$errorMessage = static::getJsonErrorMessage($path);
-			throw new \Exception('Configuration file cannot be decoded.');
+			throw new \Vcms\Exception\Syntax($path);
 		}
 
 		foreach ($json as $key => $value) {
