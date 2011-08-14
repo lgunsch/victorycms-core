@@ -126,45 +126,82 @@ class LoadManager
 		}
 
 		foreach ($json as $key => $value) {
-			if ($key == RegistryKeys::LOAD) {
-				if (Registry::isKey(RegistryKeys::LOAD)) {
-					$locations = Registry::get(RegistryKeys::LOAD);
-				} else {
-					$locations = array();
-				}
-				if (is_array($value) && isset($value)) {
-					foreach ($value as $item) {
-						if (is_array($item)) {
-							throw new \Exception(
-								'LoadManager does not support multi-dimensional arrays yet.'
-							);
-						} else {
-							if (! in_array($item, $locations)) {
-								Registry::add(RegistryKeys::LOAD, $item, false);
-								static::load($item);
-							}
-						}
-					}
-				} elseif (isset($value["value"])) {
-					if (! in_array($value, $locations)) {
-						Registry::add(RegistryKeys::LOAD, $value, false);
-						static::load($value);
-					}
-				}
+			// Skip any null values
+			if (! isset($value)) {
+				continue;
+			}
 
-			} elseif (is_array($value) && isset($value)) {
+			// Process loading of listed config files
+			if ($key == RegistryKeys::LOAD) {
+				static::processSecondaryFiles($value);
+
+			// Add a key and array value pair into the registry, default is read-only
+			} elseif (is_array($value)) {
 				if (isset($value["value"]) && isset($value["readonly"])) {
 					Registry::add($key, ($value["value"]), $value["readonly"]);
 				} elseif (isset($value["value"])) {
-					Registry::add($key, ($value["value"]), false);
+					Registry::add($key, ($value["value"]), true);
 				} else {
-					Registry::add($key, $value, false);
+					Registry::add($key, $value, true);
 				}
+
+			// Add a key value pair into the registry, default is read-only
 			} elseif ($value) {
-				if (isset($value)) {
-					Registry::set($key, $value, false);
+				Registry::set($key, $value, true);
+			}
+		}
+	}
+
+	/**
+	 * Process loading of listed configuration files from the current configuration
+	 * file; configuration files which have circular references to each other
+	 * cannot be loaded.
+	 *
+	 * @param mixed $jsonValue JSON decoded value.
+	 *
+	 * @throws \Exception If json_decode function is not available, path to
+	 * configuration file is invalid, configuration file cannnot be read, or the
+	 * configuration file cannot be properly decoded.
+	 *
+	 * @return void
+	 */
+	private static function processSecondaryFiles($jsonValue)
+	{
+		// Get the config files which have been already loaded
+		if (Registry::isKey(RegistryKeys::LOAD)) {
+			$locations = Registry::get(RegistryKeys::LOAD);
+		} else {
+			$locations = array();
+		}
+
+		$load = array();
+
+		// Load multiple config files from array
+		if (is_array($jsonValue) && isset($jsonValue)) {
+			foreach ($jsonValue as $item) {
+				if (is_array($item)) {
+					throw new \Exception(
+						'LoadManager does not support multi-dimensional loading arrays.'
+					);
+				}
+				if (! in_array($item, $locations)) {
+					Registry::add(RegistryKeys::LOAD, $item, false);
+					array_push($load, $item);
+					array_push($locations, $item);
 				}
 			}
+
+		// Load a single config file
+		} elseif (isset($jsonValue["value"])) {
+			if (! in_array($jsonValue, $locations)) {
+				Registry::add(RegistryKeys::LOAD, $jsonValue, false);
+				array_push($load, $jsonValue);
+			}
+		}
+
+		// Process each new config file now
+		foreach ($load as $location) {
+			static::load($location);
 		}
 	}
 
