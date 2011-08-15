@@ -119,8 +119,9 @@ class LoadManager
 
 		$contents = FileUtils::removeComments($contents);
 		$json = json_decode($contents, true);
+		$error = json_last_error();
 
-		if ($json === null) {
+		if ($json === null || $error != JSON_ERROR_NONE) {
 			static::$errorMessage = static::getJsonErrorMessage($path);
 			throw new \Vcms\Exception\Syntax($path);
 		}
@@ -219,10 +220,11 @@ class LoadManager
 		$json_errors = array(
     		JSON_ERROR_NONE => 'No error has occurred',
     		JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
+    		JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON',
     		JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
-    		JSON_ERROR_SYNTAX => 'Syntax error'
+    		JSON_ERROR_SYNTAX => 'Syntax error',
+    		JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
 		);
-
 		$message = 'Could not decode configuration file ';
 		$message .= (VictoryCMS::isCli())? $filePath : "<em>$filePath</em>";
 		$message .= (VictoryCMS::isCli())? ": ": ":&nbsp;<strong>";
