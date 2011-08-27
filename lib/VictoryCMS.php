@@ -136,7 +136,7 @@ class VictoryCMS
 
 		// Error debug info displaying is determined by debug mode
 		error_reporting(E_STRICT | -1); // -1 is important to display sytax errors
-		ini_set('display_errors', Registry::get(RegistryKeys::DEBUG));
+		ini_set('display_errors', 1);
 
 		set_exception_handler(__NAMESPACE__.'\VictoryCMS::errorHandler');
 		set_error_handler(__NAMESPACE__.'\VictoryCMS::errorHandler', E_STRICT);
