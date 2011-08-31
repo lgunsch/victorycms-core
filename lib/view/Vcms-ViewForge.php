@@ -79,6 +79,49 @@ class ViewForge
 	}
 
 	/**
+	 * This will take an array and convert it to a forgespec suitable for the the
+	 * main forge function, forge the forgespec, and return the Response object.
+	 * The forgespec must be in UTF-8 format and will simply use json_encode to
+	 * transform the array to a forgespec.
+	 *
+	 * @param string $forgeSpec JSON formatted string $forgeSpec
+	 *
+	 * @example
+	 * <code>
+	 * $forgeArray = array(
+	 *		"objects"=>array(
+	 *			array(
+	 *				"name"=>"TestView",
+	 *				"params"=>array(
+	 *					"test1"=>array("obj1", "obj2"),
+	 *					"test2"=>array("obj3", "obj4")
+	 *				)
+	 *			),
+	 *			array(
+	 *				"name"=>"TestView2",
+	 *				"params"=>array(
+	 *					"test1"=>array("obj1", "obj2"),
+	 *					"test2"=>array("obj3", "obj4")
+	 *				)
+	 *			)
+	 *		)
+	 * );
+	 * $response = ViewForge::forgeArray($forgeArray);
+	 * </code>
+	 *
+	 * @return Response object
+	 */
+	public static function forgeArray(array $forgeSpec)
+	{
+		$json = json_encode($forgeSpec);
+		$error = json_last_error();
+		if ($json == null || $error != JSON_ERROR_NONE) {
+			throw new \Vcms\Exception\Syntax(static::getUserErrorMessage());
+		}
+		return static::forge($json);
+	}
+
+	/**
 	 * The main forge function which receives a forgespec and
 	 * builds a Vcms Response object using the appropriate views.
 	 * If everything goes well, it will render the view objects
@@ -227,6 +270,28 @@ class ViewForge
 	public static function getUserErrorMessage()
 	{
 		return static::$errorMessage;
+	}
+
+	/**
+	 * This will return a nice readable error message if there is an error in a
+	 * forgespec string; It assumes json_decode or json_encode produced the error
+	 * since this parses forgespec strings using JSON format.
+	 *
+	 * @return string The last JSON error in user friendly format.
+	 */
+	protected static function getJsonErrorMessage()
+	{
+		$json_errors = array(
+    		JSON_ERROR_NONE => 'No error has occurred',
+    		JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
+    		JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON',
+    		JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
+    		JSON_ERROR_SYNTAX => 'Syntax error',
+    		JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
+		);
+
+		$message = 'Could not decode forgeSpec: '.$json_errors[json_last_error()].'.';
+		return $message;
 	}
 
 	/**
