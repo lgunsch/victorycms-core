@@ -40,9 +40,11 @@ require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-InvalidValue.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-NotFound.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-Overwrite.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-Permission.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-PermissionKey.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-SingletonCopy.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-ExternalLibrary.php';
 require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-FileSize.php';
+require_once 'exceptions'.DIRECTORY_SEPARATOR.'Vcms-Exception-Syntax.php';
 
 /**
  * VictoryCMS core class; this class is the entry point to the VictoryCMS
