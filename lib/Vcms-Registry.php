@@ -241,9 +241,12 @@ class Registry
 	}
 
 	/**
-	 * This returns true if key is a valid key-value binding key, false if not.
+	 * This returns true if key, or all keys if key is an array, is a valid
+	 * key-value binding key, false if not or any key in the array does not
+	 * exist.
 	 *
-	 * @param string $key The binding name or key to use to identify the binding.
+	 * @param string|array $key The binding name or key to use to identify the
+	 * 							binding.
 	 *
 	 * @return boolean true if $key is a valid key; false otherwise.
 	 */
@@ -253,10 +256,15 @@ class Registry
 
 		if ($key == null) {
 			return false;
-		} elseif (! array_key_exists($key, $gl->vars)) {
-			return false;
-		} else {
+		} elseif (is_array($key)) {
+			foreach ($key as $index) {
+				if (! array_key_exists($index, $gl->vars)) {
+					return false;
+				}
+			}
 			return true;
+		} else {
+			return array_key_exists($key, $gl->vars);
 		}
 	}
 
